@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+
+/* --- STORES PAGE --- */
+:root {
+    --primary-blue:  #6C7EE1;
+    --primary-blue-dark: #5A6ACC;
+    --primary-light: #edeef8;
+    --text-dark: #333;
+    --text-light: #666666;
+    --white-color: #fff;
+    --border-radius-main: 16px;
+    --shadow-main: 0 8px 25px rgba(0, 0, 0, 0.08);
+    --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.stores-page {
+    background-color: #f8f9fa;
+    padding: 3rem 0;
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+
+.stores-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+.stores-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    font-family: var(--font-heading);
+}
+.stores-header p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0.5rem auto 0;
+    
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    background-color: var(--white-color);
+    padding: 1rem;
+    border-radius: var(--border-radius-main);
+    box-shadow: var(--shadow-main);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+.filter-tabs button {
+    border: none;
+    background: var(--primary-light);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: all 0.3s ease;
+    display: inline-flex; /* Giúp căn chỉnh nội dung bên trong button */
+    align-items: center;  /* Căn giữa icon và chữ theo chiều dọc */
+    gap: 8px;             /* Tạo khoảng cách giữa icon và chữ */
+
+}
+.filter-tabs button:hover {
+    background-color: var(--primary-blue);
+    color: var(--white-color);
+}
+.filter-tabs button.active {
+    background-color: var(--primary-blue);
+    color: var(--white-color);
+    box-shadow: 0 4px 10px rgba(108, 99, 255, 0.4);
+}
+
+.search-box {
+    position: relative;
+}
+.search-box input {
+    border: 2px solid var(--primary-light);
+    border-radius: 12px;
+    padding: 10px 20px 10px 40px;
+    width: 250px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+.search-box input:focus {
+    border-color: var(--primary-blue);
+}
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+}
+
+/* Stores Grid */
+.stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.store-card {
+    background: var(--white-color);
+    border-radius: var(--border-radius-main);
+    box-shadow: var(--shadow-main);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.store-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.1);
+}
+
+.store-card-banner {
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+.store-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+}
+
+.store-card-rating {
+    background: rgba(0,0,0,0.6);
+    color: #ffc107;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.store-card-content {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.store-card-name {
+    margin: 0 0 0.25rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.store-card-category {
+    margin: 0 0 1rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.store-card-info-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.store-card-info-line i {
+    font-size: 1.1rem;
+    color: var(--primary-blue);
+    position: relative;
+    top: 1px; /* Căn chỉnh icon cho đẹp hơn */
+}
+
+.store-card-tags {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.store-card-tags .tag {
+    background: var(--primary-light);
+    color: var(--text-light);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.stores-footer {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 0 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filter-bar {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+    .search-box input {
+        width: 100%;
+    }
+}
+
+
+/* Thêm vào cuối file StoresPage.css */
+
+.see-more-btn {
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--primary-blue);
+  border: none;
+  border-radius: 50px; /* Bo tròn mạnh */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.35);
+}
+
+.see-more-btn:hover {
+  background-color: var(--primary-blue-dark);
+  transform: translateY(-2px);
+}

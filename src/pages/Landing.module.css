@@ -1,0 +1,61 @@
+/* 
+  File này định nghĩa các biến màu và font đặc thù cho trang Introduce,
+  ánh xạ chúng vào các biến toàn cục từ global.css để dễ quản lý.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap');
+:root {
+  /* Font đặc trưng cho trang này */
+  --font-heading: 'Be Vietnam Pro', sans-serif;
+  /* Ánh xạ màu sắc của trang này vào hệ thống màu toàn cục của bạn */
+  --page-color-primary: var(--color-sage, #8A9A5B);
+  --page-color-accent: var(--color-terracotta, #E2725B);
+  --page-bg-body: var(--bg-subtle, #FDFBF5);
+  --page-color-heading-dark: var(--color-text-dark, #36454F);
+  --page-bg-surface: var(--bg-surface, #FFFFFF);
+}
+
+/* Các style cơ bản cho toàn bộ trang */
+
+.pageWrapper {
+  background-color: var(--page-bg-body);
+  color: var(--page-color-heading-dark);
+  font-family: var(--font-family-sans); /* Sử dụng font body từ global.css */
+}
+
+.pageWrapper h1,
+.pageWrapper h2,
+.pageWrapper h3 {
+    font-family: var(--font-heading); /* Sử dụng font heading đặc trưng */
+}
+
+/* Preloader Styles */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--page-bg-body);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease;
+}
+
+.preloader.hidden {
+    opacity: 0;
+}
+
+.logoLoader {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--page-color-primary);
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}

@@ -1,0 +1,14 @@
+.overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.modal { background: white; max-width: 500px; width: 90%; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); padding: 0; }
+.header { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--border-color-default); }
+.header h3 { font-size: var(--font-size-lg); font-weight: 600; }
+.closeButton { background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--color-text-light); }
+.voucherList { max-height: 400px; overflow-y: auto; padding: var(--spacing-4); display: flex; flex-direction: column; gap: var(--spacing-4); }
+.voucherItem { display: flex; align-items: center; gap: var(--spacing-4); border: 2px solid var(--border-color-default); border-radius: var(--border-radius-lg); padding: var(--spacing-4); transition: all 0.2s ease; }
+.voucherItem.applied { border-color: var(--color-primary); background-color: #f8f9ff; }
+.voucherItem.disabled { opacity: 0.5; background-color: #f9fafb; }
+.iconWrapper { color: var(--color-primary); font-size: 2rem; }
+.voucherInfo { flex-grow: 1; }
+.voucherCode { font-weight: 600; margin-bottom: var(--spacing-1); }
+.voucherDesc { font-size: 0.875rem; color: var(--color-text-light); }
+.radioSelect { width: 20px; height: 20px; accent-color: var(--color-primary); cursor: pointer; }

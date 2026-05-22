@@ -1,0 +1,106 @@
+/* src/components/landing/CommunitySection.module.css */
+.communitySection {
+    padding: 100px 0;
+    text-align: center;
+    background: var(--page-bg-body);
+    overflow: hidden; /* Thêm overflow hidden để chắc chắn không có gì tràn ra ngoài */
+}
+
+.communitySection h2 {
+    padding: 0 10%;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+    margin: 0 auto 80px auto;
+    max-width: 800px;
+}
+
+@keyframes infinite-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+.testimonialSliderWrapper {
+    max-width: 100%;
+    margin-top: -20px;
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.testimonialSlider {
+    display: flex;
+    /* Chiều rộng sẽ được tính động, nhưng ta có thể đặt một giá trị lớn dự phòng */
+    width: fit-content; 
+    animation: infinite-scroll 40s linear infinite;
+}
+
+.testimonialSliderWrapper:hover .testimonialSlider {
+    animation-play-state: paused;
+}
+
+.testimonialCard {
+    width: 350px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    background: var(--page-bg-surface);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    margin: 0 15px;
+}
+
+.testimonialCard blockquote {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    position: relative;
+}
+.testimonialCard blockquote::before { 
+    content: '“'; 
+    position: absolute; 
+    top: -20px; 
+    left: -30px; 
+    font-size: 4rem; 
+    color: var(--page-color-primary); 
+    opacity: 0.3; 
+}
+.testimonialCard cite { 
+    font-style: normal; 
+    font-weight: 600; 
+    color: var(--text-dark); 
+    font-style: italic;
+}
+
+/* Partner Logos */
+.partnerLogosSection {
+    margin-top: 6rem;
+    padding: 0 10%;
+    text-align: center;
+}
+.partnerLogosSection h4 { 
+    color: var(--color-text-subtle); 
+    font-weight: 400; 
+    margin-bottom: 2rem; 
+    text-transform: uppercase; 
+    font-size: 0.9rem; 
+    letter-spacing: 1px; 
+}
+.logosContainer { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 3rem; 
+    flex-wrap: wrap; 
+}
+.logosContainer img { 
+    height: 35px; 
+    filter: grayscale(100%) opacity(0.5); 
+    transition: all 0.3s ease; 
+}
+.logosContainer img:hover { 
+    filter: grayscale(0%) opacity(1); 
+}

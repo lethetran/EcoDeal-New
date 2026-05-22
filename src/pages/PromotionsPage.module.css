@@ -1,0 +1,563 @@
+/* 
+.pageContainer {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-6);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;   align-items: center;
+  margin-bottom: var(--spacing-8);
+}
+
+.filterTabs {
+  display: inline-flex;   background-color: var(--bg-subtle);
+  padding: var(--spacing-1);
+  border-radius: var(--border-radius-full);
+}
+
+.tabButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--border-radius-full);
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+.tabButton > * {
+        position: relative;     z-index: 2; }
+
+.tabButton:hover:not(.active) {
+  color: var(--color-primary);
+}
+
+.activeTabIndicator {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-primary);
+  border-radius: var(--border-radius-full);
+  box-shadow: var(--shadow-md);
+  z-index: 0;
+}
+
+.tabButton.active {
+  color: white;
+}
+
+
+.voucherGrid {
+  display: flex;         
+  overflow-x: auto;      
+  gap: var(--spacing-6); 
+  
+  
+  padding-block: var(--spacing-4); 
+  
+  
+  scroll-snap-type: x mandatory;
+
+  
+  scrollbar-width: none; 
+  -ms-overflow-style: none;  
+}
+.voucherGrid::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+
+.voucherGrid > .voucherCardWrapper {
+  
+  flex: 0 0 350px; 
+  
+  
+  scroll-snap-align: start;
+}
+
+.voucherCardWrapper {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.voucherCard {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid var(--border-color-default);
+  height: 100%;
+}
+
+.voucherCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.voucherMedia {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.voucherMedia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.voucherCard[data-type="store"] .voucherMedia img {
+  object-fit: contain;
+  padding: var(--spacing-4);
+}
+
+.voucherCard:hover .voucherMedia img {
+  transform: scale(1.1);
+}
+
+.mediaOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+}
+
+.voucherContent {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: var(--spacing-6);
+}
+
+.voucherInfo {
+  flex-grow: 1;
+}
+
+.voucherTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin-bottom: var(--spacing-2);
+}
+
+.voucherDesc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  line-height: 1.5;
+  height: 42px;
+  overflow: hidden;
+}
+
+.voucherFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px dashed var(--border-color-default);
+}
+
+.voucherExpiry {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+}
+
+.savedBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--color-success);
+  font-weight: 600;
+  background-color: var(--color-success-bg);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--border-radius-full);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.loadMoreContainer {
+  display: flex;                  
+  justify-content: space-between; 
+  align-items: center;            
+  
+  
+  grid-column: 1 / -1;            
+  margin-top: var(--spacing-4);
+  padding-bottom: var(--spacing-4); 
+}
+
+
+
+.foryou-title {
+  
+  
+  font-family: "Lora", "Times New Roman", serif;
+  font-size: 2.5rem;
+  color: #3D405B; 
+  font-weight: 600;
+  margin: 0; 
+}
+
+
+
+.loadMoreButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: 10px 24px;
+  border: 1.5px solid #3D405B;
+  border-radius: 50px;
+  background-color: transparent;
+  color: #3D405B;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0; 
+  cursor: pointer;
+}
+
+
+.loadMoreButton:hover {
+  background-color: #3D405B;
+  color: white;
+}
+
+
+@media (max-width: 576px) {
+  .loadMoreContainer {
+    
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 16px; 
+  }
+} */
+
+/* ========================================================== */
+/* === PROMOTIONS PAGE CSS (PHIÊN BẢN E-COMMERCE) === */
+/* ========================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+
+/* 1. BIẾN CSS & NỀN TẢNG */
+:root {
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+.pageWrapper { background-color: var(--bg-page); padding-top: 70px;}
+.pageContainer { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+
+
+/* BỔ SUNG: STYLE CHO BANNER HEADER */
+.pageHeader {
+  margin-bottom: 2rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.headerBanner {
+  width: 100%;
+  display: block;
+}
+
+/* 2. BỐ CỤC CHUNG & TIÊU ĐỀ SECTION */
+.voucherSection { margin-bottom: 3rem; }
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 0.75rem 2rem;
+  background-color: var(--text-dark);
+  color: white;
+  display: inline-block;
+  left: 50%;
+  position: relative;
+  transform: translateX(-50%);
+  border-radius: 6px;
+}
+
+.sectionTitle h2 {
+  font-family: var(--font-heading);
+}
+
+.voucherGrid, .voucherGridHot {
+  display: grid;
+  gap: 1.5rem;
+}
+.voucherGrid { grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
+.voucherGridHot { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+/* 3. THIẾT KẾ THẺ VOUCHER "VÉ COUPON" */
+.voucherCard {
+  display: flex;
+  height: 140px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden; /* QUAN TRỌNG: Cần để che phần thừa của hình tròn */
+}
+.voucherCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+/* === THAY ĐỔI LỚN: HIỆU ỨNG KHUYẾT LÕM === */
+.voucherCard::before, .voucherCard::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  /* Dùng màu nền của trang để tạo ảo giác đục lỗ */
+  background: var(--bg-page); 
+  border-radius: 50%;
+  top: 50%;
+  z-index: 2;
+}
+.voucherCard::before {
+  left: 0;
+  transform: translate(-50%, -50%); /* Đẩy nửa hình tròn ra ngoài */
+}
+.voucherCard::after {
+  right: 0;
+  transform: translate(50%, -50%); /* Đẩy nửa hình tròn ra ngoài */
+}
+
+.voucherCard.expired {
+  filter: grayscale(1);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* 4. NỘI DUNG BÊN TRONG THẺ */
+.voucherLeft {
+  width: 70%;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  border-right: 2px dashed var(--border-color);
+}
+.voucherBrand { 
+  text-align: center; 
+  flex-shrink: 0; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  width: 80px;
+}
+.brandLogoImg {
+  width: 48px; 
+  height: 48px;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+  object-fit: cover;
+  background-color: #eee;
+}
+.voucherBrand span { 
+  font-weight: 600; 
+  font-size: 0.85rem; 
+  line-height: 1.2;
+}
+.voucherDetails { display: flex; flex-direction: column; justify-content: center; width: 100%; }
+.voucherValue { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; }
+.voucherCondition { font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.75rem; }
+.voucherProgress {
+  width: 100%;
+  height: 18px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.progressBar {
+  position: absolute; top: 0; left: 0; height: 100%;
+  border-radius: 10px; background-color: var(--primary-red);
+}
+.progressText {
+  position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+  font-size: 0.7rem; color: white; font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+.voucherRight {
+  width: 30%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.voucherTimer { text-align: center; }
+.voucherTimer span { font-size: 0.7rem; color: var(--text-light); }
+.voucherTimer p { font-size: 1.1rem; font-weight: 600; letter-spacing: 1px; color: var(--text-dark); white-space: nowrap; }
+
+/* 5. PHÂN LOẠI MÀU SẮC & NÚT BẤM */
+
+/* --- Voucher Exclusive --- */
+.voucherCard.exclusive { background-color: var(--primary-pink); }
+.voucherCard.exclusive .saveButton {
+    background-color: var(--primary-red);
+}
+/* THAY ĐỔI: Nút "Đã lưu" của thẻ Exclusive sẽ chuyển thành màu xám */
+.voucherCard.exclusive .saveButton.saved {
+    background-color: #A0AEC0; 
+}
+
+/* --- Voucher Hot --- */
+.voucherCard.hot { background-color: var(--hot-red-dark); color: white; }
+.voucherCard.hot .voucherCondition,
+.voucherCard.hot .voucherTimer span,
+.voucherCard.hot .voucherTimer p,
+.voucherCard.hot .voucherLeft {
+    color: #f0f0f0;
+    border-color: rgba(255,255,255,0.3); /* Làm cho đường kẻ mờ hơn */
+}
+.voucherCard.hot .saveButton {
+    background-color: var(--hot-red-light);
+}
+/* THAY ĐỔI: Nút "Đã lưu" của thẻ Hot vẫn giữ nguyên màu đỏ */
+.voucherCard.hot .saveButton.saved {
+    background-color: var(--hot-red-light);
+}
+
+.voucherCard.hot .progressBar { background-color: #fcebeb; }
+.voucherCard.hot .progressText { color: var(--text-dark); text-shadow: none; }
+
+/* --- Style chung cho nút --- */
+.saveButton {
+  margin-top: 0.75rem; width: 100%; padding: 0.7rem;
+  border-radius: 8px; border: none;
+  color: white; font-weight: 600; cursor: pointer;
+  transition: background-color 0.2s;
+}
+.saveButton:hover:not(:disabled) { 
+    filter: brightness(1.1);
+}
+.saveButton:disabled { 
+    cursor: not-allowed;
+    filter: grayscale(0.5); /* Làm cho nút trông bị vô hiệu hóa */
+}
+/* THAY ĐỔI: Khi nút bị vô hiệu hóa VÀ đã lưu, trông nó vẫn "bình thường" */
+.saveButton.saved {
+    cursor: default;
+    filter: none; /* Bỏ hiệu ứng grayscale nếu đã lưu */
+}
+
+
+/* 6. RESPONSIVE */
+@media (max-width: 768px) {
+  .voucherGrid, .voucherGridHot { grid-template-columns: 1fr; }
+  .voucherCard { height: auto; flex-direction: column; }
+  .voucherLeft { width: 100%; border-right: none; border-bottom: 2px dashed var(--border-color); }
+  .voucherRight { width: 100%; }
+  .voucherCard::before, .voucherCard::after { display: none; }
+}
+/* 6. STYLE CHO NÚT XEM THÊM */
+.loadMoreButton {
+    display: block;
+    margin: 2rem auto 0;
+    padding: 0.75rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-red);
+    background-color: var(--primary-blue);
+    color: var(--color-white);
+    /* border: 2px solid var(--primary-red); */
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.loadMoreButton:hover {
+    background-color: var(--primary-blue-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(217, 63, 63, 0.3);
+}
+
+/* 7. RESPONSIVE */
+@media (max-width: 768px) {
+  .voucherGrid, .voucherGridHot { grid-template-columns: 1fr; }
+  .voucherCard { height: auto; flex-direction: column; }
+  .voucherLeft { width: 100%; border-right: none; border-bottom: 2px dashed var(--border-color); }
+  .voucherRight { width: 100%; }
+  .voucherCard::before, .voucherCard::after { display: none; }
+}
+
+.voucherCondition {
+    white-space: nowrap;      /* Không xuống hàng */
+    overflow: hidden;         /* Ẩn phần thừa */
+    text-overflow: ellipsis;  /* Hiển thị dấu "..." */
+}
+
+.voucherDetails { 
+  flex: 1;
+  min-width: 0; /* <<< ĐÂY CHÍNH LÀ DÒNG QUAN TRỌNG NHẤT */
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+}
+
+/* === THAY THẾ ĐOẠN NÀY ĐỂ SỬA LỖI CẮT CHỮ DỌC === */
+
+.voucherProgress {
+  width: 100%;
+  min-height: 20px; /* << THAY ĐỔI QUAN TRỌNG: từ height sang min-height */
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 10px;
+  z-index: 0;
+}
+
+/* .progressTextWrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 0 8px;
+  overflow: hidden;
+} */
+
+.progressText {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4; /* Thêm dòng này để đảm bảo khoảng cách dọc */
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

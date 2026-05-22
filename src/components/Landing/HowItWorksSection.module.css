@@ -1,0 +1,45 @@
+.howItWorksSection {
+    background-color: var(--page-bg-body);
+    padding: 120px 10%;
+}
+
+.howItWorksSection h2 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+    margin: 0 auto 80px auto;
+    max-width: 800px;
+}
+
+.stepsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 50px;
+}
+
+.step {
+    text-align: center;
+}
+
+.step span {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    color: var(--page-bg-surface);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.step h3 {
+    font-family: var(--font-family-sans);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.step p {
+    line-height: 1.7;
+}

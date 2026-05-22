@@ -1,0 +1,664 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+
+:root {
+  
+  --primary-blue: #6C7EE1;
+  --primary-blue-dark: #5A6ACC;
+  --accent-orange: #FFB74D;
+  --text-dark: #333333;
+  --text-light: #6E6E6E;
+  --body-bg: #F8F9FA;
+  --container-bg: #FFFFFF;
+  --border-color: #E0E0E0;
+
+  
+  --body-font: 'Poppins', sans-serif;
+  --h1-font-size: 2.5rem;
+  --h2-font-size: 1.75rem;
+  --h3-font-size: 1.125rem;
+  --normal-font-size: 1rem;
+  --small-font-size: 0.875rem;
+
+  
+  --box-shadow: 0 4px 20px hsla(220, 18%, 45%, 0.1);
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--body-font);
+  background-color: var(--body-bg);
+  color: var(--text-dark);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+.container_home {
+  max-width: 100%;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.section {
+  padding: 4rem 0 2rem;
+}
+
+.section__title {
+  font-size: 40px;
+  color: var(--primary-blue);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+
+.btn_home {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn--primary {
+  background-color: var(--primary-blue);
+  color: white;
+}
+.btn--primary:hover {
+  transform: scale(1.05);
+  box-shadow: var(--box-shadow);
+}
+
+.btn--outline {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+.btn--outline:hover {
+  background-color: var(--primary-blue);
+  color: white;
+}
+
+.btn--light {
+  background-color: white;
+  color: var(--primary-blue);
+}
+.btn--light:hover {
+  
+  transform: scale(1.05);
+}
+
+.btn--lg {
+  padding: 1rem 2rem;
+  font-size: var(--normal-font-size);
+}
+
+
+.header {
+  width: 100%;
+  background-color: var(--container-bg);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav {
+  width: 100%;
+  height: 4.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav.container_home {
+    display: flex; /* Bật Flexbox */
+    align-items: center; /* Căn chỉnh các mục theo chiều dọc */
+    width: 100%;
+    max-width: 1320px; /* Giới hạn chiều rộng tối đa trên màn hình lớn */
+    margin: 0 auto; /* Căn giữa container trong header */
+    padding: 0 20px; /* Khoảng đệm hai bên */
+}
+
+.nav__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+.nav__search {
+  display: flex;
+  align-items: center;
+  background-color: var(--body-bg);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  width: 400px;
+}
+.nav__search i {
+  font-size: 1.25rem;
+  color: var(--text-light);
+}
+.nav__search input {
+  border: none;
+  outline: none;
+  background: none;
+  width: 100%;
+  margin-left: 0.5rem;
+  font-size: var(--normal-font-size);
+}
+
+/* .nav__search input:focus-within {
+  border-color: transparent;
+  border-color: #7a96f9;
+  box-shadow: 0 0 8px rgba(122, 150, 249, 0.7);
+} */
+
+.nav__search:focus-within {
+  border-color: transparent;
+  border-color: #7a96f9;
+  box-shadow: 0 0 8px rgba(122, 150, 249, 0.7);
+}
+.nav__list {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav__link {
+  font-weight: 500;
+  color: var(--text-light);
+  transition: color 0.3s;
+}
+.nav__link:hover, .nav__link.active {
+  color: var(--primary-blue);
+}
+
+.nav__actions {
+  display: flex;
+  gap: 1rem;
+}
+
+
+.hero__container {
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 2rem;
+}
+
+.hero__title {
+  font-size: var(--h1-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.hero__description {
+  font-size: var(--normal-font-size);
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+.hero__image img {
+  width: 100%;
+  max-width: 500px;
+  display: block;
+  margin-left: auto;
+}
+.hero__content .btn i {
+    vertical-align: middle;
+}
+
+
+.deals__container {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1.5rem; 
+    
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+}
+.deals__container::-webkit-scrollbar {
+  display: none; 
+}
+
+
+/* .deal-card {
+    min-width: 280px;
+    background-color: var(--container-bg);
+    border-radius: 1rem;
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+.deal-card:hover {
+    transform: translateY(-5px);
+}
+
+.deal-card__image {
+    position: relative;
+    height: 180px;
+}
+.deal-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.deal-card__tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: var(--accent-orange);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: var(--small-font-size);
+    font-weight: 600;
+}
+
+.deal-card__content {
+    padding: 1rem;
+}
+
+.deal-card__title {
+    font-size: var(--h3-font-size);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.deal-card__store {
+    color: var(--text-light);
+    font-size: var(--small-font-size);
+    margin-bottom: 0.75rem;
+}
+
+.deal-card__price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.price--old {
+    text-decoration: line-through;
+    color: var(--text-light);
+}
+.price--new {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+}
+.deal-card__info {
+    font-size: var(--small-font-size);
+    color: var(--text-light);
+} */
+
+
+.how-it-works__container {
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+}
+
+.step-item__icon {
+    font-size: 3rem;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+}
+
+.step-item__title {
+    font-size: var(--h3-font-size);
+    margin-bottom: 0.5rem;
+}
+
+.step-item__description {
+    color: var(--text-light);
+    padding: 0 1rem;
+}
+
+
+
+.partner-cta {
+    background-color: var(--primary-blue);
+    color: white;
+    border-radius: 1.5rem;
+    margin: 2rem auto;
+}
+
+.partner-cta__container {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+.partner-cta__title {
+    font-size: var(--h2-font-size);
+    margin-bottom: 1rem;
+}
+.partner-cta__description {
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    opacity: 0.9;
+}
+
+
+
+.footer {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding-top: 4rem;
+}
+
+.footer__container {
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.footer__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.footer__description {
+    color: #bdc3c7;
+}
+
+.footer__content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.footer__title {
+    font-size: var(--h3-font-size);
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.footer__link {
+    color: #bdc3c7;
+    transition: color 0.3s;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+.footer__link:hover {
+    color: var(--primary-blue);
+}
+
+.footer__social {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer__social-link {
+    font-size: 1.5rem;
+    color: #bdc3c7;
+    transition: color 0.3s;
+}
+.footer__social-link:hover {
+    color: var(--primary-blue);
+}
+
+.footer__copy {
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+    border-top: 1px solid #34495e;
+    color: #95a5a6;
+    font-size: var(--small-font-size);
+}
+
+
+
+
+@media (max-width: 992px) {
+  .nav__search {
+    width: 250px;
+  }
+
+  .nav__list {
+    gap: 1rem;
+  }
+
+  .hero__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero__image img {
+    margin: 0 auto;
+  }
+
+  .hero__description {
+    margin: 0 auto 2rem;
+  }
+
+  .how-it-works__container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer__content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .nav__search {
+    display: none;
+  }
+
+  .hero__container {
+    padding: 1rem 0;
+  }
+
+  .hero__title {
+    font-size: 2rem;
+  }
+
+  .btn--lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .footer__content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .deals__container {
+    gap: 1rem;
+  }
+}
+
+
+
+
+
+/* 
+  Thiết kế mặc định (Mobile-First)
+  - Ẩn các thành phần chỉ dành cho Desktop
+  - Sắp xếp các mục theo cột
+*/
+.nav__search,
+.nav__list {
+  display: none; 
+}
+
+
+.nav__toggle {
+  display: inline-block; 
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+
+@media screen and (min-width: 768px) {
+  .container_home {
+    max-width: 720px;
+  }
+  
+  .nav__search {
+    display: flex; 
+    width: 300px;
+  }
+
+  .nav__list {
+    display: flex; 
+    gap: 1.5rem;
+  }
+
+  .nav__toggle {
+    display: none; 
+  }
+
+  
+  .hero__container {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    text-align: left;
+    padding-top: 3rem;
+  }
+
+  .hero__image img {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .hero__description {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  
+  .how-it-works__container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  
+  .footer__container {
+    grid-template-columns: 1fr 2fr;
+    text-align: left;
+  }
+  .footer__content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .footer__logo, .footer__description {
+    text-align: left;
+  }
+}
+
+/* 
+  ----------------------------------------------------
+  Breakpoint 2: Màn hình Desktop nhỏ
+  - Bắt đầu từ 992px trở lên
+  ----------------------------------------------------
+*/
+@media screen and (min-width: 992px) {
+  .container_home {
+    max-width: 960px;
+  }
+
+  .nav {
+    height: 5rem;
+  }
+
+  .nav__search {
+    width: 400px;
+  }
+
+  .nav__list {
+    gap: 2.5rem;
+  }
+
+  .section {
+    padding: 5rem 0 3rem;
+  }
+
+  .hero__title {
+    font-size: var(--h1-font-size);
+  }
+}
+
+/* 
+  ----------------------------------------------------
+  Breakpoint 3: Màn hình Desktop lớn
+  - Bắt đầu từ 1200px trở lên
+  ----------------------------------------------------
+*/
+@media screen and (min-width: 1200px) {
+  .container_home {
+    max-width: 1140px;
+  }
+}
+
+/* Seemore */
+/* Thêm vào file CSS của bạn, ví dụ: Home.css */
+
+.see-more-container {
+  text-align: center; /* Căn giữa nút */
+  margin-top: 40px;   /* Khoảng cách với lưới sản phẩm ở trên */
+}
+
+.see-more-btn {
+  padding: 12px 30px;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background-color: #6C7EE1;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.35);
+}
+
+.see-more-btn:hover {
+  /* background-color: #6C7EE1;
+  border-color: #6C7EE1;
+  color: white; */
+  background-color: #5850e0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.see-more-btn:active {
+  transform: translateY(0);
+}
+
+.deals-grid__footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

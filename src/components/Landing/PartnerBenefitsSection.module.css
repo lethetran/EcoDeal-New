@@ -1,0 +1,97 @@
+/* src/components/landing/PartnerBenefitsSection.module.css */
+.partnerBenefitsSection {
+    background-color: var(--page-bg-surface);
+    text-align: center;
+    padding: 120px 10%;
+}
+
+.partnerBenefitsSection h2 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+    margin: 0 auto; /* Bỏ margin-bottom để .sectionSubtitle kiểm soát */
+    max-width: 800px;
+}
+
+.sectionSubtitle {
+    max-width: 600px;
+    margin: 1.5rem auto 3rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--color-text-light);
+}
+
+.benefitsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.benefitItem {
+    background-color: var(--page-bg-body);
+    padding: 2.5rem 2rem;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.benefitItem:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.benefitIcon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background-color: var(--primary-blue);
+    color: var(--page-bg-surface);
+    display: grid;
+    place-items: center;
+}
+
+.benefitIcon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.benefitItem h3 {
+    font-family: var(--font-family-sans);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.benefitItem p {
+    font-weight: 300;
+    color: var(--color-text-light);
+}
+
+.ctaButtons {
+    margin-top: 1rem;
+}
+
+/* Sao chép style cho nút từ Header.module.css để đảm bảo tính nhất quán */
+.btnPrimary {
+    font-family: var(--font-family-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 5px;
+    text-decoration: none;
+    display: inline-block;
+    background: var(--primary-blue); 
+    color: var(--page-bg-surface);
+}
+
+.btnPrimary:hover {
+    background: var(--page-bg-surface); 
+    color: var(--primary-blue); 
+    transform: translateY(-3px); 
+    border-color: var(--primary-blue);
+    box-shadow: var(--shadow-md);
+}

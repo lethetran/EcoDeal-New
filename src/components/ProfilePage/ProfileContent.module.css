@@ -1,0 +1,83 @@
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.contentTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-dark);
+  padding: var(--spacing-6);
+  border-bottom: 1px solid var(--border-color-default);
+}
+
+.contentBody {
+  padding: var(--spacing-8);
+  color: var(--color-text-light);
+  line-height: 1.7;
+}
+
+.orderList {
+    padding: var(--spacing-2) var(--spacing-6) var(--spacing-6);
+    display: flex;
+    flex-direction: column;
+}
+
+.orderItem {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: var(--spacing-6);
+    align-items: center;
+    padding: var(--spacing-6) 0;
+}
+.orderItem:not(:last-child) {
+    border-bottom: 1px solid var(--border-color-default);
+}
+
+.orderInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+.orderId {
+    font-weight: 600;
+    color: var(--color-text-dark);
+}
+.orderDate {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-light);
+}
+.orderTotal {
+    font-weight: 600;
+}
+.orderStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+.completed {
+    background-color: var(--color-success-bg);
+    color: var(--color-success);
+}
+.processing {
+    background-color: #FEF3C7;     color: #92400E; }
+.spinner {
+    animation: spin 1.5s linear infinite;
+}
+
+.viewDetailButton {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color-default);
+    color: var(--color-text-default);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.viewDetailButton:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}

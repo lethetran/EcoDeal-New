@@ -1,0 +1,15 @@
+.header {
+  margin-bottom: var(--spacing-8);
+  padding-bottom: var(--spacing-6);
+  border-bottom: 1px solid var(--border-color-default);
+}
+.title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+.subtitle {
+  margin-top: var(--spacing-2);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-light);
+}

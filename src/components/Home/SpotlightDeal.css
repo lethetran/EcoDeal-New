@@ -1,0 +1,210 @@
+/* ======================================================= */
+/* === CSS CHO PHẦN ƯU ĐÃI CỦA NGÀY (SPOTLIGHT DEAL) === */
+/* ======================================================= */
+
+/* Mục Ưu Đãi Của Ngày (Spotlight) */
+.spotlight-deal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4rem;
+    background-color:#f0f2fe; /* Màu nền nhẹ, ấm cúng */
+    padding: 3rem 4rem; /* Giảm padding một chút */
+
+    /* === THAY ĐỔI QUAN TRỌNG NHẤT === */
+    height: 600px; /* 1. Đặt một chiều cao CỐ ĐỊNH cho toàn bộ slide */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+}
+
+/* Phần chứa hình ảnh */
+.spotlight-image {
+    /* 2. Cho phép phần ảnh này chiếm toàn bộ chiều cao của cha */
+    height: 100%;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden; /* Ẩn phần ảnh bị tràn ra ngoài */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+}
+
+.spotlight-image img { 
+    /* 3. Đảm bảo ảnh luôn lấp đầy container của nó mà không bị méo */
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; /* Đây là thuộc tính "thần kỳ" */
+}
+
+/* Phần thông tin (giữ nguyên nhưng có thể cần điều chỉnh) */
+.spotlight-info {
+    /* (Tùy chọn) Sắp xếp nội dung bên trong bằng flexbox nếu cần */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+    align-items: flex-start;
+}
+
+.spotlight-info .tag {
+    display: inline-block; 
+    padding: 6px 15px; 
+    /* Giả sử bạn có biến --color-terracotta, nếu không hãy thay bằng màu cụ thể */
+    background-color: var(--primary-blue); 
+    color: var(--color-white, #FFFFFF); 
+    border-radius: 20px; 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+    margin-bottom: 1rem;
+}
+
+.spotlight-info h2 {
+    /* Giả sử bạn có biến --font-heading */
+    font-family: var(--font-heading, 'Poppins', sans-serif); 
+    font-size: 3rem; 
+    margin: 0 0 1rem 0;
+}
+
+.spotlight-info p { 
+    font-size: 1.1rem; 
+    line-height: 1.7; 
+    opacity: 0.8; 
+}
+
+/* Style cho nút bấm, kế thừa từ style chung */
+.spotlight-info .btn-primary { 
+    margin-top: 1.5rem; 
+}
+
+/* Style chung cho nút bấm (để đảm bảo hoạt động độc lập) */
+.btn-primary { 
+    font-family: var(--font-body, 'Poppins', sans-serif); 
+    font-weight: 600; 
+    font-size: 0.9rem; 
+    padding: 12px 30px; 
+    border-radius: 50px; 
+    border: 2px solid transparent; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    text-decoration: none; 
+    display: inline-block; 
+    background: var(--primary-blue); 
+    color: var(--color-white, #FFFFFF);
+}
+.btn-primary:hover { 
+    background: var(--primary-blue-dark, #5A6ACC); 
+    transform: translateY(-3px); 
+}
+
+/* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 992px) {
+    .spotlight-deal {
+        grid-template-columns: 1fr; /* Chuyển sang layout 1 cột */
+        padding: 3rem;
+        gap: 2rem;
+        height: auto; /* 4. Cho phép chiều cao tự động trên mobile */
+        min-height: 700px; /* Đặt chiều cao tối thiểu để không bị quá nhỏ */
+    }
+    .spotlight-info h2 {
+        font-size: 2.5rem;
+    }
+}
+
+/* ======================================================= */
+/* === CSS MỚI CHO SPOTLIGHT DEALS SLIDER === */
+/* ======================================================= */
+
+/* 1. Container chính của slider */
+.spotlight-slider {
+  position: relative; /* Để định vị các nút điều khiển */
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* 2. Wrapper để ẩn các slide không hiển thị */
+.slider-wrapper {
+  overflow: hidden; /* Đây là thuộc tính quan trọng nhất! */
+  border-radius: 30px; /* Giữ lại bo góc của thiết kế cũ */
+}
+
+/* 3. Track chứa tất cả các slide */
+.slider-track {
+  display: flex; /* Xếp các slide nằm ngang */
+  /* Thêm hiệu ứng chuyển động mượt mà */
+  transition: transform 0.5s ease-in-out; 
+}
+
+/* 4. Style cho mỗi slide đơn lẻ */
+.slider-slide {
+  /* Mỗi slide chiếm 100% chiều rộng của wrapper */
+  flex: 0 0 100%; 
+  box-sizing: border-box;
+}
+
+/* 5. Tái sử dụng style .spotlight-deal của bạn cho nội dung bên trong slide */
+/* Đảm bảo nó không có margin ngoài để không phá vỡ layout */
+.slider-slide .spotlight-deal {
+  margin: 0; 
+  border-radius: 0; /* Bo góc giờ sẽ do .slider-wrapper quản lý */
+  width: 100%;
+}
+
+
+/* 6. Style cho các nút điều khiển < > */
+.slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /* background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--color-border, #E2E8F0); */
+  /* border-radius: 50%;
+  width: 50px;
+  height: 50px; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--color-text-primary, #6b6a6a);
+  transition: all 0.2s ease;
+  background: none;
+    border: none;
+    padding: 10px;
+}
+
+.slider-button:hover {
+  transform: translateY(-50%) scale(1.2);
+  color: var(--color-primary-dark, #4A89DC); /* Thay bằng màu chính của bạn */
+}
+
+/* ======================================================= */
+/* === SỬA ĐỔI: DỊCH NÚT SLIDER RA HAI BÊN === */
+/* ======================================================= */
+
+/* Định vị cho từng nút trên màn hình lớn */
+.slider-button.prev {
+  /* Dùng giá trị âm để đẩy nút ra ngoài mép trái của slider */
+  left: -5px; 
+}
+
+.slider-button.next {
+  /* Dùng giá trị âm để đẩy nút ra ngoài mép phải của slider */
+  right: -5px;
+}
+
+/* Responsive: Trên màn hình nhỏ, đưa nút vào trong để tránh bị mất */
+@media (max-width: 992px) {
+  .slider-button.prev {
+    left: 10px; /* Đặt lại giá trị dương */
+  }
+  .slider-button.next {
+    right: 10px; /* Đặt lại giá trị dương */
+  }
+}
+
+/* Giữ nguyên các style responsive khác nếu có */
+@media (max-width: 768px) {
+  .slider-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+}

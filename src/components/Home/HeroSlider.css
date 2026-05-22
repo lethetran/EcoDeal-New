@@ -1,0 +1,121 @@
+/* ========================================= */
+/* === CSS CHO HERO SLIDER === */
+/* ========================================= */
+
+/* 1. Container chính của Slider */
+.hero-slider {
+  /* Chiều cao chiếm 70% viewport, có giới hạn min/max */
+  height: 70vh;
+  min-height: 550px;
+  max-height: 750px;
+  
+  /* Ẩn các phần thừa ra ngoài */
+  overflow: hidden;
+  
+  /* Màu nền dự phòng khi ảnh chưa tải xong */
+  background-color: var(--text-dark);
+  
+  /* Màu chữ mặc định cho nội dung bên trong */
+  color: white;
+  
+  /* Đảm bảo slider nổi trên nền gradient */
+  position: relative;
+  z-index: 2;
+}
+
+/* 2. Định dạng cho từng Slide */
+.hero-slider .slide {
+  /* Mỗi slide chiếm toàn bộ không gian của container */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 3. Nền và Lớp phủ của Slide */
+.slide__background-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slide__background {
+  width: 100%;
+  /* Chiều cao 115% để có thể tạo hiệu ứng Ken Burns (phóng to/di chuyển) mà không bị lộ viền */
+  height: 115%;
+  /* Đảm bảo ảnh lấp đầy khung mà không bị méo */
+  object-fit: cover;
+  /* Giảm độ sáng của ảnh nền để chữ nổi bật hơn */
+  filter: brightness(0.6);
+}
+
+.slide__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Lớp phủ gradient từ mờ ở trên đến tối hơn ở dưới, giúp chữ dễ đọc hơn */
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+}
+
+/* 4. Nội dung của Slide (Tiêu đề, Phụ đề) */
+.slide__content {
+  /* Căn giữa nội dung một cách hoàn hảo */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  text-align: center;
+  width: 90%;
+  max-width: 800px;
+  
+  /* Đảm bảo nội dung nổi trên lớp phủ */
+  z-index: 5;
+}
+
+.slide__title {
+  font-family: var(--font-heading);
+  /* Kích thước chữ linh hoạt theo màn hình */
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-weight: 700;
+  /* Đổ bóng cho chữ để tăng độ tương phản */
+  text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+/* Cho phép animation trên từng từ/chữ cái nếu cần */
+.slide__title span {
+  display: inline-block;
+}
+
+.slide__subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 300;
+  max-width: 600px;
+  margin: 0 auto; /* Tự động căn giữa */
+  opacity: 0.9;
+}
+
+/* 5. Thanh tiến trình của Slider */
+.slider__progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: var(--primary-blue);
+  z-index: 10;
+}
+
+/* 6. Responsive cho thiết bị di động */
+@media screen and (max-width: 768px) {
+  .hero-slider {
+    /* Giảm chiều cao trên màn hình nhỏ */
+    height: 60vh;
+  }
+}

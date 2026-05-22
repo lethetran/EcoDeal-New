@@ -1,0 +1,31 @@
+.storySection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 5%;
+    align-items: center;
+    background-color: var(--page-bg-surface);
+    padding: 120px 10%;
+}
+
+.storySection h2 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+    margin: 0 auto 80px auto;
+    max-width: 800px;
+}
+
+.storyImageWrapper {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.storyImageWrapper img {
+    width: 100%;
+    display: block;
+}
+
+.storyText p {
+    line-height: 1.8;
+    font-size: var(--font-size-lg);
+}

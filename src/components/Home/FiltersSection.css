@@ -1,0 +1,169 @@
+/* --- BIẾN CSS HOÀN THIỆN (PHONG CÁCH CAM CHÁY) --- */
+:root {
+  /* <<< THAY ĐỔI Ở ĐÂY: Đảm bảo --primary-blue là màu cam cháy */
+  --main-color: #f97316; /* Cam cháy */
+  --primary-blue-dark: #fb923c; /* Cam cháy nhạt hơn cho hover */
+  
+  --bg-light: #f9fafb; /* Nền xám rất nhạt */
+  --bg-medium: #f3f4f6; /* Nền cho button thường */
+  --bg-white: #ffffff;
+
+  --text-dark: #1f2937;
+  --text-medium: #6b7280;
+  --text-light: #9ca3af;
+  
+  --border-color: #e5e7eb;
+
+  /* Font chữ đã được thống nhất */
+  --font-primary: 'Inter', sans-serif;
+
+  /* Đổ bóng đã được tinh chỉnh */
+  --box-shadow-soft: 0 4px 12px rgba(0,0,0,0.05);
+  --box-shadow-medium: 0 4px 8px rgba(249, 115, 22, 0.2); /* Đổ bóng màu cam */
+}
+
+/* --- CÀI ĐẶT CƠ BẢN --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-primary); /* Áp dụng font Inter */
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ========================================================== */
+/* --- FILTERS SECTION (CẬP NHẬT VIEW TOGGLE VỚI ANIMATION) --- */
+/* ========================================================== */
+
+.filters-section {
+  padding: 1rem 0;
+  position: sticky;
+  top: 4.5rem; /* Chiều cao header */
+  background-color: rgba(249, 250, 251, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filters__card-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  background: var(--bg-white);
+  border-radius: 16px;
+  padding: 0.75rem;
+  box-shadow: var(--box-shadow-soft);
+  border: 1px solid var(--border-color);
+}
+
+/* Container cho các chip button (giữ nguyên) */
+.filters__scroll-container {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.filters__scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Thiết kế "Chip Button" (giữ nguyên) */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap; 
+  background-color: var(--bg-medium);
+  color: var(--text-dark);
+  border-radius: 999px;
+  padding: 0.65rem 1.25rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+.filter-chip i { font-size: 1.1rem; }
+.filter-chip:hover {
+  background-color: var(--primary-blue-dark);
+  color: white;
+  transform: translateY(-2px);
+}
+.filter-chip.active {
+  background-color: var(--primary-blue);
+  color: white;
+  box-shadow: var(--box-shadow-medium);
+  transform: translateY(-2px);
+}
+
+
+/* ========================================================== */
+/* --- VIEW TOGGLE - ĐỒNG BỘ MÀU SẮC & GIỮ ANIMATION --- */
+/* ========================================================== */
+
+/* ========================================================== */
+/* --- VIEW TOGGLE - ICON MÀU CAM, NỀN TRẮNG TRƯỢT --- */
+/* ========================================================== */
+
+.view-toggle {
+  display: flex;
+  /* <<< THAY ĐỔI: Nền của cả cụm nút là màu xám nhạt */
+  background-color: var(--bg-medium); 
+  border-radius: 12px;
+  padding: 0.25rem;
+  flex-shrink: 0;
+  position: relative; 
+}
+
+.view-toggle__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  
+  /* <<< THAY ĐỔI: Nền của nút luôn trong suốt */
+  background-color: transparent; 
+  
+  position: relative; 
+  z-index: 2; 
+}
+
+/* Định dạng cho icon */
+.view-toggle__btn i {
+  font-size: 1.5rem;
+  color: var(--text-medium); /* Màu icon mặc định */
+  transition: color 0.3s ease, transform 0.2s ease-out;
+  position: relative;
+  z-index: 2; 
+}
+
+/* Hiệu ứng scale nhẹ khi hover */
+.view-toggle__btn:hover i {
+    transform: scale(1.1);
+}
+
+/* <<< THAY ĐỔI: Icon sẽ có MÀU CAM khi nút active */
+.view-toggle__btn i.active {
+  color: var(--primary-blue);
+}
+
+/* "Viên thuốc" nền sẽ trượt */
+.active-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* <<< THAY ĐỔI: Nền của viên thuốc luôn là màu TRẮNG */
+  background-color: var(--bg-white); 
+  
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 1; 
+}

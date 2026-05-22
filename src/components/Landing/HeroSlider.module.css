@@ -1,0 +1,115 @@
+/* src/components/landing/HeroSlider.module.css */
+
+.videoStage {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--page-color-heading-dark);
+}
+
+.videoSlider {
+    display: flex;
+    width: 300%; /* Sẽ được tính toán động trong JS */
+    height: 100%;
+    transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.videoSlide {
+    position: relative;
+    width: 100%;
+    flex-shrink: 0;
+    height: 100vh;
+}
+
+.videoSlide video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+}
+
+.videoSlide::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+}
+
+.slideContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--page-bg-surface);
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+    z-index: 5;
+}
+
+.slideContent h1,
+.slideContent p {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: text-reveal 1s forwards;
+}
+
+.slideContent p {
+    animation-delay: 0.3s;
+}
+
+.slideContent h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    margin: 0 0 15px 0;
+}
+
+.slideContent p {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+@keyframes text-reveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sliderControls {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    max-width: 300px;
+    z-index: 10;
+}
+
+.progressBarContainer {
+    width: 100%;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+.progressBar {
+    width: 0%;
+    height: 100%;
+    background-color: var(--page-bg-surface);
+    border-radius: 2px;
+    /* Animation sẽ được trigger trong JS */
+}
+
+.progressBarAnimating {
+    width: 100%;
+    transition: width 8000ms linear;
+}

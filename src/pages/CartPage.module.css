@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+
+/* 1. BIẾN CSS & NỀN TẢNG */
+:root {
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.pageContainer {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-6);
+  padding-top: 80px;
+  padding-bottom: 120px;
+}
+
+.cartLayout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--spacing-8);
+  align-items: flex-start;
+  margin-top: var(--spacing-6);
+}
+
+/* Thanh "Chọn tất cả" */
+.cartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4) var(--spacing-5);
+  background-color: var(--bg-surface);
+  /* border-radius: var(--border-radius-lg); */
+  border-radius: 10px;
+  margin-bottom: var(--spacing-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.selectAllWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  cursor: pointer;
+  margin-left: 20px;
+}
+.selectAllWrapper label {
+  cursor: pointer;
+  font-weight: 500;
+  user-select: none;
+  color: var(--color-text-dark);
+}
+
+/* Custom checkbox dùng chung */
+:global(.cart-page-checkbox) {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color-default);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+:global(.cart-page-checkbox):hover {
+  border-color: var(--primary-blue);
+}
+:global(.cart-page-checkbox):checked {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+:global(.cart-page-checkbox):checked::after {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 10px;
+  border: solid var(--color-text-on-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  position: absolute;
+  top: 3px;
+  left: 7px;
+}
+
+
+.continueShopping {
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  background-color: #e3e6f8;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--border-radius-md);
+}
+.continueShopping:hover {
+  color: var(--primary-blue-dark);
+}
+
+
+/* Khối bao bọc một cửa hàng */
+.storeGroup {
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-8);
+  overflow: hidden;
+}
+
+/* Container cho các sản phẩm bên trong 1 cửa hàng */
+.itemsInStore {
+  display: flex;
+  flex-direction: column;
+  /* padding: 0 var(--spacing-5); */
+  margin: 0 20px 0 20px;
+}
+
+.summarySidebar {
+  position: sticky;
+  top: var(--spacing-6);
+}
+
+/* Giao diện giỏ hàng trống */
+.emptyCart {
+  text-align: center;
+  padding: var(--spacing-12) var(--spacing-6);
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-lg);
+  margin-top: var(--spacing-8);
+}
+.emptyCartImage { max-width: 250px; margin-bottom: var(--spacing-8); }
+.emptyCart h2 { font-size: var(--font-size-2xl); font-weight: 700; color: var(--color-text-dark); margin-bottom: var(--spacing-2); }
+.emptyCart p { color: var(--color-text-light); margin-bottom: var(--spacing-8); }
+.continueShoppingButton {
+  display: inline-block; padding: var(--spacing-3) var(--spacing-8); background-color: var(--primary-blue);
+  color: white; font-weight: 600; border-radius: var(--border-radius-md); transition: all 0.2s ease;
+  text-decoration: none;
+}
+.continueShoppingButton:hover { background-color: var(--primary-blue-dark); box-shadow: var(--shadow-md); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .cartLayout {
+    grid-template-columns: 1fr;
+  }
+  .summarySidebar {
+    position: static;
+    margin-top: var(--spacing-8);
+  }
+}
+
+
+.storeGroup {
+background-color: var(--bg-surface); 
+/* border-radius: var(--border-radius-xl);  */
+border-radius: 10px;
+box-shadow: var(--shadow-md); 
+margin-bottom: var(--spacing-4);
+overflow: hidden;
+}
+.itemsInStore {
+display: flex;
+flex-direction: column;
+padding: 0 var(--spacing-5);
+}
+

@@ -1,0 +1,141 @@
+
+.cartItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-5);
+  padding: var(--spacing-6) 0;
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid var(--border-color-default);
+}
+.cartItem:last-child {
+  border-bottom: none;
+}
+
+.selectionArea {
+  display: flex;
+}
+
+.itemImage {
+  width: 90px;
+  height: 90px;
+  border-radius: var(--border-radius-lg);
+  object-fit: cover;
+  flex-shrink: 0;
+  margin: 0 20px 0 10px;
+}
+
+.itemInfo {
+  flex-grow: 1;
+}
+
+.itemName {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--spacing-2);
+  color: var(--color-text-dark);
+  transition: color 0.2s ease;
+}
+
+.itemPriceUnit {
+  /* font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-4); */
+}
+
+.itemActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-3);
+  margin-left: var(--spacing-4);
+}
+
+.itemTotalPrice {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: #4f46e5;
+  white-space: nowrap;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  padding: var(--spacing-2);
+  border-radius: var(--border-radius-full);
+  display: flex;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  font-size: 16px;
+}
+.removeButton:hover {
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
+}
+.infoColumn {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--spacing-2); /* Chỉnh lại gap để khoảng cách đều hơn */
+}
+
+.itemName {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin: 0;
+}
+
+/* ======================================= */
+/* THÊM CÁC STYLE MỚI CHO GIÁ TẠI ĐÂY */
+/* ======================================= */
+
+/* Container cho cả 2 giá */
+.priceWrapper {
+  display: flex;
+  align-items: baseline; /* Quan trọng: Căn các giá theo đường chân chữ */
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+}
+
+/* Style cho giá mới (giá khuyến mãi) */
+.currentPrice {
+  font-size: 1.1rem; /* Cỡ chữ to hơn một chút */
+  font-weight: 600;
+  color: #f97316; /* Màu cam */
+}
+
+/* Style cho giá gốc */
+.originalPrice {
+  font-size: 0.875rem; /* Cỡ chữ nhỏ hơn */
+  color: #94a3b8; /* Màu xám */
+  text-decoration: line-through; /* Gạch ngang */
+}
+
+/* ======================================= */
+/* THÊM STYLE MỚI CHO TAG % TẠI ĐÂY */
+/* ======================================= */
+.discountBadge {
+  background-color: orange; /* Dùng màu đỏ cho nổi bật */
+  color: var(--color-text-on-primary); /* Chữ trắng */
+  padding: var(--spacing-1) var(--spacing-2); /* 4px trên-dưới, 8px trái-phải */
+  border-radius: 40px;
+  font-size: 0.75rem; /* Cỡ chữ rất nhỏ */
+  font-weight: 700;   /* In đậm */
+  white-space: nowrap; /* Đảm bảo không bị xuống dòng */
+  padding: 2px 6px;
+}
+
+
+/* Style cho thẻ Link mới */
+.itemNameLink {
+  text-decoration: none; /* Bỏ gạch chân */
+  color: inherit;      /* Giữ màu chữ mặc định */
+}
+
+/* Thêm hiệu ứng hover */
+.itemNameLink:hover .itemName {
+  color: var(--primary-blue);
+}

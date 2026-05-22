@@ -1,0 +1,738 @@
+/* --- Kế thừa các biến từ file global --- */
+:root {
+  --primary-blue: #6C7EE1; /* Orange 500 */
+  --color-primary-dark: #EA580C; /* Orange 600 */
+  --color-primary-light: #FFF7ED; /* Orange 50 */
+  --color-text-dark: #1F2937;    /* Gray 800 */
+  --color-text-light: #4B5563;   /* Gray 600 */
+  --color-text-subtle: #6B7280;  /* Gray 500 */
+  --color-background: #F9FAFB;   /* Gray 50 */
+  --color-surface: #FFFFFF;
+  --color-border: #E5E7EB;       /* Gray 200 */
+  --color-success: #10B981;       /* Emerald 500 */
+  --color-accent: #EF4444;       /* Red 500 */
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  --border-radius-md: 8px; 
+  --border-radius-lg: 12px; 
+  --border-radius-xl: 16px;
+  
+  --spacing-1: 4px; --spacing-2: 8px; --spacing-3: 12px; --spacing-4: 16px; 
+  --spacing-5: 20px; --spacing-6: 24px; --spacing-8: 32px;
+}
+
+/* --- Layout Chung --- */
+.pageBackground { 
+  background-color: var(--color-background); 
+  min-height: 100vh; 
+  padding-bottom: 120px;
+  padding-top: 70px;
+
+
+}
+
+.pageContainer { 
+  max-width: 1280px; 
+  margin: 0 auto; 
+  padding: var(--spacing-6) var(--spacing-4); 
+}
+
+.pageHeader { 
+  margin-bottom: var(--spacing-4); 
+}
+
+.backToCartLink { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: var(--spacing-2); 
+  color: var(--color-text-light); 
+  font-weight: 500; 
+  text-decoration: none; 
+  transition: color 0.2s ease; 
+}
+.backToCartLink:hover { 
+  color: var(--primary-blue); 
+}
+
+.checkoutLayout { 
+  display: grid; 
+  grid-template-columns: 1fr 400px; 
+  gap: var(--spacing-8); 
+  align-items: flex-start; 
+}
+
+.mainContent { 
+  display: flex; 
+  flex-direction: column; 
+  gap: var(--spacing-6); 
+}
+
+.mainTitle { 
+  font-size: 2.25rem; 
+  font-weight: 800; 
+  color: var(--color-text-dark); 
+  letter-spacing: -0.02em; 
+}
+
+/* --- Section --- */
+.section { 
+  background-color: var(--color-surface); 
+  border-radius: var(--border-radius-lg); 
+  box-shadow: var(--shadow-sm); 
+  border: 1px solid var(--color-border);
+  transition: box-shadow 0.3s ease;
+}
+.section:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.sectionHeader { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: var(--spacing-4) var(--spacing-5); 
+  border-bottom: 1px solid var(--color-border); 
+}
+
+.sectionTitleWrapper { 
+  display: flex; 
+  align-items: center; 
+  gap: var(--spacing-3); 
+}
+
+.sectionIcon { 
+  color: var(--primary-blue); 
+  font-size: 1.25rem; 
+  line-height: 1; /* Căn chỉnh icon chuẩn hơn */
+}
+
+.sectionTitle { 
+  font-size: 1.125rem; 
+  font-weight: 600; 
+  color: var(--color-text-dark); 
+}
+
+.sectionAction .changeButton { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: var(--spacing-1); 
+  background: none; 
+  border: none; 
+  color: var(--primary-blue); 
+  font-weight: 600; 
+  cursor: pointer; 
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-md);
+  transition: background-color 0.2s ease;
+}
+.sectionAction .changeButton:hover {
+  background-color: #f0f2fe;
+}
+
+.sectionContent { 
+  padding: var(--spacing-5); 
+}
+
+/* --- Thành phần bên trong Section --- */
+.addressInfo { 
+  font-size: 0.95rem; 
+}
+
+.customerName { 
+  font-weight: 600; 
+  color: var(--color-text-dark); 
+}
+
+.addressText { 
+  color: var(--color-text-light); 
+  margin-top: var(--spacing-1); 
+}
+
+/* Bảng sản phẩm */
+.orderItemsHeader { 
+  display: grid; 
+  grid-template-columns: 3fr 1fr 1.5fr 1.5fr; 
+  gap: var(--spacing-4); 
+  padding: 0 var(--spacing-2) var(--spacing-2); 
+  font-size: 0.75rem; 
+  color: var(--color-text-subtle); 
+  text-transform: uppercase; 
+  font-weight: 500;
+  border-bottom: 1px solid var(--color-border); 
+}
+
+.orderItemsHeader .quantityCell, 
+.orderItemsHeader .priceCell, 
+.orderItemsHeader .totalCell { 
+  text-align: right; 
+}
+
+.orderItemsList { 
+  display: flex; 
+  flex-direction: column; 
+  gap: var(--spacing-4); 
+  margin-top: var(--spacing-4); 
+  margin-bottom: var(--spacing-4);
+}
+
+/* .orderItem { 
+  display: grid; 
+  grid-template-columns: 3fr 1fr 1.5fr 1.5fr; 
+  align-items: center; 
+  gap: var(--spacing-4); 
+} */
+
+.orderItemsHeader,
+.orderItem {
+    display: grid;
+    /* Định nghĩa cột CHUNG cho cả hai -> Luôn thẳng hàng */
+    grid-template-columns: 3fr 1fr 1.5fr 1.5fr; 
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.productCell { 
+  display: flex; 
+  align-items: center; 
+  gap: var(--spacing-3); 
+}
+
+.productImage { 
+  width: 56px; 
+  height: 56px; 
+  object-fit: cover; 
+  border-radius: var(--border-radius-md); 
+  flex-shrink: 0;
+}
+
+.productInfo {
+  min-width: 0; /* Fix cho text-overflow */
+}
+
+.productName { 
+  font-weight: 600; 
+  color: var(--color-text-dark); 
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  display: block;
+}
+
+.storeLink { 
+  font-size: 0.875rem; 
+  color: var(--primary-blue); 
+  text-decoration: none; 
+  font-weight: 500; 
+}
+.storeLink:hover { 
+  text-decoration: underline; 
+}
+
+.quantityCell, .priceCell, .totalCell { 
+  text-align: right; 
+  font-size: 0.75rem; 
+  color: var(--color-text-dark); 
+}
+
+.totalCell { 
+  font-weight: 600; 
+}
+
+.notesTextarea { 
+  width: 100%; 
+  min-height: 48px; /* Chiều cao tối thiểu ban đầu, tương đương 1-2 dòng */
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--color-border); 
+  border-radius: var(--border-radius-lg); 
+  transition: border-color 0.2s, box-shadow 0.2s, height 0.1s ease; /* Thêm transition cho height */
+  outline: none;
+  line-height: 1.5;
+  
+  /* === GIẢI QUYẾT 2 YÊU CẦU CỦA BẠN === */
+  /* 1. Ẩn biểu tượng kéo-thả ở góc */
+  resize: none; 
+  /* 2. Ẩn thanh cuộn dọc (scrollbar) */
+  overflow: hidden;
+}
+
+.notesTextarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px #f1f2fd;
+}
+
+/* Radio Card */
+.radioGroup { 
+  display: flex; 
+  flex-direction: column; 
+  gap: var(--spacing-3); 
+}
+
+.radioCard { 
+  display: grid; 
+  grid-template-columns: auto 1fr auto; 
+  align-items: center; 
+  gap: var(--spacing-4); 
+  padding: var(--spacing-4); 
+  border: 2px solid var(--color-border); 
+  border-radius: var(--border-radius-lg); 
+  cursor: pointer; 
+  transition: all 0.2s ease-in-out; 
+  position: relative;
+}
+.radioCard input[type="radio"] { 
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.radioCardIcon { 
+  font-size: 1.5rem; 
+  color: var(--color-text-subtle); 
+  transition: color 0.2s ease; 
+}
+
+.radioCardTitle { 
+  font-weight: 600; 
+  color: var(--color-text-dark); 
+}
+
+.radioCardDesc { 
+  font-size: 0.875rem; 
+  color: var(--color-text-subtle); 
+  display: block; 
+}
+
+.radioCardCheckMark { 
+  width: 20px; 
+  height: 20px; 
+  border-radius: 50%; 
+  border: 2px solid var(--color-border); 
+  transition: all 0.2s ease-in-out; 
+  background-color: var(--color-surface);
+}
+
+.radioCard:hover { 
+  border-color: var(--primary-blue); 
+}
+.radioCard input:checked + .radioCardIcon + .radioCardContent + .radioCardCheckMark { 
+  border-color: var(--primary-blue); 
+  background-color: var(--primary-blue); 
+  box-shadow: 0 0 0 3px white inset; 
+}
+
+.radioCard input:checked + .radioCardIcon { 
+  color: var(--primary-blue); 
+}
+
+.radioCard input:focus-visible ~ .radioCardCheckMark {
+  box-shadow: 0 0 0 3px #f0f1fb;
+}
+
+
+/* --- Sidebar --- */
+.sidebar { 
+  position: sticky; 
+  top: var(--spacing-6); 
+}
+
+.summaryBox { 
+  background-color: var(--color-surface); 
+  border-radius: var(--border-radius-xl); 
+  box-shadow: var(--shadow-md); 
+  border: 1px solid var(--color-border); 
+  padding: var(--spacing-6); 
+  display: flex; 
+  flex-direction: column; 
+  gap: var(--spacing-4); 
+}
+
+.summaryTitle { 
+  font-size: 1.25rem; 
+  font-weight: 700; 
+  color: var(--color-text-dark);
+  text-align: center;
+  margin-bottom: var(--spacing-2);
+}
+
+/* Voucher Section */
+.voucherSection { 
+  display: flex; 
+  flex-direction: column; 
+  gap: var(--spacing-2); 
+}
+
+.voucherLabel { 
+  display: flex; 
+  align-items: center; 
+  gap: var(--spacing-2); 
+  font-weight: 600; 
+  font-size: 0.9rem;
+  color: var(--color-text-dark);
+}
+
+.voucherInputWrapper { 
+  display: flex; 
+}
+.voucherInputWrapper input { 
+  flex-grow: 1; 
+  border: 1px solid var(--color-border); 
+  border-right: none; 
+  padding: var(--spacing-2) var(--spacing-3); 
+  border-top-left-radius: var(--border-radius-md); 
+  border-bottom-left-radius: var(--border-radius-md); 
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+.voucherInputWrapper input:focus {
+  box-shadow: 0 0 0 3px #f0f1fa inset;
+}
+.voucherInputWrapper button { 
+  background-color: #f0f1fa; 
+  color: var(--primary-blue); 
+  border: 1px solid var(--primary-blue);
+  border-left: none;
+  font-weight: 600; 
+  padding: 0 var(--spacing-4); 
+  border-top-right-radius: var(--border-radius-md); 
+  border-bottom-right-radius: var(--border-radius-md); 
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.voucherInputWrapper button:hover {
+  background-color: var(--primary-blue);
+  color: white;
+}
+.voucherInputWrapper button:disabled {
+  background-color: #F3F4F6;
+  color: #9CA3AF;
+  border-color: var(--color-border);
+  cursor: not-allowed;
+}
+
+
+.appliedVoucher { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  background-color: #E8F5E9; /* Màu xanh lá cây nhẹ */
+  color: #2E7D32; /* Màu xanh lá cây đậm */
+  padding: var(--spacing-2) var(--spacing-3); 
+  border-radius: var(--border-radius-md); 
+  font-weight: 600; 
+  border: 1px solid #A5D6A7;
+}
+.appliedVoucher button { 
+  background: none; 
+  border: none; 
+  color: #C62828; /* Màu đỏ cho nút xóa */
+  cursor: pointer; 
+  font-size: 1.2rem; 
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+.appliedVoucher button:hover {
+  color: #B71C1C;
+}
+
+.selectVoucherButton { 
+  background: none; 
+  border: 1px dashed var(--primary-blue); 
+  color: var(--primary-blue); 
+  padding: var(--spacing-2); 
+  border-radius: var(--border-radius-md); 
+  font-weight: 600; 
+  cursor: pointer; 
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.selectVoucherButton:hover {
+  background-color: #f0f1fa;
+  border-style: solid;
+}
+
+/* Summary Details */
+.summaryDetails { 
+  display: flex; 
+  flex-direction: column; 
+  gap: var(--spacing-3); 
+}
+
+.summaryRow { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
+.summaryRow span:first-child { 
+  color: var(--color-text-light); 
+}
+.summaryRow span:last-child { 
+  font-weight: 500; 
+  color: var(--color-text-dark); 
+}
+
+.discountRow, .discountRow span { 
+  color: var(--color-success) !important; 
+  font-weight: 600 !important; 
+}
+
+.divider { 
+  border: none; 
+  border-top: 1px solid var(--color-border); 
+  margin: var(--spacing-2) 0; 
+}
+
+.grandTotalRow { 
+  font-weight: 600; 
+  font-size: 1.125rem; 
+}
+.grandTotalRow span:first-child {
+  color: var(--color-text-dark);
+}
+
+.grandTotalAmount { 
+  font-size: 1.75rem; 
+  font-weight: 700; 
+  color: var(--color-accent); 
+}
+
+.placeOrderButton { 
+  width: 100%; 
+  padding: var(--spacing-4); 
+  font-size: 1.125rem; 
+  font-weight: 600; 
+  color: white; 
+  background-color: var(--primary-blue);
+  border: none; 
+  border-radius: var(--border-radius-lg); 
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+  box-shadow: var(--shadow-md);
+  margin-top: var(--spacing-2);
+}
+.placeOrderButton:hover { 
+  transform: translateY(-3px); 
+  box-shadow: 0 6px 12px -2px rgba(132, 130, 130, 0.4), 0 3px 7px -3px rgba(0, 0, 0, 0.3);
+  background-color: var(--primary-blue-dark);
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .checkoutLayout { 
+    grid-template-columns: 1fr; 
+  }
+  .sidebar { 
+    position: static; 
+    margin-top: var(--spacing-6); 
+  }
+  .mainTitle {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: var(--spacing-4) var(--spacing-3);
+  }
+  .checkoutLayout {
+    gap: var(--spacing-6);
+  }
+  .orderItem, .orderItemsHeader {
+    grid-template-columns: 1fr 50px; /* Chuyển sang layout 2 cột */
+    grid-template-rows: auto auto; /* 2 hàng */
+    row-gap: var(--spacing-2);
+  }
+  .productCell {
+    grid-column: 1 / 3; /* Chiếm cả 2 cột */
+  }
+  .quantityCell, .priceCell, .totalCell {
+    grid-column: 2 / 3; /* Nằm ở cột 2 */
+    text-align: right;
+    font-size: 0.9rem;
+  }
+  /* Ẩn bớt tiêu đề không cần thiết trên mobile */
+  .orderItemsHeader .priceCell {
+    display: none;
+  }
+  .orderItem .priceCell {
+    display: none;
+  }
+  .orderItemsHeader .quantityCell::before {
+    content: "SL / ";
+  }
+  .orderItemsHeader .totalCell::before {
+    content: "Tổng";
+  }
+  .orderItemsHeader .productCell {
+    grid-column: 1 / 2;
+  }
+
+  .radioCard {
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-3);
+  }
+  .radioCardCheckMark {
+    display: none; /* Ẩn dấu check để tiết kiệm không gian, border là đủ */
+  }
+}
+
+
+
+
+
+
+
+
+/* Các style chỉ dành riêng cho Header */
+.orderItemsHeader {
+    padding: 0 var(--spacing-2) var(--spacing-2); 
+    font-size: 0.75rem; 
+    color: var(--color-text-subtle); 
+    text-transform: uppercase; 
+    font-weight: 400;
+    border-bottom: 1px solid var(--color-border); 
+}
+
+/* Căn lề cho các cột trong Header */
+.orderItemsHeader .quantityCell, 
+.orderItemsHeader .priceCell, 
+.orderItemsHeader .totalCell { 
+    text-align: right; 
+}
+
+/* Danh sách sản phẩm (không cần thay đổi nhiều) */
+.orderItemsList { 
+    display: flex; 
+    flex-direction: column; 
+    gap: var(--spacing-4); 
+    margin-top: var(--spacing-4); 
+    margin-bottom: var(--spacing-4);
+}
+
+
+
+
+/* Khung bao bọc cho mỗi cửa hàng */
+.storeGroup {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-5);
+  overflow: hidden; /* Để bo góc hoạt động đúng */
+}
+
+/* Header của mỗi cửa hàng */
+.storeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.storeIdentity {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.storeNameLink {
+  color: inherit; /* Kế thừa màu từ .storeIdentity */
+  text-decoration: none;
+}
+.storeNameLink:hover {
+  color: var(--primary-blue);
+}
+
+.chatButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #059669; /* Màu xanh lá cây - teal */
+  font-weight: 500;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-md);
+  transition: background-color 0.2s ease;
+}
+.chatButton:hover {
+  background-color: #D1FAE5; /* Màu xanh lá cây rất nhạt */
+}
+
+/* Chỉnh lại layout bảng sản phẩm để phù hợp với hình ảnh mới */
+.orderItemsHeader,
+.orderItem {
+    /* Sản phẩm | Đơn giá | Số lượng | Thành tiền */
+    grid-template-columns: 4.6fr 1.2fr 1.2fr 1.2fr; 
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+}
+
+.orderItemsHeader {
+    padding-top: var(--spacing-2);
+    border-bottom: none; /* Bỏ border-bottom cũ nếu có */
+}
+
+.orderItem {
+    padding-bottom: var(--spacing-3);
+    padding-top: var(--spacing-3);
+}
+
+/* Thêm style cho dòng Phân loại */
+.productVariation {
+  font-size: 0.8rem;
+  color: var(--color-text-subtle);
+  background-color: var(--color-background);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-md);
+  margin-top: var(--spacing-1);
+  display: inline-block; /* Chỉ chiếm chiều rộng cần thiết */
+}
+
+/* Căn giữa cho lời nhắn */
+/* .notesTextarea {
+  margin-top: 0;
+} */
+
+/* Container mới cho phần lời nhắn */
+.notesContainer {
+  display: flex;
+  flex-direction: column; /* Xếp label và textarea theo chiều dọc */
+  gap: var(--spacing-2);   /* Khoảng cách giữa label và textarea */
+  margin-top: var(--spacing-10); /* Giữ lại khoảng cách với các phần tử ở trên */
+}
+
+/* Style cho tiêu đề "Lời nhắn cho người bán" */
+.notesLabel {
+  font-weight: 500;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  /* padding-left: var(--spacing-4);  */
+}
+
+
+
+.notesLabel {
+  font-weight: 500;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  
+  /* === PHẦN THÊM MỚI ĐỂ CĂN CHỈNH ICON === */
+  display: flex;         /* Biến label thành flex container */
+  align-items: center;   /* Căn giữa icon và chữ theo chiều dọc */
+  gap: var(--spacing-2);   /* Tạo khoảng cách 8px giữa icon và chữ */
+  /* padding-left: var(--spacing-2);  */
+}

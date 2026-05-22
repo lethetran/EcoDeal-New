@@ -1,0 +1,84 @@
+/* .selector {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color-default);
+  border-radius: var(--border-radius-full);
+}
+.button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-2);
+  display: flex;
+  color: var(--color-text-light);
+  transition: var(--transition-fast);
+}
+.button:hover:not(:disabled) {
+  color: var(--color-primary);
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.quantity {
+  font-weight: 600;
+  padding: 0 var(--spacing-3);
+  min-width: 40px;
+  text-align: center;
+} */
+
+
+/* Container chính, bỏ border, chỉ dùng làm layout */
+.selector {
+  display: inline-flex;
+  align-items: center;
+  background-color: white; /* Màu nền xám rất nhạt */
+  border-radius: var(--border-radius-full);
+  padding: 3px; /* Thêm padding nhỏ bên trong */
+  border: 1px solid #e2e8f0; 
+  color: #475569;
+  margin-top: 10px;
+
+}
+
+.selector:hover {
+  /* background-color: #e2e8f0; Màu nền xám nhạt khi hover */
+  border-color: rgb(126, 125, 125); /* Đổi màu border khi hover */
+  
+}
+/* Style cho nút + và - */
+.button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  transition: all 0.2s ease;
+  width: 26px;  /* Kích thước cố định */
+  height: 26px; /* Kích thước cố định */
+  border-radius: var(--border-radius-full); /* Bo tròn */
+}
+
+.button:hover:not(:disabled) {
+  /* background-color: var(--color-primary); */
+  /* color: var(--color-text-on-primary); */
+  color: black;
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Style cho số lượng ở giữa */
+.quantity {
+  font-weight: 600;
+  padding: 0 var(--spacing-3);
+  min-width: 40px;
+  text-align: center;
+  font-size: var(--font-size-base);
+  color: var(--color-text-dark);
+}

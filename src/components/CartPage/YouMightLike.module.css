@@ -1,0 +1,75 @@
+.container {
+  margin-top: var(--spacing-12);
+  padding-top: var(--spacing-8);
+  border-top: 1px solid var(--border-color-default);
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-6);
+  text-align: center;
+  color: var(--color-text-dark);
+  font-family: var(--font-heading);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.suggestionCard {
+  text-align: center;
+}
+
+.suggestionCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.suggestionImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.suggestionInfo {
+  padding: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 150px); /* Đảm bảo info chiếm hết phần còn lại */
+}
+
+.suggestionName {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin-bottom: var(--spacing-2);
+  min-height: 40px; /* Đảm bảo chiều cao đồng đều */
+  flex-grow: 1; /* Đẩy giá và nút xuống dưới */
+}
+
+.suggestionPrice {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-4);
+}
+
+.addButton {
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}

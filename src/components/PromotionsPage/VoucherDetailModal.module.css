@@ -1,0 +1,168 @@
+/* .backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-4);
+}
+
+.modal {
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+.closeButton:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+  transform: rotate(90deg);
+}
+
+.modalHeader {
+  height: 200px;
+}
+.modalHeader img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modalContent {
+  padding: var(--spacing-8);
+}
+.modalContent h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin-bottom: var(--spacing-2);
+}
+.modalContent p {
+  color: var(--color-text-light);
+  line-height: 1.6;
+}
+
+.codeSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-subtle);
+  border: 2px dashed var(--border-color-default);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-4);
+  margin: var(--spacing-6) 0;
+}
+.codeText {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 2px;
+}
+.copyButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+}
+.copyButton svg {
+    color: var(--color-success);
+}
+.termsSection {
+    margin-top: var(--spacing-6);
+}
+.termsSection h4 {
+    font-weight: 600;
+    margin-bottom: var(--spacing-2);
+} */
+
+
+.backdrop {
+  position: fixed; inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 1rem;
+}
+.modal {
+  background-color: var(--container-bg);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+}
+.modalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  width: 100%;
+}
+.modalImage {
+  background-color: var(--body-bg);
+}
+.modalImage img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.modalContent {
+  padding: 2rem;
+  position: relative;
+  overflow-y: auto;
+}
+.closeButton {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--body-bg); color: var(--text-light);
+  border: none; border-radius: 50%; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.closeButton:hover { background: #e0e0e0; transform: rotate(90deg); }
+.modalContent h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+.modalContent .desc { color: var(--text-light); line-height: 1.6; margin-bottom: 1.5rem; }
+.codeSection {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #eef2ff; border: 2px dashed #c7d2fe;
+  border-radius: 12px; padding: 1rem; margin: 1.5rem 0;
+}
+.codeText { font-size: 1.25rem; font-weight: 700; color: var(--primary-blue-dark); letter-spacing: 2px; }
+.copyButton {
+  display: flex; align-items: center; gap: 0.5rem;
+  background-color: var(--primary-blue); color: white; border: none;
+  padding: 0.6rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;
+  transition: background-color 0.2s;
+}
+.copyButton.copied { background-color: var(--success-green); }
+.termsSection { margin-top: 1.5rem; }
+.termsSection h4 { font-weight: 600; margin-bottom: 0.5rem; }
+.termsSection p { font-size: 0.9rem; color: var(--text-light); line-height: 1.7; }

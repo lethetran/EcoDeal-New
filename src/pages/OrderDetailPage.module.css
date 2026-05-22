@@ -1,0 +1,222 @@
+.pageContainer {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-6);
+  padding-top: 80px;
+  padding-bottom: 120px;
+}
+
+.cardTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-dark);
+  padding: var(--spacing-6);
+  border-bottom: 1px solid var(--border-color-default);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.cardTitle svg {
+  color: var(--color-primary);
+}
+
+.mainLayout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--spacing-8);
+  align-items: flex-start;
+}
+
+.leftColumn,
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.stickyCard {
+  position: sticky;
+  top: var(--spacing-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.timeline {
+  padding: var(--spacing-6);
+}
+
+.timelineItem {
+  display: flex;
+  position: relative;
+  gap: var(--spacing-6);
+  /* align-items: center;
+   */
+}
+
+.timelineConnector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timelineConnector::before {
+  content: "";
+  flex-grow: 1;
+  width: 2px;
+  background-color: var(--border-color-default);
+  transition: var(--transition-smooth);
+}
+
+.timelineItem:last-child .timelineConnector::before {
+  background-color: transparent;
+}
+
+.timelineIconWrapper {
+  padding: var(--spacing-1) 0;
+  background-color: var(--bg-surface);
+}
+
+.timelineIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--bg-subtle);
+  color: var(--color-text-subtle);
+  border: 2px solid var(--border-color-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  transition: var(--transition-smooth);
+}
+
+.timelineContent {
+  padding: var(--spacing-2) 0 var(--spacing-8);
+  transform: translateY(36px);
+}
+
+.timelineContent strong {
+  color: var(--color-text-dark);
+  font-weight: 600;
+}
+
+.timelineContent p {
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-1);
+}
+
+.timelineItem.done .timelineConnector::before {
+  background-color: var(--color-success);
+}
+
+.timelineItem.done .timelineIcon {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+  box-shadow: 0 0 15px hsla(145, 63%, 42%, 0.4);
+}
+
+.timelineItem.done .timelineContent strong {
+  color: var(--color-success);
+}
+
+.orderItemsList {
+  padding: var(--spacing-2) var(--spacing-6) var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) 0;
+}
+.orderItem:not(:last-child) {
+  border-bottom: 1px dashed var(--border-color-default);
+}
+
+.itemImage {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--border-radius-md);
+  object-fit: cover;
+}
+
+.itemDetails {
+  flex-grow: 1;
+}
+
+.itemName {
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.itemQuantity {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.itemPrice {
+  font-weight: 600;
+  color: var(--color-text-default);
+}
+
+.addressText {
+  padding: var(--spacing-6);
+  line-height: 1.6;
+  color: var(--color-text-light);
+}
+
+.paymentDetails {
+  padding: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-light);
+  font-size: var(--font-size-base);
+}
+
+.summaryRow span:first-child {
+  color: var(--color-text-default);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  padding: var(--spacing-6);
+  background-color: var(--bg-subtle);
+  border-top: 1px solid var(--border-color-default);
+}
+
+.totalRow span:first-child {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-dark);
+}
+
+.totalPrice {
+  font-size: var(--font-size-2xl);
+  color: var(--color-primary);
+}
+
+@media (max-width: 992px) {
+  .mainLayout {
+    grid-template-columns: 1fr;
+  }
+  .stickyCard {
+    position: static;
+  }
+}

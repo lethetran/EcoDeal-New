@@ -1,0 +1,351 @@
+/* --- ADVANCED ABOUT US PAGE V2 --- */
+:root {
+  --primary-color: #6c63ff;
+  --primary-dark: #5850e0;
+  --primary-light: #f0f2f5;
+  --text-dark: #2c3e50;
+  --text-light: #576574;
+  --white-color: #fff;
+  --border-radius-main: 20px;
+  --shadow-main: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.about-page-v2 {
+  background-color: #f8f9fa;
+  color: var(--text-dark);
+}
+
+.section-title-v2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3.5rem;
+}
+
+/* --- Animation Classes --- */
+/* Base state for animated elements */
+.animate-fade-in,
+.animate-fade-in-up,
+.animate-slide-in-left,
+.animate-slide-in-right {
+  opacity: 0;
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+.animate-fade-in-up {
+  transform: translateY(40px);
+}
+.animate-slide-in-left {
+  transform: translateX(-50px);
+}
+.animate-slide-in-right {
+  transform: translateX(50px);
+}
+
+/* Visible state */
+.is-visible .animate-fade-in,
+.is-visible .animate-fade-in-up,
+.is-visible .animate-slide-in-left,
+.is-visible .animate-slide-in-right {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Staggered Delays */
+.delay-1 {
+  transition-delay: 0.2s !important;
+}
+.delay-2 {
+  transition-delay: 0.4s !important;
+}
+.delay-3 {
+  transition-delay: 0.6s !important;
+}
+.delay-4 {
+  transition-delay: 0.8s !important;
+}
+
+/* 1. Hero Section */
+/* --- ADVANCED ABOUT US PAGE V2 --- */
+/* ... các định nghĩa :root và animation giữ nguyên ... */
+:root {
+  --primary-color: #6c63ff;
+  --primary-dark: #5850e0;
+  --primary-light: #f0f2f5;
+  --text-dark: #2c3e50;
+  --text-light: #576574;
+  --white-color: #fff;
+  --border-radius-main: 20px;
+  --shadow-main: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ... các lớp animation giữ nguyên ... */
+
+/* ========================================================== */
+/* BẮT ĐẦU THAY THẾ TỪ ĐÂY */
+/* ========================================================== */
+
+/* 1. Hero Section - Tinh chỉnh lại */
+.about-hero-v2 {
+  position: relative;
+  text-align: center;
+  padding: 7rem 0 9rem 0; /* Tăng padding dưới để có không gian cho Impact Section */
+  color: var(--white-color);
+  overflow: hidden;
+}
+
+.hero-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Thêm URL ảnh nền của bạn ở đây */
+  background-image:
+    linear-gradient(45deg, rgba(108, 99, 255, 0.9), rgba(88, 80, 224, 0.95)),
+    url("https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=1600&auto=format&fit=crop");
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.1); /* Phóng to một chút để không bị viền khi blur */
+  filter: blur(4px); /* Làm mờ ảnh nền để nổi bật chữ */
+}
+
+.about-hero-v2 .container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn giữa toàn bộ nội dung */
+}
+
+.hero-eyebrow {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.15); /* Thêm nền mờ để dễ đọc hơn */
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+.hero-title-v2 {
+  font-size: 3.5rem; /* Giữ nguyên kích thước lớn */
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2; /* Cải thiện khoảng cách dòng */
+  max-width: 800px; /* Giới hạn chiều dài dòng cho dễ đọc */
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* Tăng độ sâu cho chữ */
+}
+
+.hero-subtitle-v2 {
+  font-size: 1.15rem;
+  max-width: 700px;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+/* 2. Impact Section (Glassmorphism) - Tinh chỉnh lại */
+.impact-section {
+  padding: 0; /* Bỏ padding cũ */
+  margin-top: -80px; /* Kéo lên trên Hero section */
+  position: relative;
+  z-index: 3;
+}
+
+.impact-grid {
+  display: grid;
+  /* Dùng grid-template-columns để căn chỉnh tốt hơn */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; /* Giảm gap để các box gần nhau hơn */
+
+  /* Hiệu ứng thủy tinh mờ */
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+
+  border-radius: 24px; /* Bo tròn mạnh hơn */
+  padding: 2.5rem 2rem; /* Tăng padding bên trong */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 40px rgba(108, 99, 255, 0.2);
+}
+
+.impact-card {
+  text-align: center;
+  padding: 1rem; /* Thêm padding cho mỗi card con */
+  position: relative;
+}
+
+/* Thêm đường kẻ phân cách tinh tế */
+.impact-card:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(108, 99, 255, 0.3),
+    transparent
+  );
+}
+
+.impact-number {
+  font-size: 2.8rem; /* Giảm nhẹ kích thước số */
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 0.5rem; /* Giảm khoảng cách với text bên dưới */
+}
+
+.impact-text {
+  font-size: 1rem;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+/* ========================================================== */
+/* KẾT THÚC THAY THẾ Ở ĐÂY */
+/* ========================================================== */
+
+/* 3. Story Section */
+.story-section-v2 {
+  padding: 6rem 0;
+}
+.story-item {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  margin-bottom: 6rem;
+}
+.story-item.reverse {
+  flex-direction: row-reverse;
+}
+.story-image-wrapper {
+  flex: 1;
+}
+.story-image-wrapper img {
+  width: 100%;
+  border-radius: var(--border-radius-main);
+  box-shadow: var(--shadow-main);
+}
+.story-content-wrapper {
+  flex: 1;
+}
+.story-tag {
+  display: inline-block;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  padding: 6px 15px;
+  border-radius: 50px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.story-content-wrapper h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+}
+.story-content-wrapper p {
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+/* 4. Team Section */
+.team-section-v2 {
+  padding: 5rem 0;
+  background-color: var(--white-color);
+}
+.team-grid-v2 {
+    display: grid;
+    /* Tạo ra 4 cột với độ rộng bằng nhau */
+    grid-template-columns: repeat(2, 0.5fr);
+    
+    /* Tạo khoảng trống giữa các cột (đây chính là vùng màu tím trong ảnh) */
+    gap: 10px; /* Cậu có thể điều chỉnh giá trị này */
+}
+.team-member-card-v2 {
+  text-align: center;
+  transition: transform 0.3s ease;
+  display: flex;
+    flex-direction: column; /* Xếp các phần tử theo chiều dọc */
+    align-items: center; 
+}
+.team-member-card-v2:hover {
+  transform: translateY(-10px);
+}
+.team-member-image-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.team-member-image-wrapper img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: var(--shadow-main);
+}
+.team-member-card-v2 h4 {
+  font-size: 1.3rem;
+  margin-bottom: 0.3rem;
+}
+.team-member-card-v2 p {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+
+/* 5. CTA Section */
+.cta-section-v2 {
+  padding: 6rem 0;
+  background: url("https://www.toptal.com/designers/subtlepatterns/uploads/double-bubble-outline.png");
+}
+.cta-container-v2 {
+  text-align: center;
+  background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+  color: var(--white-color);
+  padding: 4rem;
+  border-radius: var(--border-radius-main);
+  box-shadow: 0 20px 40px rgba(108, 99, 255, 0.4);
+}
+.cta-container-v2 h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+.cta-container-v2 p {
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+.cta-buttons-v2 {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .impact-grid,
+  .story-item {
+    grid-template-columns: 1fr;
+    flex-direction: column !important;
+  }
+}
+@media (max-width: 768px) {
+  .hero-title-v2 {
+    font-size: 2.5rem;
+  }
+  .section-title-v2,
+  .story-content-wrapper h2,
+  .cta-container-v2 h2 {
+    font-size: 1.8rem;
+  }
+  .impact-grid {
+    padding: 2rem;
+    gap: 2rem;
+  }
+  .impact-number {
+    font-size: 2.2rem;
+  }
+}

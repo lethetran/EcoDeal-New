@@ -1,0 +1,177 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ======================================================================== */
+/* === HỆ THỐNG THIẾT KẾ TRUNG TÂM - PHONG CÁCH WARM & ELEGANT V1.0 === */
+/* ======================================================================== */
+
+/* 
+  File này định nghĩa toàn bộ nền tảng giao diện cho trang web, bao gồm:
+  1. Font chữ & Bảng màu chủ đạo.
+  2. Các style mặc định cho body, tiêu đề, nút bấm.
+  3. Các class tiện ích (utility classes) như .container.
+  4. Ghi đè các style mặc định của trình duyệt (CSS Reset).
+*/
+
+/* --- 1. FONT CHỮ & CÁC BIẾN --- */
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Poppins:wght@400;500;600&display=swap');
+
+:root {
+  /* Bảng màu */
+  --color-background-cream: #FDFBF5;
+  --color-primary-terracotta: #E2725B;
+  --color-text-charcoal: #3D405B;
+  --color-text-slate: #6B7280;
+  --color-text-on-primary: #FFFFFF;
+  --color-border-subtle: #E5E7EB;
+
+  /* Font chữ */
+  --font-heading: 'Lora', serif;
+  --font-body: 'Poppins', sans-serif;
+
+  /* Kích thước & Khoảng cách (Tùy chọn nhưng rất hữu ích) */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --border-radius-full: 999px;
+}
+
+/* --- 2. CSS RESET & STYLE NỀN TẢNG --- */
+
+/* Ghi đè một vài style mặc định của trình duyệt cho nhất quán */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth; /* Hiệu ứng cuộn mượt khi bấm vào link neo */
+}
+
+body {
+  margin: 0; /* Xóa margin mặc định */
+  background-color: var(--color-background-cream);
+  font-family: var(--font-body);
+  color: var(--color-text-slate); /* Màu chữ mặc định cho các đoạn văn */
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased; /* Làm chữ mượt hơn trên macOS/iOS */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- 3. TYPOGRAPHY (Định dạng văn bản) --- */
+
+/* Style mặc định cho các Tiêu đề */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-text-charcoal);
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  line-height: 1.2;
+}
+
+h1 { font-size: 3rem; }
+h2 { font-size: 2.5rem; }
+h3 { font-size: 1.75rem; }
+
+p {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+/* Style mặc định cho các nút bấm và link */
+a, button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-decoration: none; /* Xóa gạch chân mặc định của link */
+  color: inherit; /* Kế thừa màu chữ từ thẻ cha */
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+
+/* --- 4. LAYOUT & UTILITY CLASSES --- */
+
+/* 
+  Class .container này sẽ được dùng ở nhiều trang để giới hạn
+  chiều rộng và căn giữa nội dung.
+*/
+.container {
+  width: 100%;
+  max-width: 1440px; /* Chiều rộng tối đa của nội dung */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-6); /* 24px lề trái */
+  padding-right: var(--spacing-6); /* 24px lề phải */
+}
+
+/* 
+  Class này được dùng cho các section chính để tạo khoảng cách
+  đồng nhất giữa chúng.
+*/
+.section {
+  padding-block: 4rem; /* 64px khoảng cách trên và dưới */
+}
+
+/* Xóa bỏ hoàn toàn các class mặc định của Create React App */
+/* Bạn không cần các class .App, .App-logo, .App-header nữa. */
+/* Thay vào đó, hãy xây dựng layout của bạn với các component và class mới. */
+
+/* Ví dụ về cách sử dụng:
+
+   <div className="App">
+       <Header />
+       <main>
+           <HeroSection />
+           <ForYouSection />
+       </main>
+       <Footer />
+   </div>
+
+   Bạn có thể giữ lại div.App nhưng không cần style gì cho nó.
+*/

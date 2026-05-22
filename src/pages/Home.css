@@ -1,0 +1,1061 @@
+
+
+/* =================================================================== */
+/* =================== DESIGN SYSTEM :ROOT =================== */
+/* =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400..700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* 
+   * =========================================
+   * BẢNG MÀU CHÍNH (PRIMARY PALETTE)
+   * =========================================
+   */
+  
+  /* Màu chủ đạo - Terracotta (Cam đất nung) */
+  /* Dùng cho các nút kêu gọi hành động chính (CTA), tag nổi bật, link active. */
+   /* Color Palette */
+   --primary-blue: #6C7EE1;
+  --primary-blue-dark: #5A6ACC;
+  --color-secondary: #F9F3EB;      /* Kem nhạt - nền */
+  --color-accent: #FFD2A6;         /* Cam kem dịu nhẹ - nhấn phụ */
+  --color-text-main: #2F2F2F;      /* Xám đen - tiêu đề/chữ chính */
+  --color-text-muted: #666666;     /* Xám nhạt - mô tả phụ */
+  --color-white: #FFFFFF;
+  --color-border: #E0DAD3;         /* Viền nhẹ */
+  --bg-body: #dcedf6;
+
+  /* Font settings */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Font sizes */
+  --font-size-heading: 2rem;
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+
+  
+  /* 
+   * =========================================
+   * MÀU SẮC CHO CÁC TRẠNG THÁI (SEMANTIC COLORS)
+   * =========================================
+   */
+  --color-success: #4CAF50;         /* Xanh lá cây cho thành công */
+  --color-warning: #FFC107;         /* Vàng cho cảnh báo */
+  --color-error: #F44336;           /* Đỏ cho lỗi */
+  --color-info: #2196F3;            /* Xanh dương cho thông tin */
+
+  /* 
+   * =========================================
+   * FONT CHỮ (TYPOGRAPHY)
+   * =========================================
+   */
+  
+  /* Font cho tiêu đề (Headings) - Sang trọng, cổ điển */
+  --font-heading: 'Lora', serif;
+  
+  /* Font cho nội dung (Body) - Hiện đại, dễ đọc */
+  --font-body: 'Poppins', sans-serif;
+
+  /* Cỡ chữ cơ sở (Base Font Sizes) */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 2rem;      /* 32px */
+  --font-size-4xl: 2.5rem;    /* 40px */
+  
+  /* 
+   * =========================================
+   * CÁC BIẾN GIAO DIỆN KHÁC (UI VARIABLES)
+   * =========================================
+   */
+  
+  /* Bo góc (Border Radius) */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --border-radius-full: 9999px; /* Cho các nút hình con nhộng, avatar */
+
+  /* Viền (Borders) */
+  --border-color: #EAE3D9;
+  --border-width: 1px;
+
+  /* Đổ bóng (Box Shadow) - Tinh tế, mềm mại */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  
+  /* Khoảng cách (Spacing) */
+  --spacing-1: 0.25rem; /* 4px */
+  --spacing-2: 0.5rem;  /* 8px */
+  --spacing-4: 1rem;    /* 16px */
+  --spacing-6: 1.5rem;  /* 24px */
+  --spacing-8: 2rem;    /* 32px */
+
+  /* Hiệu ứng chuyển động (Transitions) */
+  --transition-fast: all 0.2s ease-in-out;
+  --transition-normal: all 0.3s ease-in-out;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* Shadow */
+  --shadow-light: 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- CÀI ĐẶT CƠ BẢN --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #6C7EE1;
+  color: var(--text-dark);
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+ul {
+  list-style: none;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --- CẤU TRÚC CHUNG --- */
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+  
+}
+.section {
+  padding: 3rem 0;
+}
+.section__title {
+  font-size: 1.75rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+.pt-0 {
+  padding-top: 0;
+}
+
+/* --- HEADER & NAV --- */
+.header {
+  width: 100%;
+  background-color: var(--container-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+/* .nav {
+  height: 4.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+.nav {
+    display: flex; /* Bật Flexbox */
+    align-items: center; /* Căn chỉnh các mục theo chiều dọc */
+    width: 100%;
+    max-width: 1320px; /* Giới hạn chiều rộng tối đa trên màn hình lớn */
+    margin: 0 auto; /* Căn giữa container trong header */
+    padding: 0 20px; /* Khoảng đệm hai bên */
+}
+
+.nav__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+.nav__search {
+  display: flex;
+  align-items: center;
+  background-color: var(--body-bg);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  width: 400px;
+}
+.nav__search i {
+  font-size: 1.25rem;
+  color: var(--text-light);
+}
+.nav__search input {
+  border: none;
+  outline: none;
+  background: none;
+  width: 100%;
+  margin-left: 0.5rem;
+  font-size: 1rem;
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.nav__action-link {
+  position: relative;
+  color: var(--text-light);
+  transition: color 0.3s;
+}
+.nav__action-link i {
+  font-size: 1.6rem;
+}
+.nav__action-link:hover {
+  color: var(--primary-blue);
+}
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: var(--accent-orange);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cart-badge.updated {
+  animation: pop 0.4s ease;
+}
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.user-area {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 2rem;
+  transition: background-color 0.2s;
+}
+.user-area:hover {
+  background-color: var(--body-bg);
+}
+.user-area__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.user-area__greeting {
+  font-weight: 500;
+}
+.user-area__dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background-color: var(--container-bg);
+  border-radius: 0.75rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+.user-area:hover .user-area__dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.dropdown__menu li a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+.dropdown__menu li a i { font-size: 1.25rem; }
+.dropdown__menu li a:hover {
+  background-color: var(--body-bg);
+  color: var(--primary-blue);
+}
+.dropdown__divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 0.5rem 0;
+}
+
+/* --- FILTERS & WELCOME --- */
+.welcome.section {
+  padding: 2rem 0;
+}
+.welcome__title {
+  font-size: 2rem;
+  font-weight: 600;
+  border-right: 3px solid var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+}
+.welcome__subtitle {
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 4.5s;
+}
+.filters__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.quick-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.filter-btn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--border-color);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.filter-btn:not(.active):hover {
+  transform: translateY(-2px);
+  background-color: #e8eaf6;
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.filter-btn.active {
+  background-image: linear-gradient(to top, var(--primary-blue-dark), var(--primary-blue));
+  color: white;
+  border-color: var(--primary-blue-dark);
+}
+.view-toggle {
+  display: flex;
+  background-color: #e8eaf6;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+}
+.view-toggle__btn {
+  border: none;
+  background: transparent;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+.view-toggle__btn i {
+  font-size: 1.25rem;
+  color: var(--text-light);
+  display: block;
+}
+.view-toggle__btn.active {
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.view-toggle__btn.active i {
+  color: var(--primary-blue);
+}
+
+/* ============================================= */
+/* --- CSS HOÀN CHỈNH CHO DEAL CARD (BẮT ĐẦU) --- */
+/* ============================================= */
+
+.deal-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  background-color: var(--bg-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.deal-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.deal-card__image {
+  position: relative;
+  width: 100%;
+  padding-top: 75%; /* Tỷ lệ 4:3 */
+  background-color: var(--bg-surface);
+}
+
+.deal-card__image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.deal-card__discount-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: #f47f31;
+  color: white;
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.deal-card__content {
+  padding: 16px;
+}
+
+.deal-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  min-height: 32px;
+}
+
+.deal-card__title:hover{
+  color: var(--primary-blue);
+}
+
+.deal-card__info-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color:var(--color-text-muted);
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.deal-card__info-bar .info-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.deal-card__store-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.deal-card__store-info .store-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.deal-card__store-info .store-distance {
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.deal-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.price--new {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e55353;
+}
+
+.price--old {
+  font-size: 0.85rem;
+  color: #adb5bd;
+  text-decoration: line-through;
+}
+
+.deal-card__add-to-cart {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgb(255, 255, 255);
+  /* border: 1px solid #eee; */
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: var(--primary-blue);
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.2s ease;
+}
+
+.deal-card__add-to-cart:hover {
+  background-color: var(--primary-blue);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* =========================================== */
+/* --- CSS HOÀN CHỈNH CHO DEAL CARD (KẾT THÚC) --- */
+/* =========================================== */
+
+/* --- CÁC DANH SÁCH --- */
+.deals__container {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 1.5rem;
+  scrollbar-width: none;
+}
+.deals__container::-webkit-scrollbar {
+  display: none;
+}
+
+.deals-grid__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stores__container {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scrollbar-width: none;
+}
+.stores__container::-webkit-scrollbar {
+  display: none;
+}
+.store-card {
+  position: relative;
+  min-width: 150px;
+  background-color: var(--container-bg);
+  border-radius: 1rem;
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.store-card:hover {
+  transform: translateY(-5px);
+}
+.store-card__logo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: 0 auto 1rem auto;
+  background-color: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+.store-card__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+.store-card__name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.store-card__indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--accent-orange);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: 1rem;
+}
+
+/* --- FOOTER --- */
+.footer {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding-top: 4rem;
+}
+.footer__container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+.footer__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+.footer__description {
+  color: #bdc3c7;
+}
+.footer__content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.footer__title {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+.footer__link {
+  color: #bdc3c7;
+  transition: color 0.3s;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+.footer__link:hover {
+  color: var(--primary-blue);
+}
+.footer__social {
+  display: flex;
+  gap: 1rem;
+}
+.footer__social-link {
+  font-size: 1.5rem;
+  color: #bdc3c7;
+  transition: color 0.3s;
+}
+.footer__social-link:hover {
+  color: var(--primary-blue);
+}
+.footer__copy {
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+  border-top: 1px solid #34495e;
+  color: #95a5a6;
+  font-size: 0.875rem;
+}
+
+/* --- HIỆU ỨNG & TIỆN ÍCH KHÁC --- */
+.skeleton {
+  animation: skeleton-loading 1.5s infinite linear;
+  background-color: #e0e0e0;
+  background-image: linear-gradient(90deg, #e0e0e0, #f5f5f5, #e0e0e0);
+  background-size: 200% 100%;
+}
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.deal-card.is-loading .deal-card__image,
+.deal-card.is-loading .deal-card__title,
+.deal-card.is-loading .deal-card__store,
+.deal-card.is-loading .deal-card__price {
+  color: transparent;
+  border-radius: 4px;
+  background-color: var(--bg-surface);
+  animation: skeleton-loading 1.5s infinite linear;
+  background-image: linear-gradient(90deg, #e0e0e0, #f5f5f5, #e0e0e0);
+  background-size: 200% 100%;
+}
+.deal-card.is-loading .deal-card__title { height: 20px; width: 80%; margin-bottom: 8px; }
+.deal-card.is-loading .deal-card__store { height: 16px; width: 50%; }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.welcome__title.typing-animation {
+  animation: blink-caret 0.75s step-end infinite;
+}
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--text-dark); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  padding: 0; margin: 0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: background-color 0.2s, color 0.2s;
+}
+.logout-button i { font-size: 1.25rem; }
+.logout-button:hover {
+  background-color: var(--body-bg);
+  color: var(--primary-blue);
+}
+
+/* --- OVERLAY TÌM KIẾM --- */
+#search-open-btn {
+  display: none;
+}
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--body-bg);
+  z-index: 200; 
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.search-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.search-overlay__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+.search-overlay__form {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.search-overlay__form i {
+  font-size: 1.5rem;
+  color: var(--text-light);
+}
+.search-overlay__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1.25rem;
+  font-family: "Poppins", sans-serif;
+  color: var(--text-dark);
+}
+.search-overlay__close {
+  border: none;
+  background: none;
+  font-size: 2rem;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.search-overlay__close:hover {
+  color: var(--text-dark);
+}
+.search-overlay__content {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--text-light);
+}
+
+/* --- RESPONSIVE --- */
+@media screen and (max-width: 768px) {
+  .container { padding: 0 1rem; }
+  .nav { height: 4rem; }
+  .user-area__greeting { display: none; }
+  .filters__container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer__container, .footer__content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .footer__social { justify-content: center; }
+  .nav__search { display: none; }
+  #search-open-btn { display: block; background: none; border: none; }
+}
+
+
+
+/* Seemore */
+/* Thêm vào file CSS của bạn, ví dụ: Home.css */
+
+.see-more-container {
+  text-align: center; /* Căn giữa nút */
+  margin-top: 40px;   /* Khoảng cách với lưới sản phẩm ở trên */
+}
+
+.see-more-btn {
+  padding: 12px 30px;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background-color: var(--primary-blue);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.35);
+}
+
+.see-more-btn:hover {
+  /* background-color: #6C7EE1;
+  border-color: #6C7EE1;
+  color: white; */
+  background-color: var(--primary-blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.see-more-btn:active {
+  transform: translateY(0);
+}
+
+.deals-grid__footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* ======================================================================== */
+/* === CSS CHO PHẦN ƯU ĐÃI CHỚP NHOÁNG (MARQUEE DEALS) === */
+/* ======================================================================== */
+
+/* 1. Style cho tiêu đề của Section (giữ nguyên từ thiết kế chung) */
+.dashboard-section {
+  margin-bottom: 7rem;
+  padding: 0 5%;
+}
+.dashboard-section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 700px; /* Giới hạn chiều rộng để dễ đọc */
+  margin-left: auto;
+  margin-right: auto;
+}
+.dashboard-section-header h2 {
+  font-family: var(--font-primary, 'Poppins', sans-serif); /* Sử dụng biến font đã định nghĩa */
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text-primary, #1A202C);
+}
+.dashboard-section-header p {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary, #718096);
+  margin: 10px auto 0;
+  line-height: 1.6;
+}
+
+/* 2. Style chính cho hiệu ứng Marquee */
+
+/* Bỏ padding của section để slider chạy tràn lề */
+.marquee-section {
+    padding: 0;
+    margin-top: 5rem;
+    margin-bottom: 7rem;
+}
+
+/* Khung chứa slider, dùng để tạo hiệu ứng mờ 2 bên */
+.marquee-wrapper {
+  max-width: 100vw;
+  overflow: hidden; /* Quan trọng: Ẩn đi phần bị tràn ra ngoài */
+
+  /* Mẹo tạo hiệu ứng mờ dần ở 2 cạnh để slider trông mượt mà hơn */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+/* Slider chứa tất cả các card */
+.marquee-slider {
+  display: flex;
+  /* Quan trọng: Chiều rộng phải đủ lớn để chứa tất cả các card (kể cả bản sao) */
+  /* Cách tính: (chiều rộng card + khoảng cách) * số lượng card (đã nhân đôi) */
+  /* Ví dụ: (340px + 20px) * 10 card = 3600px */
+  width: calc((340px + 20px) * 10);
+
+  /* Định nghĩa animation chạy vô hạn */
+  animation: infinite-scroll 60s linear infinite;
+}
+
+/* Tạm dừng animation khi người dùng di chuột vào */
+.marquee-wrapper:hover .marquee-slider {
+  animation-play-state: paused;
+}
+
+/* Định nghĩa keyframes cho animation */
+@keyframes infinite-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* Di chuyển sang trái một đoạn bằng đúng một nửa chiều rộng của slider */
+    transform: translateX(-50%);
+  }
+}
+
+/* Style cho mỗi DealCard bên trong slider */
+/* Class "deal-card" này sẽ được áp dụng từ file CSS chung của DealCard */
+.marquee-slider .deal-card {
+  margin: 0 10px; /* Khoảng cách giữa các thẻ */
+  flex-shrink: 0;   /* Ngăn không cho thẻ bị co lại */
+  width: 340px;     /* Đặt chiều rộng cố định cho mỗi thẻ */
+}
+
+
+/* ======================================================= */
+/* === CSS CHO TIÊU ĐỀ SECTION (KHÁM PHÁ TỰ DO) === */
+/* ======================================================= */
+
+/* Style cho khối bao bọc tiêu đề */
+.dashboard-section-header {
+    text-align: center; /* Căn giữa toàn bộ nội dung (h2 và p) */
+    margin-bottom: 3rem;  /* Khoảng cách 48px với nội dung bên dưới */
+
+    /* Các thuộc tính tùy chọn để khối tiêu đề trông đẹp hơn */
+    max-width: 700px;     /* Giới hạn chiều rộng để các dòng chữ không quá dài */
+    margin-left: auto;    /* Tự động căn giữa khối theo chiều ngang */
+    margin-right: auto;   /* Tự động căn giữa khối theo chiều ngang */
+}
+
+/* Style cho tiêu đề chính (h2 - "Khám Phá Tự Do") */
+.dashboard-section-header h2 {
+    /* Sử dụng biến font đã định nghĩa ở :root, với font dự phòng */
+    font-family: var(--font-heading, 'Poppins', sans-serif); 
+    
+    /* Kích thước chữ linh hoạt (responsive) */
+    font-size: clamp(2.5rem, 5vw, 3.5rem); 
+    
+    font-weight: 700; /* Có thể là 800 nếu bạn muốn đậm hơn */
+    margin: 0; /* Xóa margin mặc định của thẻ h2 */
+    
+    /* Sử dụng biến màu đã định nghĩa */
+    color: var(--color-text-primary, #1A202C); 
+}
+
+/* Style cho đoạn mô tả (p) */
+.dashboard-section-header p {
+    font-size: 1.1rem; /* Kích thước chữ 17.6px */
+    color: var(--color-text-secondary, #718096); /* Màu chữ phụ, xám hơn */
+    margin: 10px auto 0; /* Khoảng cách 10px với tiêu đề h2 ở trên */
+    line-height: 1.6; /* Giãn dòng cho dễ đọc */
+}
+
+
+/* ======================================================================== */
+/* === CSS CHO PHẦN KHÁM PHÁ THÊM (SLIDER LƯỚT NGANG) === */
+/* ======================================================================== */
+
+/* 1. Container chính, giờ sẽ là một slider */
+.deals__container {
+  display: flex; /* Xếp các thẻ DealCard nằm ngang */
+  overflow-x: auto; /* Kích hoạt thanh cuộn ngang khi nội dung tràn ra */
+  gap: 20px; /* Khoảng cách giữa các thẻ */
+
+  /* Thêm padding để các thẻ không bị dính sát vào cạnh */
+  padding-block: 20px; /* Padding trên dưới, tránh box-shadow bị cắt */
+  padding-inline: 10px; /* Padding trái phải */
+
+  /* Mẹo UX: Thêm hiệu ứng "snap" khi lướt */
+  scroll-snap-type: x mandatory;
+
+  /* Ẩn thanh cuộn (scrollbar) để giao diện sạch sẽ hơn */
+  scrollbar-width: none; /* Dành cho Firefox */
+  -ms-overflow-style: none;  /* Dành cho Internet Explorer 10+ */
+}
+
+/* Ẩn thanh cuộn cho các trình duyệt Webkit (Chrome, Safari, Edge) */
+.deals__container::-webkit-scrollbar {
+  display: none;
+}
+
+/* 2. Style cho mỗi thẻ DealCard bên trong slider */
+/* Class "deal-card" này được lấy từ CSS bạn đã có */
+.deals__container > .deal-card {
+  /* Quan trọng: Ngăn không cho thẻ bị co lại và đặt chiều rộng cố định */
+  flex: 0 0 320px; 
+  
+  /* Căn thẻ vào điểm bắt đầu của snap */
+  scroll-snap-align: start;
+}

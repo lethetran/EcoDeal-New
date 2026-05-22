@@ -1,0 +1,75 @@
+:root {
+  
+  --primary-blue: #6C7EE1;
+  --primary-blue-dark: #5A6ACC;
+  --accent-orange: #FFB74D;
+  --text-dark: #333333;
+  --text-light: #6E6E6E;
+  --body-bg: #F8F9FA;
+  --container-bg: #FFFFFF;
+  --border-color: #E0E0E0;
+}
+
+.ctaSection {
+    background-color: var(--page-color-primary); /* Dùng màu sage */
+    color: var(--page-bg-surface);
+    text-align: center;
+    padding: 120px 10%;
+}
+
+.ctaSection h2 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+    margin: 0 auto 1rem auto;
+    color: var(--page-bg-surface);
+}
+
+.ctaSection p {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.ctaButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Sử dụng lại style nút từ các section trước */
+.btnPrimary, .btnSecondary {
+    font-family: var(--font-family-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btnPrimary {
+    background: var(--primary-blue);
+    color: var(--page-bg-surface);
+}
+.btnPrimary:hover {
+    background: var(--page-bg-surface);
+    color: var(--primary-blue);
+    transform: translateY(-3px);
+}
+.btnSecondary {
+    background: transparent;
+    border-color: var(--page-bg-surface);
+    color: var(--page-bg-surface);
+}
+.btnSecondary:hover {
+    background: var(--page-bg-surface);
+    color: var(--primary-blue);
+    transform: translateY(-3px);
+}

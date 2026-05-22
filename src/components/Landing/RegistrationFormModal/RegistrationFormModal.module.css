@@ -1,0 +1,116 @@
+/* Lớp nền mờ bao phủ toàn bộ trang */
+.backdrop {
+    position: fixed;
+    inset: 0; /* Tương đương top: 0; left: 0; right: 0; bottom: 0; */
+    background-color: rgba(10, 20, 40, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Luôn nằm trên cùng */
+}
+
+/* Khung nội dung chính của Modal */
+.modalContent {
+    background: white;
+    width: 90%;
+    max-width: 500px; /* Giới hạn chiều rộng tối đa */
+    padding: 2rem 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Nút đóng ở góc trên bên phải */
+.closeButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #f1f1f1;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+    background: #e0e0e0;
+    transform: scale(1.1) rotate(90deg);
+}
+
+/* Phần tiêu đề của Form */
+.formHeader {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.formHeader h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.formHeader p {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Form */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.5rem;
+}
+
+.formGroup input {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formGroup input:focus {
+    outline: none;
+    border-color: var(--color-primary, #6A11CB); /* Dùng màu chính của cậu */
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+}
+
+/* Nút Submit */
+.submitButton {
+    background: var(--primary-gradient, linear-gradient(90deg, #8E2DE2 0%, #4A00E0 100%));
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 1rem;
+}
+
+.submitButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}

@@ -1,0 +1,345 @@
+
+/* ==========================================================================
+   BIẾN MÀU VÀ FONT (Cần thiết để Header hiển thị đúng)
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* 1. BIẾN CSS & NỀN TẢNG */
+   :root {
+    /* --font-heading: 'Cormorant Garamond', serif; */
+    --font-body: 'Poppins', sans-serif;
+    --color-sage: #8A9A5B;
+    --color-terracotta: #E2725B;
+    --color-cream: #FDFBF5;
+    --color-charcoal: #36454F;
+    --color-white: #ffffff;
+     --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-primary: 'Poppins', sans-serif;
+}
+
+/* ==========================================================================
+   CSS CƠ BẢN CHO HEADER (Thanh điều hướng)
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    box-sizing: border-box;
+    z-index: 100;
+    transition: all 0.4s ease;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    height: 70px;
+}
+
+.navbar .logo, .navbar nav a {
+    color: var(--color-charcoal);
+}
+
+.navbar .logo {
+    font-family: var(--font-primary);
+    color: var(--primary-blue);
+    font-size: 2rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.navbar nav a {
+    text-decoration: none;
+    margin-left: 40px;
+    font-weight: 700;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.navbar nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background-color: var(--color-terracotta);
+    transition: width 0.3s ease;
+}
+
+.navbar nav a:hover::after {
+    width: 100%;
+}
+
+/* ======================================================================== */
+/* CONTAINER CHUNG CHO CÁC NÚT HÀNH ĐỘNG */
+/* ======================================================================== */
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Khoảng cách giữa các icon và khu vực user */
+}
+
+/* ======================================================================== */
+/* ICON GIỎ HÀNG, THÔNG BÁO & BADGE */
+/* ======================================================================== */
+.nav__action-link {
+  position: relative;
+  color: var(--text-light);
+  transition: color 0.3s;
+}
+
+.nav__action-link i {
+  font-size: 1.6rem; /* Kích thước icon */
+}
+
+.nav__action-link:hover {
+  color: var(--primary-blue);
+}
+
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: var(--accent-orange);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animation khi badge được cập nhật (tùy chọn) */
+.cart-badge.updated {
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* ======================================================================== */
+/* KHU VỰC NGƯỜI DÙNG (AVATAR & DROPDOWN) */
+/* ======================================================================== */
+.user-area {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 2rem;
+  transition: background-color 0.2s;
+}
+
+.user-area:hover {
+  background-color: var(--body-bg);
+}
+
+.user-area__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.user-area__greeting {
+  font-weight: 500;
+}
+
+.user-area__dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background-color: var(--container-bg);
+  border-radius: 0.75rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+/* Hiển thị dropdown khi hover vào .user-area hoặc khi có class .active */
+.user-area:hover .user-area__dropdown,
+.user-area__dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown__menu li a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.dropdown__menu li a i {
+  font-size: 1.25rem;
+}
+
+.dropdown__menu li a:hover {
+  background-color: var(--body-bg);
+  color: var(--primary-blue);
+}
+
+.dropdown__divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 0.5rem 0;
+}
+
+/* ======================================================================== */
+/* NÚT ĐĂNG XUẤT */
+/* ======================================================================== */
+.logout-button {
+  /* Reset style của button để trông giống thẻ <a> */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+
+  /* Style giống các mục menu khác */
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500; /* Đổi font-weight để khớp với thẻ <a> */
+  color: var(--text-dark);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.logout-button i {
+  font-size: 1.25rem;
+}
+
+.logout-button:hover {
+  background-color: var(--body-bg);
+  color: var(--primary-blue);
+}
+
+/* ======================================================================== */
+/* RESPONSIVE (ĐIỀU CHỈNH CHO MÀN HÌNH NHỎ) */
+/* ======================================================================== */
+@media screen and (max-width: 768px) {
+  /* Ẩn lời chào "Chào An!" trên màn hình nhỏ để tiết kiệm không gian */
+  .user-area__greeting {
+    display: none;
+  }
+}
+
+
+/* ================================================================ */
+/* =================== GIAO DIỆN DESKTOP (Mặc định) ================== */
+/* ================================================================ */
+.desktop-header {
+    /* Các style header ngang của bạn giữ nguyên ở đây */
+    display: flex; /* Sẽ bị ẩn trên mobile */
+}
+
+/* Ẩn tab bar trên desktop */
+.mobile-tab-bar {
+    display: none;
+}
+
+
+/* ================================================================ */
+/* =================== GIAO DIỆN MOBILE (<= 768px) ================= */
+/* ================================================================ */
+@media screen and (max-width: 768px) {
+    /* Ẩn header của desktop */
+    .desktop-header {
+        display: none;
+    }
+
+    /* Hiển thị và style cho Tab Bar dọc */
+    .mobile-tab-bar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 76px; /* Chiều rộng của Tab Bar */
+        background-color: var(--container-bg, #ffffff);
+        border-right: 1px solid var(--border-color, #e9ecef);
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem 0;
+        z-index: 1000;
+    }
+
+    /* Logo trên mobile */
+    .logo-mobile {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-blue, #6c7ee1);
+        margin-bottom: 2rem;
+    }
+
+    /* Container cho các link chính */
+    .tab-bar__links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    /* Từng link trong tab bar */
+    .tab-bar__link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--text-light, #6e6e6e);
+        transition: color 0.3s ease;
+    }
+
+    .tab-bar__link i {
+        font-size: 1.8rem; /* Icon to, dễ bấm */
+    }
+
+    .tab-bar__link span {
+        font-size: .7rem; /* Chữ mô tả nhỏ bên dưới */
+        margin-top: 4px;
+        font-weight: 500;
+    }
+
+    /* Style cho link đang được active */
+    .tab-bar__link.active,
+    .tab-bar__link:hover {
+        color: var(--primary-blue, #6c7ee1);
+        
+    }
+
+    /* Profile user ở cuối tab bar */
+    .tab-bar__profile {
+        margin-top: auto; /* Đẩy xuống dưới cùng */
+    }
+
+    .tab-bar__profile .user-area__avatar {
+        width: 44px;
+        height: 44px;
+        border: 2px solid var(--border-color, #e9ecef);
+        cursor: pointer;
+    }
+}
