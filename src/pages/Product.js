@@ -10,6 +10,7 @@ import { FaStar } from 'react-icons/fa';
 import styles from './Product.module.css';
 import { fetchDealById, fetchLatestDeals } from '../services/dealService';
 import { fetchDealReviews, fetchSellerRatingSummary, submitDealReview } from '../services/reviewService';
+import { createNotification } from '../services/notificationService';
 import { useCart } from '../hooks/useCart';
 import { auth } from '../firebase-config';
 
@@ -202,6 +203,14 @@ function ProductDetailPage() {
         rating: newReviewRating,
         comment: newReviewText,
         authorName,
+      });
+
+      await createNotification({
+        uid: deal.ownerUid,
+        fromUid: auth.currentUser.uid,
+        type: 'new_review',
+        message: `${authorName} vừa đánh giá ${newReviewRating}⭐ cho "${deal.productName}"`,
+        dealId: deal.id,
       });
 
       const [dealReviews, summary] = await Promise.all([

@@ -9,6 +9,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase-config';
 import { logout } from '../../services/authService';
 import { useCart } from '../../hooks/useCart';
+import NotificationBell from '../NotificationBell/NotificationBell';
 const Header = () => {
     // 1. State để quản lý việc dropdown đang mở hay đóng
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -154,9 +155,7 @@ const Header = () => {
                     {cartItemCount > 0 && <span className="cart-badge">{cartItemCount}</span>}
                 </a>
 
-                <a href="/notifications" className="nav__action-link">
-                    <i className='bx bx-bell'></i>
-                </a>
+                <NotificationBell />
 
                 {/* Gán ref vào đây */}
                 <div className="user-area" ref={dropdownRef}>

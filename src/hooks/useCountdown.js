@@ -17,10 +17,13 @@ const useCountdown = (initialSeconds) => {
     const minutes = Math.floor(secondsLeft / 60);
     const seconds = secondsLeft % 60;
 
+    const reset = () => setSecondsLeft(initialSeconds);
+
     return {
         minutes: minutes.toString().padStart(2, '0'),
         seconds: seconds.toString().padStart(2, '0'),
         isExpired: secondsLeft === 0,
+        reset,
     };
 };
 

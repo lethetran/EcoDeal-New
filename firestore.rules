@@ -24,8 +24,18 @@ service cloud.firestore {
         && data.comment is string && data.comment.size() <= 1000;
     }
 
-    function isValidSellerReply(data) {
-      return data.sellerReply is string && data.sellerReply.size() <= 1000;
+    function isValidReply(data) {
+      return data.uid is string && data.uid.size() > 0
+        && data.message is string && data.message.size() > 0 && data.message.size() <= 1000;
+    }
+
+    function isValidNotification(data) {
+      return data.uid is string && data.uid.size() > 0
+        && data.fromUid is string && data.fromUid.size() > 0
+        && data.uid != data.fromUid
+        && data.type is string
+        && data.message is string && data.message.size() > 0 && data.message.size() <= 500
+        && data.read == false;
     }
 
     match /flashDeals/{dealId} {
@@ -63,13 +73,13 @@ service cloud.firestore {
     match /reviews/{reviewId} {
       allow read: if true;
 
+      // Mỗi lần gửi tạo 1 bình luận mới (ID tự sinh), không giới hạn 1 bình luận / khách / bài đăng.
       allow create: if request.auth != null
-        && reviewId == (request.resource.data.dealId + '_' + request.auth.uid)
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.sellerUid != request.auth.uid
         && isValidReview(request.resource.data);
 
-      // Khách sửa lại đánh giá của chính mình
+      // Khách sửa lại 1 bình luận cụ thể của chính mình (nếu UI cho sửa)
       allow update: if request.auth != null
         && resource.data.uid == request.auth.uid
         && request.resource.data.uid == resource.data.uid
@@ -77,15 +87,41 @@ service cloud.firestore {
         && request.resource.data.sellerUid == resource.data.sellerUid
         && isValidReview(request.resource.data);
 
-      // Shop (chủ bài đăng) phản hồi đánh giá — chỉ được đổi sellerReply/sellerReplyAt
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+
+      // Thread bình luận qua lại giữa khách (chủ đánh giá) và shop (chủ bài đăng).
+      // Mỗi tin là 1 document riêng — không ai ghi đè được tin của người khác.
+      match /replies/{replyId} {
+        allow read: if true;
+
+        allow create: if request.auth != null
+          && request.resource.data.uid == request.auth.uid
+          && isValidReply(request.resource.data)
+          && (
+            get(/databases/$(database)/documents/reviews/$(reviewId)).data.uid == request.auth.uid
+            || get(/databases/$(database)/documents/reviews/$(reviewId)).data.sellerUid == request.auth.uid
+          );
+
+        allow update, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+      }
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+
+      allow create: if request.auth != null
+        && request.resource.data.fromUid == request.auth.uid
+        && isValidNotification(request.resource.data);
+
+      // Chỉ người nhận được đánh dấu đã đọc, không được sửa nội dung thông báo.
       allow update: if request.auth != null
-        && resource.data.sellerUid == request.auth.uid
-        && request.resource.data.dealId == resource.data.dealId
-        && request.resource.data.sellerUid == resource.data.sellerUid
+        && resource.data.uid == request.auth.uid
         && request.resource.data.uid == resource.data.uid
-        && request.resource.data.rating == resource.data.rating
-        && request.resource.data.comment == resource.data.comment
-        && isValidSellerReply(request.resource.data);
+        && request.resource.data.fromUid == resource.data.fromUid
+        && request.resource.data.type == resource.data.type
+        && request.resource.data.message == resource.data.message
+        && request.resource.data.dealId == resource.data.dealId
+        && request.resource.data.read is bool;
 
       allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
     }

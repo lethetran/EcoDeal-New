@@ -14,6 +14,7 @@ import ProfilePage from "./pages/ProfilePage";
 import PromotionsPage from "./pages/PromotionsPage";
 import StoreDetailPage from "./pages/StoreDetailPage";
 import PaymentQRPage from "./pages/PaymentQRPage";
+import PaymentResultPage from "./pages/PaymentResultPage";
 import AboutPage from "./pages/AboutPage";
 import StoresPage from "./pages/StoresPage"; // Import trang cửa hàng
 import Landing from "./pages/Landing"; // Import trang giới thiệu
@@ -61,6 +62,7 @@ function App() {
         <Route path="/promotions" element={<PromotionsPage />} />
         <Route path="/store/:id" element={<StoreDetailPage />} />
         <Route path="/payment-qr" element={<PaymentQRPage />} />
+        <Route path="/payment-result" element={<PaymentResultPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/stores" element={<StoresPage />} />
         <Route path="/landing" element={<Landing />} />

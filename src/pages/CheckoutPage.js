@@ -272,15 +272,42 @@ const CheckoutPage = () => {
 
     // Kiểm tra phương thức thanh toán đã chọn
     if (paymentMethod === 'online') {
-      // Nếu là thanh toán online, chuyển hướng người dùng
-      // Bạn có thể truyền một số thông tin đơn hàng qua state nếu cần
-      console.log('Chuyển hướng đến cổng thanh toán...');
-      navigate('/payment-qr', { 
-        state: { 
-          orderId,
-          amount: total 
-        } 
-      });
+      try {
+        const idToken = await auth.currentUser.getIdToken();
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({ orderId }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Checkout init failed: ${response.status}`);
+        }
+
+        const { checkoutURL, checkoutFormfields } = await response.json();
+
+        // SePay yêu cầu submit form POST thật (không phải fetch) để chuyển hướng sang trang thanh toán của họ.
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = checkoutURL;
+
+        Object.entries(checkoutFormfields || {}).forEach(([key, value]) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value;
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+      } catch (error) {
+        console.error('Cannot start SePay checkout:', error);
+        alert('Không thể khởi tạo thanh toán online lúc này. Vui lòng thử lại hoặc chọn thanh toán khi nhận hàng.');
+      }
 
     } else if (paymentMethod === 'cod') {
       // Nếu là thanh toán khi nhận hàng (COD), hiển thị thông báo thành công

@@ -9,6 +9,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase-config';
 import { logout } from '../../services/authService';
 import { useCart } from '../../hooks/useCart';
+import NotificationBell from '../NotificationBell/NotificationBell';
 // Component Header sẽ nhận một prop là hàm `onSearchClick` từ component cha
 function Header({ onSearchClick }) {
   
@@ -97,9 +98,7 @@ function Header({ onSearchClick }) {
             {cartItemCount > 0 && <span className="cart-badge">{cartItemCount}</span>}
           </a>
 
-          <a href="/notifications" className="nav__action-link">
-            <i className='bx bx-bell'></i>
-          </a>
+          <NotificationBell />
 
           <div className="user-area" ref={dropdownRef}>
             <div className="user-area__trigger" onClick={toggleDropdown} style={{display: 'flex', alignItems: 'center', cursor: 'pointer'}}>

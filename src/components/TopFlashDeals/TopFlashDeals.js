@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import VerifiedBadge from '../VerifiedBadge/VerifiedBadge';
 import ProductQuickView from '../ProductQuickView/ProductQuickView';
 import Toast from '../Toast/Toast';
+import { fetchSellerRatingSummary } from '../../services/reviewService';
 
 const isFruitDeal = (deal) => deal?.category === 'fresh_fruits' || deal?.quantityUnit === 'kg';
 
@@ -157,6 +158,7 @@ const TopFlashDeals = () => {
   const [hasOverflow, setHasOverflow] = useState(false);
   const [quickViewDeal, setQuickViewDeal] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '' });
+  const [sellerRatings, setSellerRatings] = useState({});
   const dealsGridRef = useRef(null);
 
   const scrollDeals = (direction) => {
@@ -241,6 +243,28 @@ const TopFlashDeals = () => {
 
   useEffect(() => {
     updateOverflowState();
+  }, [deals]);
+
+  // Tải điểm sao của từng shop (gộp theo ownerUid để tránh gọi trùng) để hiện dưới tên sản phẩm.
+  useEffect(() => {
+    const uniqueSellerUids = [...new Set(deals.map((deal) => deal.ownerUid).filter(Boolean))];
+    const missingUids = uniqueSellerUids.filter((uid) => !(uid in sellerRatings));
+    if (missingUids.length === 0) return;
+
+    let cancelled = false;
+    Promise.all(
+      missingUids.map((uid) => fetchSellerRatingSummary(uid).then((summary) => [uid, summary]))
+    )
+      .then((entries) => {
+        if (cancelled) return;
+        setSellerRatings((prev) => ({ ...prev, ...Object.fromEntries(entries) }));
+      })
+      .catch((error) => console.error('Cannot load seller ratings:', error));
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deals]);
 
   useEffect(() => {
@@ -338,6 +362,15 @@ const TopFlashDeals = () => {
                 <h3 className="deal-name">
                   {deal.productName}
                 </h3>
+
+                {sellerRatings[deal.ownerUid]?.count > 0 && (
+                  <div className="deal-seller-rating">
+                    <i className="bx bxs-star"></i>
+                    <span>{sellerRatings[deal.ownerUid].average.toFixed(1)}</span>
+                    <span className="deal-seller-rating__count">({sellerRatings[deal.ownerUid].count} đánh giá shop)</span>
+                  </div>
+                )}
+
                 {deal.ecoCheckApproved && (
                   <div className="deal-verified-row">
                     <VerifiedBadge label="Đã kiểm duyệt" size="sm" />

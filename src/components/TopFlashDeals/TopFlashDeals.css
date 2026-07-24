@@ -283,6 +283,26 @@
   margin-left: 4px;
 }
 
+.deal-seller-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+}
+
+.deal-seller-rating i {
+  color: #f59e0b;
+  font-size: 13px;
+}
+
+.deal-seller-rating__count {
+  font-weight: 500;
+  color: #9ca3af;
+}
+
 .deal-price {
   display: flex;
   align-items: center;

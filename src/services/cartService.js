@@ -3,8 +3,10 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   limit,
+  onSnapshot,
   orderBy,
   query,
   serverTimestamp,
@@ -12,6 +14,16 @@ import {
   where,
 } from 'firebase/firestore';
 import { firestore } from '../firebase-config';
+
+const mapOrder = (docSnap) => {
+  const data = docSnap.data();
+  return {
+    id: docSnap.id,
+    ...data,
+    createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : data.createdAt,
+    updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toISOString() : data.updatedAt,
+  };
+};
 
 const userCartItemsCollection = (uid) => collection(firestore, 'userCarts', uid, 'items');
 
@@ -97,6 +109,19 @@ export const createOrderFromCart = async (uid, orderPayload) => {
   });
   return ref.id;
 };
+
+export const fetchOrderById = async (orderId) => {
+  const snap = await getDoc(doc(firestore, 'orders', orderId));
+  if (!snap.exists()) return null;
+  return mapOrder(snap);
+};
+
+// Lắng nghe realtime để trang thanh toán QR tự chuyển sang "Đã thanh toán"
+// ngay khi Cloud Function xử lý webhook SePay cập nhật status của đơn hàng.
+export const subscribeToOrder = (orderId, onChange) =>
+  onSnapshot(doc(firestore, 'orders', orderId), (snap) => {
+    onChange(snap.exists() ? mapOrder(snap) : null);
+  });
 
 export const fetchUserOrders = async (uid, maxItems = 30) => {
   const ordersQuery = query(

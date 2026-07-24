@@ -4,11 +4,13 @@ import './ProductQuickView.css';
 import { auth } from '../../firebase-config';
 import { useCart } from '../../hooks/useCart';
 import {
+  addReviewReply,
   fetchDealReviews,
+  fetchReviewReplies,
   fetchSellerRatingSummary,
-  replyToReview,
   submitDealReview,
 } from '../../services/reviewService';
+import { createNotification } from '../../services/notificationService';
 import VerifiedBadge from '../VerifiedBadge/VerifiedBadge';
 import Toast from '../Toast/Toast';
 
@@ -27,6 +29,16 @@ const formatDate = (value) => {
   return date.toLocaleDateString('vi-VN');
 };
 
+const formatDateTime = (value) => {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleString('vi-VN');
+};
+
+const displayNameOf = (user) =>
+  (user?.displayName || '').trim() || (user?.email || '').split('@')[0] || 'Ẩn danh';
+
 const StarPicker = ({ value, hoverValue, onPick, onHover, onLeave }) => (
   <div className="qv-star-picker" onMouseLeave={onLeave}>
     {[1, 2, 3, 4, 5].map((star) => (
@@ -43,6 +55,84 @@ const StarPicker = ({ value, hoverValue, onPick, onHover, onLeave }) => (
   </div>
 );
 
+const ReplyThread = ({ review, replies, currentUser, deal, storeName, onReplySent }) => {
+  const [draft, setDraft] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const canReply = !!currentUser && (currentUser.uid === review.uid || currentUser.uid === deal.ownerUid);
+  const isSeller = currentUser?.uid === deal.ownerUid;
+
+  const handleSend = async () => {
+    const text = draft.trim();
+    if (!text || !currentUser) return;
+
+    setSubmitting(true);
+    try {
+      const authorName = isSeller ? `${storeName} (Shop)` : displayNameOf(currentUser);
+
+      await addReviewReply(review.id, {
+        uid: currentUser.uid,
+        authorName,
+        isSeller,
+        message: text,
+      });
+
+      const notifyTarget = isSeller ? review.uid : deal.ownerUid;
+      if (notifyTarget && notifyTarget !== currentUser.uid) {
+        await createNotification({
+          uid: notifyTarget,
+          fromUid: currentUser.uid,
+          type: 'review_reply',
+          message: isSeller
+            ? `${storeName} đã phản hồi bình luận của bạn về "${deal.productName}"`
+            : `${authorName} đã trả lời bình luận trên "${deal.productName}"`,
+          dealId: deal.id,
+        });
+      }
+
+      setDraft('');
+      await onReplySent();
+    } catch (error) {
+      console.error('Cannot submit reply:', error);
+      alert('Không thể gửi phản hồi lúc này, vui lòng thử lại.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="qv-thread">
+      {replies.length > 0 && (
+        <div className="qv-thread-list">
+          {replies.map((reply) => (
+            <div key={reply.id} className={`qv-thread-msg ${reply.isSeller ? 'qv-thread-msg--seller' : ''}`}>
+              <div className="qv-thread-msg__head">
+                <strong>{reply.authorName}</strong>
+                <span>{formatDateTime(reply.createdAt)}</span>
+              </div>
+              <p>{reply.message}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {canReply && (
+        <div className="qv-reply-form">
+          <textarea
+            rows={2}
+            placeholder={isSeller ? 'Phản hồi đánh giá này với vai trò shop...' : 'Trả lời shop...'}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+          />
+          <button type="button" onClick={handleSend} disabled={submitting || !draft.trim()}>
+            {submitting ? 'Đang gửi...' : 'Gửi'}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ProductQuickView = ({ deal, onClose }) => {
   const { handlers } = useCart();
 
@@ -52,15 +142,13 @@ const ProductQuickView = ({ deal, onClose }) => {
 
   const [reviews, setReviews] = useState([]);
   const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [repliesByReview, setRepliesByReview] = useState({});
   const [sellerRating, setSellerRating] = useState({ average: 0, count: 0 });
 
   const [newReviewText, setNewReviewText] = useState('');
   const [newReviewRating, setNewReviewRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
-
-  const [replyDrafts, setReplyDrafts] = useState({});
-  const [submittingReplyId, setSubmittingReplyId] = useState(null);
 
   const currentUser = auth.currentUser;
   const isOwner = currentUser?.uid === deal.ownerUid;
@@ -75,12 +163,21 @@ const ProductQuickView = ({ deal, onClose }) => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onClose]);
 
+  const loadReviewsAndReplies = async () => {
+    const dealReviews = await fetchDealReviews(deal.id);
+    setReviews(dealReviews);
+
+    const repliesEntries = await Promise.all(
+      dealReviews.map((review) => fetchReviewReplies(review.id).then((replies) => [review.id, replies]))
+    );
+    setRepliesByReview(Object.fromEntries(repliesEntries));
+  };
+
   useEffect(() => {
     let cancelled = false;
     setReviewsLoading(true);
 
-    fetchDealReviews(deal.id)
-      .then((dealReviews) => { if (!cancelled) setReviews(dealReviews); })
+    loadReviewsAndReplies()
       .catch((error) => console.error('Cannot load reviews:', error))
       .finally(() => { if (!cancelled) setReviewsLoading(false); });
 
@@ -89,15 +186,12 @@ const ProductQuickView = ({ deal, onClose }) => {
       .catch((error) => console.error('Cannot load seller rating:', error));
 
     return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deal.id, deal.ownerUid]);
 
-  const refreshReviews = async () => {
-    const [dealReviews, summary] = await Promise.all([
-      fetchDealReviews(deal.id),
-      fetchSellerRatingSummary(deal.ownerUid),
-    ]);
-    setReviews(dealReviews);
-    setSellerRating(summary);
+  const refreshReviewReplies = async (reviewId) => {
+    const replies = await fetchReviewReplies(reviewId);
+    setRepliesByReview((prev) => ({ ...prev, [reviewId]: replies }));
   };
 
   const handleAddToCart = async () => {
@@ -131,9 +225,7 @@ const ProductQuickView = ({ deal, onClose }) => {
 
     setIsSubmittingReview(true);
     try {
-      const authorName = (currentUser.displayName || '').trim()
-        || (currentUser.email || '').split('@')[0]
-        || 'Ẩn danh';
+      const authorName = displayNameOf(currentUser);
 
       await submitDealReview(deal.id, deal.ownerUid, currentUser.uid, {
         rating: newReviewRating,
@@ -141,7 +233,19 @@ const ProductQuickView = ({ deal, onClose }) => {
         authorName,
       });
 
-      await refreshReviews();
+      await createNotification({
+        uid: deal.ownerUid,
+        fromUid: currentUser.uid,
+        type: 'new_review',
+        message: `${authorName} vừa đánh giá ${newReviewRating}⭐ cho "${deal.productName}"`,
+        dealId: deal.id,
+      });
+
+      const [, summary] = await Promise.all([
+        loadReviewsAndReplies(),
+        fetchSellerRatingSummary(deal.ownerUid),
+      ]);
+      setSellerRating(summary);
       setNewReviewText('');
       setNewReviewRating(5);
     } catch (error) {
@@ -149,24 +253,6 @@ const ProductQuickView = ({ deal, onClose }) => {
       alert('Không thể gửi đánh giá lúc này, vui lòng thử lại.');
     } finally {
       setIsSubmittingReview(false);
-    }
-  };
-
-  const handleSubmitReply = async (reviewId) => {
-    const text = (replyDrafts[reviewId] || '').trim();
-    if (!text) return;
-
-    setSubmittingReplyId(reviewId);
-    try {
-      await replyToReview(reviewId, text);
-      const dealReviews = await fetchDealReviews(deal.id);
-      setReviews(dealReviews);
-      setReplyDrafts((prev) => ({ ...prev, [reviewId]: '' }));
-    } catch (error) {
-      console.error('Cannot submit reply:', error);
-      alert('Không thể gửi phản hồi lúc này, vui lòng thử lại.');
-    } finally {
-      setSubmittingReplyId(null);
     }
   };
 
@@ -255,30 +341,14 @@ const ProductQuickView = ({ deal, onClose }) => {
                     </div>
                     <p className="qv-review-comment">{review.comment}</p>
 
-                    {review.sellerReply && (
-                      <div className="qv-seller-reply">
-                        <strong>Phản hồi từ {storeName}:</strong>
-                        <p>{review.sellerReply}</p>
-                      </div>
-                    )}
-
-                    {isOwner && !review.sellerReply && (
-                      <div className="qv-reply-form">
-                        <textarea
-                          rows={2}
-                          placeholder="Phản hồi đánh giá này..."
-                          value={replyDrafts[review.id] || ''}
-                          onChange={(e) => setReplyDrafts((prev) => ({ ...prev, [review.id]: e.target.value }))}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleSubmitReply(review.id)}
-                          disabled={submittingReplyId === review.id || !(replyDrafts[review.id] || '').trim()}
-                        >
-                          {submittingReplyId === review.id ? 'Đang gửi...' : 'Gửi phản hồi'}
-                        </button>
-                      </div>
-                    )}
+                    <ReplyThread
+                      review={review}
+                      replies={repliesByReview[review.id] || []}
+                      currentUser={currentUser}
+                      deal={deal}
+                      storeName={storeName}
+                      onReplySent={() => refreshReviewReplies(review.id)}
+                    />
                   </div>
                 ))}
               </div>
