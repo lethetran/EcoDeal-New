@@ -88,7 +88,7 @@ const CartPage = () => {
                 </>
             ) : (
                 <div className={styles.emptyCart}>
-                    <img src="/path/to/empty-cart-illustration.svg" alt="Giỏ hàng trống" className={styles.emptyCartImage} />
+                    <img src="/placeholders/deal-placeholder.svg" alt="Giỏ hàng trống" className={styles.emptyCartImage} />
                     <h2>Giỏ hàng của bạn đang trống</h2>
                     <p>Hãy thêm vài món ngon vào giỏ hàng nhé!</p>
                     <Link to="/" className={styles.continueShoppingButton}>Quay lại trang chủ</Link>

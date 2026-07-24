@@ -5,6 +5,27 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import './styles/global.css'; // Import global styles
+
+const DEFAULT_IMAGE_FALLBACK = '/placeholders/deal-placeholder.svg';
+
+// Replace any broken runtime image with a local placeholder.
+window.addEventListener(
+  'error',
+  (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLImageElement)) {
+      return;
+    }
+    if (target.dataset.fallbackApplied === 'true') {
+      return;
+    }
+
+    target.dataset.fallbackApplied = 'true';
+    target.src = DEFAULT_IMAGE_FALLBACK;
+  },
+  true
+);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

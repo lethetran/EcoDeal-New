@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PostProduct.css';
+import { auth } from '../../firebase-config';
+import { saveDeal } from '../../services/dealService';
 
 const SCAN_DATE_API_URL = process.env.REACT_APP_SCAN_DATE_API_URL || 'https://ac15-34-87-17-43.ngrok-free.app/scan-date';
 const SCAN_FRUITS_API_URL = process.env.REACT_APP_SCAN_FRUITS_API_URL || 'https://ac15-34-87-17-43.ngrok-free.app/scan-fruits';
@@ -509,6 +511,11 @@ const PostProduct = ({ nsxData, onClose }) => {
   };
 
   const handlePost = async () => {
+    if (!auth.currentUser) {
+      setMessage('❌ Bạn cần đăng nhập trước khi đăng deal.');
+      return;
+    }
+
     if (!formData.productName || !formData.category || !formData.quantity || !formData.salePrice) {
       setMessage('⚠️ Vui lòng điền đầy đủ thông tin sản phẩm');
       return;
@@ -619,26 +626,32 @@ const PostProduct = ({ nsxData, onClose }) => {
       //   body: JSON.stringify(productData),
       // });
 
-      // Mock response - Lưu vào localStorage
+      // Lưu deal lên Firestore theo tài khoản đang đăng nhập
       console.log('Product posted:', productData);
-      
-      // Lưu vào localStorage để Home.js có thể hiển thị Flash Deal
-      const flashDeals = JSON.parse(localStorage.getItem('flashDeals') || '[]');
-      flashDeals.unshift({
+      const savedDeal = await saveDeal({
         ...productData,
-        id: Date.now(), // ID duy nhất
+        id: `deal-${Date.now()}`,
       });
+      
+      // Lưu local cache để giao diện cập nhật tức thì
+      const flashDeals = JSON.parse(localStorage.getItem('flashDeals') || '[]');
+      flashDeals.unshift(savedDeal);
       localStorage.setItem('flashDeals', JSON.stringify(flashDeals));
       
       // Gửi event để Home.js biết có sản phẩm mới
-      window.dispatchEvent(new CustomEvent('newFlashDeal', { detail: productData }));
+      window.dispatchEvent(new CustomEvent('newFlashDeal', { detail: savedDeal }));
       
-      setMessage('✅ Bài đăng thành công! Sản phẩm đã xuất hiện trên trang Ưu Đãi Tức thì.');
+      setMessage('✅ Bài đăng thành công! Deal đã được lưu vào CSDL và hiển thị trên trang Ưu Đãi Tức thì.');
       
       // Đóng modal sau 2.5 giây
       setTimeout(() => onClose(), 2500);
     } catch (error) {
-      setMessage('❌ Lỗi khi đăng bài. Vui lòng thử lại.');
+      console.error('Post deal failed:', error);
+      if (error?.message === 'AUTH_REQUIRED') {
+        setMessage('❌ Bạn cần đăng nhập để lưu deal lên CSDL.');
+      } else {
+        setMessage('❌ Lỗi khi đăng bài. Vui lòng thử lại.');
+      }
     } finally {
       setLoading(false);
     }

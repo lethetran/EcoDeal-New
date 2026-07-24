@@ -129,6 +129,20 @@ form{ width: 100%; }
     font-weight: 600;
 }
 
+.auth-status {
+    margin: 10px 0;
+    font-size: 13px;
+    text-align: left;
+}
+
+.auth-status--error {
+    color: #c0392b;
+}
+
+.auth-status--success {
+    color: #1e824c;
+}
+
 .social-icons{
     display: flex;
     justify-content: center;

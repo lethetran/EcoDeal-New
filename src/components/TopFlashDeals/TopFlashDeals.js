@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './TopFlashDeals.css';
+import { fetchLatestDeals } from '../../services/dealService';
 
 const isFruitDeal = (deal) => deal?.category === 'fresh_fruits' || deal?.quantityUnit === 'kg';
 
@@ -128,8 +129,24 @@ const calculateDaysRemaining = (deal) => {
   return Math.max(0, daysLeft);
 };
 
+const dedupeDeals = (dealList = []) => {
+  const map = new Map();
+  dealList.forEach((deal) => {
+    const key = String(deal.id || `${deal.productName}-${deal.timestamp || ''}`);
+    if (!map.has(key)) {
+      map.set(key, deal);
+    }
+  });
+  return [...map.values()].sort((a, b) => {
+    const aTime = new Date(a.timestamp || a.createdAt || 0).getTime();
+    const bTime = new Date(b.timestamp || b.createdAt || 0).getTime();
+    return bTime - aTime;
+  });
+};
+
 const TopFlashDeals = () => {
   const [deals, setDeals] = useState([]);
+  const [cloudDeals, setCloudDeals] = useState([]);
   const [hasOverflow, setHasOverflow] = useState(false);
   const dealsGridRef = useRef(null);
 
@@ -154,10 +171,11 @@ const TopFlashDeals = () => {
 
   // Lấy deals từ localStorage và tính lại percentage
   const loadDealsWithUpdatedPercentage = useCallback(() => {
-    const flashDeals = JSON.parse(localStorage.getItem('flashDeals') || '[]');
-    const activeDeals = flashDeals.filter((deal) => !isExpired(deal));
+    const localDeals = JSON.parse(localStorage.getItem('flashDeals') || '[]');
+    const mergedDeals = dedupeDeals([...cloudDeals, ...localDeals]);
+    const activeDeals = mergedDeals.filter((deal) => !isExpired(deal));
 
-    if (activeDeals.length !== flashDeals.length) {
+    if (activeDeals.length !== mergedDeals.length || mergedDeals.length !== localDeals.length) {
       localStorage.setItem('flashDeals', JSON.stringify(activeDeals));
     }
 
@@ -186,6 +204,22 @@ const TopFlashDeals = () => {
       };
     });
     setDeals(dealsWithUpdatedPercentage);
+  }, [cloudDeals]);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchLatestDeals(50)
+      .then((dealsFromDb) => {
+        if (!isMounted) return;
+        setCloudDeals(dealsFromDb);
+      })
+      .catch((error) => {
+        console.error('Cannot load deals from database:', error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
