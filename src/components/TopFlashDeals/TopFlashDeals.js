@@ -3,6 +3,9 @@ import './TopFlashDeals.css';
 import { fetchLatestDeals } from '../../services/dealService';
 import { useCart } from '../../hooks/useCart';
 import { useNavigate } from 'react-router-dom';
+import VerifiedBadge from '../VerifiedBadge/VerifiedBadge';
+import ProductQuickView from '../ProductQuickView/ProductQuickView';
+import Toast from '../Toast/Toast';
 
 const isFruitDeal = (deal) => deal?.category === 'fresh_fruits' || deal?.quantityUnit === 'kg';
 
@@ -152,6 +155,8 @@ const TopFlashDeals = () => {
   const [deals, setDeals] = useState([]);
   const [cloudDeals, setCloudDeals] = useState([]);
   const [hasOverflow, setHasOverflow] = useState(false);
+  const [quickViewDeal, setQuickViewDeal] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: '' });
   const dealsGridRef = useRef(null);
 
   const scrollDeals = (direction) => {
@@ -266,7 +271,10 @@ const TopFlashDeals = () => {
     return () => window.removeEventListener('newFlashDeal', handleNewFlashDeal);
   }, [loadDealsWithUpdatedPercentage]);
 
-  const handleAddToCart = async (deal) => {
+  const handleAddToCart = async (deal, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!currentUser) {
       alert('Bạn cần đăng nhập để lưu giỏ hàng theo tài khoản.');
       navigate('/login');
@@ -275,10 +283,10 @@ const TopFlashDeals = () => {
 
     try {
       await handlers.handleAddDealToCart(deal);
-      alert('Đã thêm sản phẩm vào giỏ hàng.');
+      setToast({ show: true, message: '✅ Đã thêm vào giỏ hàng' });
     } catch (error) {
       console.error('Add to cart failed:', error);
-      alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+      setToast({ show: true, message: '❌ Không thể thêm vào giỏ hàng, thử lại nhé' });
     }
   };
 
@@ -302,11 +310,18 @@ const TopFlashDeals = () => {
             className={`deals-grid ${hasOverflow ? 'has-overflow' : 'is-centered'}`}
           >
           {deals.length > 0 ? deals.map((deal, index) => (
-            <div key={deal.id || index} className="flash-deal-card highlight">
+            <div
+              key={deal.id || index}
+              className="flash-deal-card highlight"
+              role="button"
+              tabIndex={0}
+              onClick={() => setQuickViewDeal(deal)}
+              onKeyDown={(e) => { if (e.key === 'Enter') setQuickViewDeal(deal); }}
+            >
               {/* Main Image */}
               <div className="deal-image-wrapper">
-                <img 
-                  src={deal.mainImage || deal.allImages?.[0]} 
+                <img
+                  src={deal.mainImage || deal.allImages?.[0]}
                   alt={deal.productName}
                   className="deal-image"
                 />
@@ -322,9 +337,13 @@ const TopFlashDeals = () => {
               <div className="deal-content">
                 <h3 className="deal-name">
                   {deal.productName}
-                  {deal.ecoCheckApproved && <span className="eco-checkmark"> ✅</span>}
                 </h3>
-                
+                {deal.ecoCheckApproved && (
+                  <div className="deal-verified-row">
+                    <VerifiedBadge label="Đã kiểm duyệt" size="sm" />
+                  </div>
+                )}
+
                 <div className="deal-price">
                   <span className="price-current">
                     {formatPrice(Math.round(parseFloat(deal.salePrice) * (1 - parseFloat(deal.dealPercentage) / 100)), deal)}
@@ -358,7 +377,7 @@ const TopFlashDeals = () => {
                   <span className="stock-label">Còn {formatQuantity(deal)}</span>
                 </div>
 
-                <button className="btn-add-cart" onClick={() => handleAddToCart(deal)}>
+                <button className="btn-add-cart" onClick={(e) => handleAddToCart(deal, e)}>
                   🛒 Thêm vào giỏ
                 </button>
               </div>
@@ -378,6 +397,16 @@ const TopFlashDeals = () => {
           )}
         </div>
       </div>
+
+      {quickViewDeal && (
+        <ProductQuickView deal={quickViewDeal} onClose={() => setQuickViewDeal(null)} />
+      )}
+
+      <Toast
+        show={toast.show}
+        message={toast.message}
+        onDone={() => setToast({ show: false, message: '' })}
+      />
     </section>
   );
 };

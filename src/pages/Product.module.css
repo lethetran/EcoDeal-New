@@ -48,6 +48,29 @@
 .store_meta__name { display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--primary-blue); font-weight: 600; }
 .store_meta__name span { text-decoration: underline; text-underline-offset: 3px; }
 .store_meta__name i { font-size: 1.1rem; }
+
+.seller-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.seller-trust-badge i { color: #f59e0b; }
+
+.not-verified-note {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  font-style: italic;
+}
 .store-meta__divider { height: 12px; width: 1px; background-color: var(--border-color); }
 .store-meta__distance { display: flex; align-items: center; gap: .25rem; }
 .info__price { display: flex; align-items: center; gap: 1rem; margin-bottom: .8rem; }

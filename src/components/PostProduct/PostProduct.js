@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PostProduct.css';
 import { auth } from '../../firebase-config';
-import { saveDeal } from '../../services/dealService';
+import { saveDeal, sanitizeProductName } from '../../services/dealService';
 
 const SCAN_DATE_API_URL = process.env.REACT_APP_SCAN_DATE_API_URL || 'https://adelaida-beastlike-vernia.ngrok-free.dev/scan-date';
 const SCAN_FRUITS_API_URL = process.env.REACT_APP_SCAN_FRUITS_API_URL || 'https://adelaida-beastlike-vernia.ngrok-free.dev/scan-fruits';
@@ -12,6 +12,28 @@ const getFirstScanResult = (data) => {
     return data[0] || null;
   }
   return data || null;
+};
+
+const resolveAIPassStatus = (payload) => {
+  const raw = payload?.data;
+  const firstItem = Array.isArray(raw) ? (raw[0] || null) : (raw || null);
+
+  if (typeof payload?.is_pass === 'boolean') {
+    return payload.is_pass;
+  }
+  if (typeof firstItem?.is_pass === 'boolean') {
+    return firstItem.is_pass;
+  }
+
+  const status = String(payload?.status || firstItem?.status || '').toUpperCase();
+  if (['PASSED', 'PASS', 'APPROVED', 'GOOD'].includes(status)) {
+    return true;
+  }
+  if (['FAILED', 'FAIL', 'REJECTED', 'BAD', 'SPOILED'].includes(status)) {
+    return false;
+  }
+
+  return null;
 };
 
 const PostProduct = ({ nsxData, onClose }) => {
@@ -61,6 +83,26 @@ const PostProduct = ({ nsxData, onClose }) => {
     if (!Number.isFinite(value)) return '0';
     const rounded = Math.round(value * 100) / 100;
     return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2).replace(/\.0+$/, '').replace(/(\.\d*[1-9])0+$/, '$1');
+  };
+
+  const setDateImageFromFile = (file, customMessage) => {
+    setDateImagePreview((previousPreview) => {
+      if (previousPreview && previousPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(previousPreview);
+      }
+      return URL.createObjectURL(file);
+    });
+
+    setDateImageFile(file);
+    setFormData((prev) => ({
+      ...prev,
+      nsx: '',
+      hsd: '',
+    }));
+    setDateWasScanned(false);
+    setDateExtracted(false);
+    setEcoCheckStatus(null);
+    setMessage(customMessage || '📷 Ảnh đã chọn. Nhấn nút "Quét" để trích xuất NSX/HSD');
   };
 
   // Tính toán thời gian còn lại và deal percentage
@@ -116,6 +158,12 @@ const PostProduct = ({ nsxData, onClose }) => {
     formData.maxDiscountThreshold,
     reductionUnit,
   ]);
+
+  useEffect(() => () => {
+    if (dateImagePreview && dateImagePreview.startsWith('blob:')) {
+      URL.revokeObjectURL(dateImagePreview);
+    }
+  }, [dateImagePreview]);
 
   // Handler cho file upload ảnh
   const handleImageUpload = (e, type) => {
@@ -215,23 +263,7 @@ const PostProduct = ({ nsxData, onClose }) => {
         return;
       }
 
-      // Set file ngay để tránh timing issue
-      setDateImageFile(file);
-      
-      // Tạo preview URL (hiệu quả hơn FileReader)
-      const previewUrl = URL.createObjectURL(file);
-      setDateImagePreview(previewUrl);
-      
-      // Reset form khi chọn ảnh mới
-      setFormData(prev => ({
-        ...prev,
-        nsx: '',
-        hsd: ''
-      }));
-      setDateWasScanned(false);
-      setDateExtracted(false);
-      setEcoCheckStatus(null);
-      setMessage('📷 Ảnh đã chọn. Nhấn nút "Quét" để trích xuất NSX/HSD');
+      setDateImageFromFile(file);
     }
     // Clear input để cho phép chọn lại file
     e.target.value = '';
@@ -339,8 +371,9 @@ const PostProduct = ({ nsxData, onClose }) => {
       return;
     }
 
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
+    const nextValue = name === 'productName' ? sanitizeProductName(value) : value;
+    setFormData(prev => ({ ...prev, [name]: nextValue }));
+
     // Nếu sửa NSX/HSD thủ công, chỉ reset scan flag và status
     if (name === 'nsx' || name === 'hsd') {
       if (dateWasScanned) {
@@ -396,14 +429,17 @@ const PostProduct = ({ nsxData, onClose }) => {
           return;
         }
 
-        const isPassed = Boolean(resJson.is_pass) || resJson.status === 'PASSED';
+        const isPassed = resolveAIPassStatus(resJson);
 
-        if (isPassed) {
+        if (isPassed === true) {
           setEcoCheckStatus('approved');
           setMessage('✅ AI kiểm duyệt: Tốt.');
-        } else {
+        } else if (isPassed === false) {
           setEcoCheckStatus('rejected');
           setMessage('❌ AI kiểm duyệt: Hư hỏng.');
+        } else {
+          setEcoCheckStatus('rejected');
+          setMessage('❌ AI trả về kết quả không rõ ràng. Vui lòng thử lại bằng ảnh khác.');
         }
         setAiCheckLoading(false);
         return;
@@ -668,10 +704,15 @@ const PostProduct = ({ nsxData, onClose }) => {
   return (
     <div className="post-product-overlay">
       <div className="post-product-modal">
-        <button className="post-product-close" onClick={onClose}>✕</button>
-        
-        <h2>📤 Đăng Sản Phẩm Ưu Đãi</h2>
-        
+        <div className="post-product-header">
+          <div className="post-product-header-text">
+            <h2>Đăng Sản Phẩm Ưu Đãi</h2>
+            <p className="post-product-subtitle">Chia sẻ ưu đãi giải cứu thực phẩm tới cộng đồng quanh bạn</p>
+          </div>
+          <button type="button" className="post-product-close" onClick={onClose} aria-label="Đóng">✕</button>
+        </div>
+
+        <div className="post-product-body">
         {/* Form nhập thông tin */}
         <form className="post-product-form">
           <div className="form-row">
@@ -685,7 +726,7 @@ const PostProduct = ({ nsxData, onClose }) => {
                 <option value="raw_meat_bread">🥩 Thịt Tươi (🔍 AI Soi Mốc & Ôi Thiu)</option>
               </select>
               {formData.category && (
-                <div className="category-badge" style={{ marginTop: '8px', fontSize: '12px', padding: '6px 8px', backgroundColor: '#f0f0f0', borderRadius: '4px', textAlign: 'center' }}>
+                <div className="category-badge">
                   {formData.category === 'packaged_food' && '⚡ Chỉ quét NSX/HSD (Tối ưu)'}
                   {formData.category === 'fresh_fruits' && '🔍 AI Soi Mốc & Thâm Nát'}
                   {formData.category === 'fresh_vegetables' && '🔍 AI Soi Nấm & Sâu Bệnh'}
@@ -701,7 +742,7 @@ const PostProduct = ({ nsxData, onClose }) => {
             </div>
           )}
 
-          <fieldset disabled={!formData.category} style={{ border: 'none', padding: 0, margin: 0, minInlineSize: 0 }}>
+          <fieldset className="post-product-fieldset" disabled={!formData.category}>
           <div className="form-row">
             <div className="form-group">
               <label>Tên sản phẩm *</label>
@@ -821,6 +862,7 @@ const PostProduct = ({ nsxData, onClose }) => {
                       type="file"
                       accept="image/*"
                       multiple
+                      capture="environment"
                       onChange={(e) => handleImageUpload(e, 'fruit-check')}
                       id="fruit-check-image-input"
                       style={{ display: 'none' }}
@@ -853,6 +895,7 @@ const PostProduct = ({ nsxData, onClose }) => {
                     )}
                   </div>
                 </div>
+
               </>
             ) : (
               <>
@@ -864,6 +907,7 @@ const PostProduct = ({ nsxData, onClose }) => {
                     <input
                       type="file"
                       accept="image/*"
+                      capture="environment"
                       onChange={(e) => handleImageUpload(e, 'date')}
                       id="date-image-input"
                       style={{ display: 'none' }}
@@ -871,6 +915,7 @@ const PostProduct = ({ nsxData, onClose }) => {
                     <label htmlFor="date-image-input" className="image-upload-label">
                       {dateExtracted ? '✅ Đã quét NSX/HSD' : 'Chụp hoặc chọn ảnh NSX/HSD'}
                     </label>
+
                     {dateImagePreview && (
                       <div className="image-preview">
                         <img src={dateImagePreview} alt="NSX/HSD" />
@@ -882,6 +927,9 @@ const PostProduct = ({ nsxData, onClose }) => {
                             const fileInput = document.getElementById('date-image-input');
                             if (fileInput) fileInput.value = '';
                             
+                            if (dateImagePreview && dateImagePreview.startsWith('blob:')) {
+                              URL.revokeObjectURL(dateImagePreview);
+                            }
                             setDateImagePreview(null);
                             setDateImageFile(null);
                             setDateExtracted(false);
@@ -904,7 +952,7 @@ const PostProduct = ({ nsxData, onClose }) => {
                   onClick={handleScanDates}
                   disabled={scanLoading || loading || !dateImageFile}
                 >
-                  {scanLoading ? '🔄 Đang quét...' : '📷 Quét NSX/HSD'}
+                  {scanLoading ? '🔄 Đang quét...' : '📷 Quét hạn sử dụng (NSX/HSD)'}
                 </button>
                 
                 <p className="image-note">💡 Chọn ảnh rồi nhấn nút "Quét" để AI trích xuất NSX và HSD. Nếu sai, bạn có thể nhập thủ công:</p>
@@ -989,7 +1037,7 @@ const PostProduct = ({ nsxData, onClose }) => {
             {/* Giảm giá ban đầu */}
             <div className="form-row">
               <div className="form-group">
-                <label>Giảm giá ban đầu (%) <span style={{color: '#999'}}>tuỳ chọn</span></label>
+                <label>Giảm giá ban đầu (%) <span className="optional-tag">tuỳ chọn</span></label>
                 <div className="percent-input-group">
                   <input
                     type="number"
@@ -1009,8 +1057,8 @@ const PostProduct = ({ nsxData, onClose }) => {
             {/* Chọn đơn vị giảm giá */}
             <div className="form-row">
               <div className="form-group">
-                <label>Đơn vị giảm giá <span style={{color: '#999'}}>tuỳ chọn</span></label>
-                <select value={reductionUnit} onChange={(e) => setReductionUnit(e.target.value)} style={{width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '6px'}}>
+                <label>Đơn vị giảm giá <span className="optional-tag">tuỳ chọn</span></label>
+                <select value={reductionUnit} onChange={(e) => setReductionUnit(e.target.value)}>
                   <option value="day">Theo ngày (%/ngày)</option>
                   <option value="hour">Theo giờ (%/giờ)</option>
                 </select>
@@ -1020,7 +1068,7 @@ const PostProduct = ({ nsxData, onClose }) => {
             {/* Giảm theo thời gian */}
             <div className="form-row">
               <div className="form-group">
-                <label>Giảm thêm {reductionUnit === 'hour' ? '%/giờ' : '%/ngày'} <span style={{color: '#999'}}>tuỳ chọn</span></label>
+                <label>Giảm thêm {reductionUnit === 'hour' ? '%/giờ' : '%/ngày'} <span className="optional-tag">tuỳ chọn</span></label>
                 <div className="percent-input-group">
                   <input
                     type="number"
@@ -1040,7 +1088,7 @@ const PostProduct = ({ nsxData, onClose }) => {
             {/* Mức giảm tối đa */}
             <div className="form-row">
               <div className="form-group">
-                <label>Mức giảm tối đa (%)<span style={{color: '#999'}}> tuỳ chọn</span></label>
+                <label>Mức giảm tối đa (%) <span className="optional-tag">tuỳ chọn</span></label>
                 <div className="percent-input-group">
                   <input
                     type="number"
@@ -1058,10 +1106,10 @@ const PostProduct = ({ nsxData, onClose }) => {
             </div>
 
             {/* Phần thông báo hỗ trợ cộng đồng (tùy chọn) */}
-            <div style={{marginTop: '20px', padding: '15px', background: '#fff3e0', borderRadius: '8px', border: '1px solid #ffe0b2'}}>
-              <h5 style={{margin: '0 0 12px 0', color: '#e65100'}}>🤝 Thông Báo Hỗ Trợ Cộng Đồng <span style={{fontSize: '12px', color: '#8d6e63'}}>(tuỳ chọn)</span></h5>
-              
-              <label style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', cursor: 'pointer'}}>
+            <div className="community-alert-box">
+              <h5 className="community-alert-title">🤝 Thông Báo Hỗ Trợ Cộng Đồng <span className="optional-tag">(tuỳ chọn)</span></h5>
+
+              <label className="community-alert-checkbox">
                 <input
                   type="checkbox"
                   checked={formData.enableFreeAlert}
@@ -1072,14 +1120,13 @@ const PostProduct = ({ nsxData, onClose }) => {
                       hoursBeforeFreeAlert: e.target.checked ? prev.hoursBeforeFreeAlert : ''
                     }))
                   }
-                  style={{width: '18px', height: '18px', cursor: 'pointer'}}
                 />
                 <span>Bật thông báo chuyển sản phẩm tới nhà hảo tâm/tổ chức từ thiện khi gần hết hạn</span>
               </label>
 
               {formData.enableFreeAlert && (
                 <div className="form-group">
-                  <label>Thông báo khi còn bao nhiêu giờ? <span style={{color: '#999'}}>tuỳ chọn</span></label>
+                  <label>Thông báo khi còn bao nhiêu giờ? <span className="optional-tag">tuỳ chọn</span></label>
                   <input
                     type="number"
                     name="hoursBeforeFreeAlert"
@@ -1089,7 +1136,7 @@ const PostProduct = ({ nsxData, onClose }) => {
                     min="0"
                     max="999"
                   />
-                  <small style={{color: '#7f8c8d', marginTop: '5px', display: 'block'}}>Ví dụ: Nhập 2 = Khi còn 2 giờ đến hết hạn, hệ thống gửi thông báo cho các đầu mối thiện nguyện trong khu vực để tiếp nhận sản phẩm phù hợp.</small>
+                  <small className="community-alert-hint">Ví dụ: Nhập 2 = Khi còn 2 giờ đến hết hạn, hệ thống gửi thông báo cho các đầu mối thiện nguyện trong khu vực để tiếp nhận sản phẩm phù hợp.</small>
                 </div>
               )}
             </div>
@@ -1123,8 +1170,8 @@ const PostProduct = ({ nsxData, onClose }) => {
 
             {/* Hiển thị thông tin free alert nếu bật */}
             {formData.enableFreeAlert && formData.hoursBeforeFreeAlert && (
-              <div style={{marginTop: '15px', padding: '12px', background: '#f3e5f5', borderRadius: '6px', border: '1px solid #e1bee7'}}>
-                <p style={{margin: '0', fontSize: '13px', color: '#4a148c'}}>
+              <div className="community-alert-info-box">
+                <p>
                   🔔 Thông báo: Khi còn <strong>{formData.hoursBeforeFreeAlert} giờ</strong>, các đơn vị thiện nguyện trong khu vực sẽ nhận thông tin để kết nối tiếp nhận sản phẩm.
                 </p>
               </div>
@@ -1163,6 +1210,7 @@ const PostProduct = ({ nsxData, onClose }) => {
         <p className="post-product-note">
           💡 <strong>Lưu ý:</strong> Đồ đóng gói được gán nhãn "EcoCheck" khi NSX/HSD hợp lệ. Riêng hoa quả tươi và thịt tươi sẽ gán nhãn AI kiểm duyệt khi hệ thống không phát hiện hư hỏng.
         </p>
+        </div>
       </div>
     </div>
   );

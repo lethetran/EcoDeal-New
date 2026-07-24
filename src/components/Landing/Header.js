@@ -23,7 +23,7 @@ const Header = () => {
 
     return (
         <header className={navbarClasses}>
-            <Link to="/" className={styles.logo}>PheniFood</Link>
+            <Link to="/home" className={styles.logo}>PheniFood</Link>
             <nav>
                 <a href="#deals-gallery">ƯU ĐÃ HÔM NAY</a>
                 <a href="/about">CÂU CHUYỆN</a>

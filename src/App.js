@@ -54,6 +54,7 @@ function App() {
         <Route path="/partner" element={<PartnerPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
         <Route path="/profile/*" element={<ProfilePage />} />

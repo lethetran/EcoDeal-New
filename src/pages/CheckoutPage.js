@@ -2,6 +2,7 @@ import React, { useState, useMemo, useRef, useCallback, useEffect } from "react"
 // import { Link } from "react-router-dom";
 import styles from "./CheckoutPage.module.css";
 import AddressModal from "../components/Checkout/AddressModal";
+import VoucherModal from "../components/CartPage/VoucherModal";
 import { Link, useNavigate } from 'react-router-dom';
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer"; // Nếu bạn muốn sử dụng Footer, hãy bỏ comment dòng này
@@ -9,6 +10,7 @@ import { auth } from '../firebase-config';
 import { useCart } from '../hooks/useCart';
 import { createOrderFromCart } from '../services/cartService';
 import { fetchUserAddresses, saveUserAddresses } from '../services/userProfileService';
+import { ALL_VOUCHERS } from '../data/vouchers';
 
 // Import các icon từ thư viện 'react-icons'
 import {
@@ -25,20 +27,21 @@ import {
   FiEdit3,
 } from "react-icons/fi";
 
-const availableVouchers = [
-  {
-    code: "GIAM10K",
-    description: "Giảm 10K cho đơn hàng từ 100K",
-    discount: 10000,
-  },
-  {
-    code: "FREESHIP",
-    description: "Miễn phí vận chuyển tối đa 15K",
-    discount: 15000,
-  },
-];
-
 const CHECKOUT_ADDRESSES_STORAGE_KEY = 'checkoutAddresses';
+
+const computeVoucherDiscount = (voucher, subTotal, shippingFee) => {
+  if (!voucher) return 0;
+  switch (voucher.type) {
+    case 'PERCENTAGE':
+      return Math.round(subTotal * (Number(voucher.value || 0) / 100));
+    case 'FIXED':
+      return Math.min(Number(voucher.value || 0), subTotal);
+    case 'SHIPPING':
+      return Math.min(Number(voucher.value || 0), shippingFee);
+    default:
+      return 0;
+  }
+};
 
 // --- Component con ---
 
@@ -90,7 +93,9 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [orderNote, setOrderNote] = useState("");
   const [voucherInput, setVoucherInput] = useState("");
-  const [appliedVoucher, setAppliedVoucher] = useState(null);
+  const [voucherError, setVoucherError] = useState("");
+  const [appliedVoucherId, setAppliedVoucherId] = useState(null);
+  const [isVoucherModalOpen, setVoucherModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const [addresses, setAddresses] = useState([]);
@@ -170,49 +175,48 @@ const CheckoutPage = () => {
     () => (shippingMethod === "delivery" ? 15000 : 0),
     [shippingMethod]
   );
+  const appliedVoucher = useMemo(
+    () => ALL_VOUCHERS.find((v) => v.id === appliedVoucherId) || null,
+    [appliedVoucherId]
+  );
   const discountAmount = useMemo(
-    () => (appliedVoucher ? appliedVoucher.discount : 0),
-    [appliedVoucher]
+    () => computeVoucherDiscount(appliedVoucher, subTotal, shippingFee),
+    [appliedVoucher, subTotal, shippingFee]
   );
   const total = Math.max(0, subTotal + shippingFee - discountAmount); // Đảm bảo tổng không âm
 
   // Hàm xử lý
-  const handleOpenVoucherModal = () => {
-    // Trong thực tế, đây sẽ là hàm mở một Modal
-    const selectedCode = prompt(
-      "Danh sách voucher có sẵn:\n" +
-        availableVouchers
-          .map((v) => `- ${v.code}: ${v.description}`)
-          .join("\n") +
-        "\nNhập mã bạn muốn dùng:"
+  const applyVoucherByCode = (code) => {
+    const voucher = ALL_VOUCHERS.find(
+      (v) => v.code.toUpperCase() === code.toUpperCase()
     );
-    if (selectedCode) {
-      const voucher = availableVouchers.find(
-        (v) => v.code.toUpperCase() === selectedCode.toUpperCase()
-      );
-      if (voucher) {
-        setAppliedVoucher(voucher);
-        setVoucherInput(voucher.code);
-      } else {
-        alert("Mã không hợp lệ!");
-      }
+    if (!voucher) {
+      setVoucherError("Mã không hợp lệ.");
+      return;
     }
+    if (subTotal < voucher.condition.minOrderValue) {
+      setVoucherError(
+        `Đơn hàng cần tối thiểu ${voucher.condition.minOrderValue.toLocaleString("vi-VN")}đ để dùng mã này.`
+      );
+      return;
+    }
+    setAppliedVoucherId(voucher.id);
+    setVoucherInput(voucher.code);
+    setVoucherError("");
   };
 
-  const handleApplyVoucherInput = () => {
-    const voucher = availableVouchers.find(
-      (v) => v.code.toUpperCase() === voucherInput.toUpperCase()
-    );
-    if (voucher) {
-      setAppliedVoucher(voucher);
-    } else {
-      alert("Mã không hợp lệ!");
-    }
+  const handleApplyVoucherInput = () => applyVoucherByCode(voucherInput);
+
+  const handleApplyVoucherFromModal = (voucherId) => {
+    const voucher = ALL_VOUCHERS.find((v) => v.id === voucherId);
+    if (voucher) applyVoucherByCode(voucher.code);
+    setVoucherModalOpen(false);
   };
 
   const handleRemoveVoucher = () => {
-    setAppliedVoucher(null);
+    setAppliedVoucherId(null);
     setVoucherInput("");
+    setVoucherError("");
   };
 
   const handlePlaceOrder = async () => {
@@ -360,7 +364,7 @@ const CheckoutPage = () => {
                     <div className={styles.storeIdentity}>
                       <FiShoppingBag />
                       <Link
-                        to={`/stores/${storeInfo.id}`}
+                        to={`/store/${storeInfo.id}`}
                         className={styles.storeNameLink}
                       >
                         {storeInfo.name}
@@ -505,7 +509,10 @@ const CheckoutPage = () => {
                       type="text"
                       placeholder="Nhập mã voucher"
                       value={voucherInput}
-                      onChange={(e) => setVoucherInput(e.target.value)}
+                      onChange={(e) => {
+                        setVoucherInput(e.target.value);
+                        if (voucherError) setVoucherError("");
+                      }}
                     />
                     <button
                       onClick={handleApplyVoucherInput}
@@ -515,9 +522,12 @@ const CheckoutPage = () => {
                     </button>
                   </div>
                 )}
+                {voucherError && (
+                  <p className={styles.voucherErrorText}>{voucherError}</p>
+                )}
                 <button
                   className={styles.selectVoucherButton}
-                  onClick={handleOpenVoucherModal}
+                  onClick={() => setVoucherModalOpen(true)}
                 >
                   Chọn hoặc nhập mã
                 </button>
@@ -559,18 +569,26 @@ const CheckoutPage = () => {
           </aside>
         </div>
       </div>
-      <AddressModal 
+      <AddressModal
                 isOpen={isAddressModalOpen}
                 onClose={() => setAddressModalOpen(false)}
             addresses={addresses}
             onSaveAddresses={persistAddresses}
                 onSelectAddress={(selectedAddr) => {
                     // Cập nhật địa chỉ trên trang Checkout
-                    setShippingAddress(selectedAddr); 
+                    setShippingAddress(selectedAddr);
                     // Đóng modal
                     setAddressModalOpen(false);
                 }}
             />
+      <VoucherModal
+        isOpen={isVoucherModalOpen}
+        onClose={() => setVoucherModalOpen(false)}
+        savedVouchers={ALL_VOUCHERS}
+        onApply={handleApplyVoucherFromModal}
+        subTotal={subTotal}
+        appliedVoucherId={appliedVoucherId}
+      />
     </div>
     <Footer />
     </>

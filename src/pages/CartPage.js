@@ -61,7 +61,7 @@ const CartPage = () => {
                                     <input type="checkbox" id="selectAll" className={styles.checkbox} checked={isAllSelected} onChange={(e) => handlers.handleSelectAll(e.target.checked)} />
                                     <label htmlFor="selectAll">Chọn tất cả ({cartItems.length} sản phẩm)</label>
                                 </div>
-                                <Link to="/" className={styles.continueShopping}>Tiếp tục mua sắm</Link>
+                                <Link to="/home" className={styles.continueShopping}>Tiếp tục mua sắm</Link>
                             </header>
                             
                             {Object.values(groupedCart).map(({ storeInfo, items }) => (
@@ -91,7 +91,7 @@ const CartPage = () => {
                     <img src="/placeholders/deal-placeholder.svg" alt="Giỏ hàng trống" className={styles.emptyCartImage} />
                     <h2>Giỏ hàng của bạn đang trống</h2>
                     <p>Hãy thêm vài món ngon vào giỏ hàng nhé!</p>
-                    <Link to="/" className={styles.continueShoppingButton}>Quay lại trang chủ</Link>
+                    <Link to="/home" className={styles.continueShoppingButton}>Quay lại trang chủ</Link>
                 </div>
             )}
 

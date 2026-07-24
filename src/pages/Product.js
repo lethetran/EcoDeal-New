@@ -1,293 +1,333 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Header from '../components/Header/Header'; // Điều chỉnh đường dẫn nếu cần
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import Header from '../components/Header/Header';
 import ProductCard from '../components/ProductCard/ProductCard';
 import Footer from '../components/Footer/Footer';
+import VerifiedBadge from '../components/VerifiedBadge/VerifiedBadge';
 import { FaStar } from 'react-icons/fa';
 
 // Import CSS Module đúng cách
 import styles from './Product.module.css';
+import { fetchDealById, fetchLatestDeals } from '../services/dealService';
+import { fetchDealReviews, fetchSellerRatingSummary, submitDealReview } from '../services/reviewService';
+import { useCart } from '../hooks/useCart';
+import { auth } from '../firebase-config';
 
-// === DỮ LIỆU MẪU ===
-const productData = {
-  name: "Combo Burger Thịt Bò Đặc Biệt",
-  mainImage: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800",
-  thumbnails: [ "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200", "https://i.pinimg.com/736x/f9/00/7f/f9007f73da46783cb255a1e621637f27.jpg", "/placeholders/deal-placeholder.svg", "/placeholders/deal-placeholder.svg", ],
-  store: { name: "Tiệm Burger House", distance: "1.2km" },
-  price: { new: 60000, old: 120000, discount: 50 },
-  description: "Một phần ăn đầy đặn giúp bạn no căng bụng. Bao gồm một burger bò phô mai hảo hạng, khoai tây chiên giòn rụm và một ly Coca-Cola mát lạnh.",
-  rescueStatus: { expiryDate: "Hôm nay", remaining: 12, reason: "Sản phẩm tươi, bán trong ngày", savedCount: 188, },
-  reviews: [ { id: 1, name: "Minh Anh", rating: 5, comment: "Mình đã giải cứu thành công! Bánh vẫn rất ngon, mềm và thơm. Ủng hộ mô hình ý nghĩa này của shop." }, { id: 2, name: "Thanh Hằng", rating: 5, comment: "Giá quá tốt cho chất lượng này. Giao hàng nhanh. Cảm ơn vì đã giúp mình tiết kiệm và bảo vệ môi trường." } ],
-  moreFromStore: [
-    { id: 10, name: 'Bánh Mì Gối Yến Mạch Tươi Ngon Bổ Dưỡng', price: 25000, originalPrice: 40000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 8 giờ', stock: 12, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
-    { id: 11, name: 'Hộp 4 Bánh Tart Trứng Béo Ngậy', price: 39000, originalPrice: 60000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 3 giờ', stock: 8, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
-    { id: 12, name: 'Bánh Bông Lan Trứng Muối', price: 59000, originalPrice: 90000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 5 giờ', stock: 4, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
-    { 
-    id: 30, 
-    name: 'Túi Cà Chua Bi Sạch VietGAP (500g)', 
-    price: 29000, 
-    originalPrice: 45000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 2 ngày', 
-    stock: 18, 
-    store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
-  },
-  { 
-    id: 31, 
-    name: 'Bó Xà Lách Romain Tươi Mơn Mởn', 
-    price: 15000, 
-    originalPrice: 25000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Hôm nay', 
-    stock: 9, 
-    store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
-  },
-  { 
-    id: 32, 
-    name: 'Khay Nấm Đùi Gà Hữu Cơ', 
-    price: 35000, 
-    originalPrice: 55000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 3 ngày', 
-    stock: 11, 
-    store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
-  },
-  { 
-    id: 33, 
-    name: 'Bơ Sáp 034 Chín Cây (Túi 1kg)', 
-    price: 49000, 
-    originalPrice: 80000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 2 ngày', 
-    stock: 7, 
-    store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
-  },
-  { 
-    id: 34, 
-    name: 'Túi Chanh Vàng Không Hạt Nhập Khẩu', 
-    price: 39000, 
-    originalPrice: 60000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 1 tuần', 
-    stock: 25, 
-    store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
-  },
-  { 
-    id: 35, 
-    name: 'Bông Cải Xanh Tươi VietGAP', 
-    price: 22000, 
-    originalPrice: 35000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 2 ngày', 
-    stock: 14, 
-    store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
-  }
-  ],
-  otherStoreSuggestions: [
-    { id: 20, name: 'Hộp Dâu Tây Đà Lạt Siêu To (500g)', price: 69000, originalPrice: 100000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 1 ngày', stock: 15, store: { id: 101, name: 'Nông sản Sạch Xanh Lá Cây To Khổng Lồ', distance: '2.5km' } },
-    { id: 21, name: 'Sữa Chua Hy Lạp Tự Nhiên Không Đường', price: 19000, originalPrice: 30000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 2 ngày', stock: 20, store: { id: 102, name: 'Tiệm Sữa Nhà Làm', distance: '3.1km' } },
-    { id: 22, name: 'Ức Gà Phi Lê Tươi Sạch Mỗi Ngày', price: 45000, originalPrice: 65000, img: '/placeholders/deal-placeholder.svg', expiry: 'Hôm nay', stock: 9, store: { id: 103, name: 'Thực phẩm An Toàn Vì Sức Khỏe', distance: '1.8km' } },
-     { id: 40, 
-    name: 'Túi Khoai Tây Bi Đà Lạt (1kg)', 
-    price: 25000, 
-    originalPrice: 40000, 
-    img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400', 
-    expiry: 'Còn 4 ngày', 
-    stock: 22, 
-    store: { id: 'nong-san-da-lat', name: 'Nông Sản Đà Lạt', distance: '3.8km' } 
-  },
-  { 
-    id: 41, 
-    name: 'Túi Cà Rốt Sạch Hữu Cơ', 
-    price: 19000, 
-    originalPrice: 30000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 3 ngày', 
-    stock: 17, 
-    store: { id: 'rau-cu-sach', name: 'Rau Củ Sạch 3 Miền', distance: '2.1km' } 
-  },
-  { 
-    id: 42, 
-    name: 'Chùm Táo Envy Nhập Khẩu Mỹ', 
-    price: 79000, 
-    originalPrice: 120000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 5 ngày', 
-    stock: 10, 
-    store: { id: 'fruitopia', name: 'Fruitopia', distance: '4.2km' } 
-  },
-  { 
-    id: 43, 
-    name: 'Bắp Cải Thảo Tươi Ngon', 
-    price: 12000, 
-    originalPrice: 20000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Hôm nay', 
-    stock: 8, 
-    store: { id: 'vuon-an-lanh', name: 'Vườn An Lành', distance: '2.9km' } 
-  },
-  { 
-    id: 44, 
-    name: 'Tỏi Cô Đơn Lý Sơn (Túi 200g)', 
-    price: 45000, 
-    originalPrice: 65000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 2 tuần', 
-    stock: 30, 
-    store: { id: 'cho-nong-san', name: 'Chợ Nông Sản Online', distance: '3.5km' } 
-  },
-  { 
-    id: 45, 
-    name: 'Dưa Chuột Baby Sạch Giòn', 
-    price: 18000, 
-    originalPrice: 28000, 
-    img: '/placeholders/deal-placeholder.svg', 
-    expiry: 'Còn 2 ngày', 
-    stock: 13, 
-    store: { id: 'bach-hoa-xanh', name: 'Bách Hóa Xanh', distance: '950m' } 
-  }
-  ]
+const FALLBACK_IMAGE = '/placeholders/deal-placeholder.svg';
+
+const computeFinalPrice = (deal) => {
+  const discount = Math.max(0, Math.min(100, Number(deal?.dealPercentage || 0)));
+  const originalPrice = Math.max(0, Number(deal?.salePrice || 0));
+  return Math.round(originalPrice * (1 - discount / 100));
 };
 
+const toProductCardShape = (deal) => ({
+  id: deal.id,
+  name: deal.productName,
+  price: computeFinalPrice(deal),
+  originalPrice: Number(deal.salePrice || 0),
+  img: deal.mainImage || FALLBACK_IMAGE,
+  stock: deal.quantity,
+  store: {
+    id: deal.ownerUid,
+    name: deal.ownerDisplayName || deal.ownerEmail || 'Cộng đồng Ecodeal',
+  },
+});
 
 function ProductDetailPage() {
-  const [currentImage, setCurrentImage] = useState(productData.mainImage);
-  const [thumbnails, setThumbnails] = useState(productData.thumbnails);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { handlers } = useCart();
+
+  const [deal, setDeal] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [currentImage, setCurrentImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [reviews, setReviews] = useState(productData.reviews);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [moreFromStore, setMoreFromStore] = useState([]);
+  const [otherDeals, setOtherDeals] = useState([]);
+
+  const [reviews, setReviews] = useState([]);
+  const [sellerRating, setSellerRating] = useState({ average: 0, count: 0 });
   const [newReviewText, setNewReviewText] = useState('');
   const [newReviewRating, setNewReviewRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleThumbnailClick = (clickedThumbnail) => {
-    const oldMainImage = currentImage;
-    setCurrentImage(clickedThumbnail);
-    
-    // === DÒNG 104 ĐÃ ĐƯỢC SỬA LỖI TỪ -d_meta' THÀNH 'thumbnails' ===
-    const newThumbnails = thumbnails.map(thumb => 
-        thumb === clickedThumbnail ? oldMainImage.replace('w=800', 'w=200') : thumb
-    );
-    setThumbnails(newThumbnails);
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setNotFound(false);
+    setDeal(null);
+
+    fetchDealById(id)
+      .then((fetchedDeal) => {
+        if (cancelled) return;
+        if (!fetchedDeal) {
+          setNotFound(true);
+          return;
+        }
+        setDeal(fetchedDeal);
+        setCurrentImage(fetchedDeal.mainImage || FALLBACK_IMAGE);
+        setQuantity(1);
+      })
+      .catch((error) => {
+        console.error('Cannot load deal:', error);
+        if (!cancelled) setNotFound(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  useEffect(() => {
+    if (!deal) return;
+    let cancelled = false;
+
+    fetchLatestDeals(30)
+      .then((deals) => {
+        if (cancelled) return;
+        const others = deals.filter((d) => d.id !== deal.id);
+        setMoreFromStore(
+          others.filter((d) => d.ownerUid === deal.ownerUid).slice(0, 4).map(toProductCardShape)
+        );
+        setOtherDeals(
+          others.filter((d) => d.ownerUid !== deal.ownerUid).slice(0, 4).map(toProductCardShape)
+        );
+      })
+      .catch((error) => console.error('Cannot load related deals:', error));
+
+    return () => {
+      cancelled = true;
+    };
+  }, [deal]);
+
+  useEffect(() => {
+    if (!deal) return;
+    let cancelled = false;
+
+    fetchDealReviews(deal.id)
+      .then((dealReviews) => { if (!cancelled) setReviews(dealReviews); })
+      .catch((error) => console.error('Cannot load reviews:', error));
+
+    fetchSellerRatingSummary(deal.ownerUid)
+      .then((summary) => { if (!cancelled) setSellerRating(summary); })
+      .catch((error) => console.error('Cannot load seller rating:', error));
+
+    return () => {
+      cancelled = true;
+    };
+  }, [deal]);
+
+  const thumbnails = useMemo(() => {
+    if (!deal) return [];
+    const images = Array.isArray(deal.allImages) && deal.allImages.length > 0
+      ? deal.allImages
+      : [deal.mainImage || FALLBACK_IMAGE];
+    return images;
+  }, [deal]);
+
+  const finalPrice = deal ? computeFinalPrice(deal) : 0;
+  const storeName = deal?.ownerDisplayName || deal?.ownerEmail || 'Cộng đồng Ecodeal';
+
+  const handleThumbnailClick = (thumbSrc) => {
+    setCurrentImage(thumbSrc);
   };
 
-  const handleSubmitReview = (e) => {
+  const handleChange = (amount) => {
+    setQuantity((prevQuantity) => Math.max(1, prevQuantity + amount));
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 300);
+  };
+
+  const handleAddToCart = async () => {
+    if (!deal) return;
+    setAddingToCart(true);
+    try {
+      await handlers.handleAddDealToCart(deal, quantity);
+    } catch (error) {
+      console.error('Cannot add to cart:', error);
+      alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+    } finally {
+      setAddingToCart(false);
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!deal) return;
+    setAddingToCart(true);
+    try {
+      await handlers.handleAddDealToCart(deal, quantity);
+      navigate('/checkout');
+    } catch (error) {
+      console.error('Cannot add to cart:', error);
+      alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+    } finally {
+      setAddingToCart(false);
+    }
+  };
+
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
-    if (!newReviewText.trim() || newReviewRating === 0) {
-      alert("Vui lòng nhập nhận xét và chọn số sao nhé!");
+
+    if (!auth.currentUser) {
+      alert('Bạn cần đăng nhập để đánh giá sản phẩm.');
+      navigate('/login');
       return;
     }
-    
+
+    if (auth.currentUser.uid === deal.ownerUid) {
+      alert('Bạn không thể tự đánh giá bài đăng của chính mình.');
+      return;
+    }
+
+    if (!newReviewText.trim() || newReviewRating === 0) {
+      alert('Vui lòng nhập nhận xét và chọn số sao nhé!');
+      return;
+    }
+
     setIsSubmitting(true);
-    const newReview = {
-      id: Date.now(),
-      name: "Bạn",
-      rating: newReviewRating,
-      comment: newReviewText,
-    };
-    
-    setTimeout(() => {
-      setReviews([newReview, ...reviews]);
+    try {
+      const authorName = (auth.currentUser.displayName || '').trim()
+        || (auth.currentUser.email || '').split('@')[0]
+        || 'Ẩn danh';
+
+      await submitDealReview(deal.id, deal.ownerUid, auth.currentUser.uid, {
+        rating: newReviewRating,
+        comment: newReviewText,
+        authorName,
+      });
+
+      const [dealReviews, summary] = await Promise.all([
+        fetchDealReviews(deal.id),
+        fetchSellerRatingSummary(deal.ownerUid),
+      ]);
+      setReviews(dealReviews);
+      setSellerRating(summary);
       setNewReviewText('');
       setNewReviewRating(5);
+    } catch (error) {
+      console.error('Cannot submit review:', error);
+      alert('Không thể gửi đánh giá lúc này, vui lòng thử lại.');
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
-const [isAnimating, setIsAnimating] = useState(false); // Thêm state mới
-const handleChange = (amount) => {
-    setQuantity(prevQuantity => {
-      const newQuantity = prevQuantity + amount;
-      return newQuantity < 1 ? 1 : newQuantity;
-    });
-    
-    // Kích hoạt animation
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 300);
-  };
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main>
+          <p style={{ textAlign: 'center', padding: '80px 0' }}>Đang tải sản phẩm...</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (notFound || !deal) {
+    return (
+      <>
+        <Header />
+        <main>
+          <div style={{ textAlign: 'center', padding: '80px 0' }}>
+            <h2>Không tìm thấy sản phẩm</h2>
+            <p>Ưu đãi này có thể đã hết hạn hoặc đã bị gỡ bỏ.</p>
+            <Link to="/home">Quay lại trang chủ</Link>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
-      <Header /> 
+      <Header />
       <main>
         <section className={`${styles['product-detail']} ${styles.section}`}>
             <div className={`${styles.container} ${styles.grid} ${styles['product-detail__container']}`}>
                 <div className={styles['product-detail__gallery']}>
                     <div className={styles['gallery__main-image']}>
-                        <img src={currentImage} alt={productData.name} />
+                        <img src={currentImage} alt={deal.productName} />
                     </div>
-                    <div className={styles['gallery__thumbnails']}>
-                        {thumbnails.map((thumbSrc, index) => (
-                          <div key={index} className={styles.thumbnail} onClick={() => handleThumbnailClick(thumbSrc)}>
-                            <img src={thumbSrc} alt={`Thumbnail ${index + 1}`} />
-                          </div>
-                        ))}
-                    </div>
+                    {thumbnails.length > 1 && (
+                      <div className={styles['gallery__thumbnails']}>
+                          {thumbnails.map((thumbSrc, index) => (
+                            <div key={index} className={styles.thumbnail} onClick={() => handleThumbnailClick(thumbSrc)}>
+                              <img src={thumbSrc} alt={`Thumbnail ${index + 1}`} />
+                            </div>
+                          ))}
+                      </div>
+                    )}
                 </div>
 
                 <div className={styles['product-detail__info']}>
-                    <h1 className={styles.info__title}>{productData.name}</h1>
+                    <h1 className={styles.info__title}>{deal.productName}</h1>
                     <div className={styles.info__store_meta}>
-                      <Link to="/stores" className={styles['store_meta__name']}>
+                      <Link to={`/store/${deal.ownerUid}`} className={styles['store_meta__name']}>
                             <i className='bx bxs-store-alt'></i>
-                            <span>{productData.store.name}</span>
+                            <span>{storeName}</span>
                       </Link>
-                        <span className={styles['store-d_meta__divider']}></span>
-                        <span className={styles['store-d_meta__distance']}><i className='bx bxs-map'></i> Cách bạn {productData.store.distance}</span>
+                      {sellerRating.count > 0 && (
+                        <span className={styles['seller-trust-badge']}>
+                          <i className='bx bxs-star'></i>
+                          {sellerRating.average.toFixed(1)} · {sellerRating.count} đánh giá
+                        </span>
+                      )}
                     </div>
                     <div className={styles.info__price}>
-                        <span className={styles['price--new']}>{productData.price.new.toLocaleString('vi-VN')}đ</span>
-                        <span className={styles['price--old']}>{productData.price.old.toLocaleString('vi-VN')}đ</span>
-                        <span className={styles['price__discount-badge']}>- {productData.price.discount}%</span>
+                        <span className={styles['price--new']}>{finalPrice.toLocaleString('vi-VN')}đ</span>
+                        {deal.dealPercentage > 0 && (
+                          <>
+                            <span className={styles['price--old']}>{Number(deal.salePrice || 0).toLocaleString('vi-VN')}đ</span>
+                            <span className={styles['price__discount-badge']}>- {deal.dealPercentage}%</span>
+                          </>
+                        )}
                     </div>
 
                     <div className={styles.info__description}>
-                        <p>{productData.description}</p>
+                      {deal.ecoCheckApproved ? (
+                        <VerifiedBadge label={deal.aiCheckLabel || 'Đã kiểm duyệt AI'} size="lg" />
+                      ) : (
+                        <span className={styles['not-verified-note']}>⏳ Chưa được hệ thống AI xác minh chất lượng</span>
+                      )}
                     </div>
-                    
+
                     <div className={styles.info__quantity}>
                         <label>Số lượng</label>
-                        <div 
+                        <div
   className={`${styles['quantity-selector']} ${isAnimating ? styles.pulse : ''}`}
 >
-    {/* Dùng span thay cho button */}
     <span className={styles['quantity-control']} onClick={() => handleChange(-1)}>-</span>
-    
-    {/* Dùng span thay cho input để dễ tạo kiểu hơn */}
     <span className={styles['quantity-display']}>{quantity}</span>
-    
-    {/* Dùng span thay cho button */}
     <span className={styles['quantity-control']} onClick={() => handleChange(1)}>+</span>
 </div>
                     </div>
-                
-                    <div className={styles['info__delivery-options']}>
-                        <label className={styles['delivery-option']}>
-                            <input type="radio" name="delivery_method" value="delivery" defaultChecked />
-                            <span className={styles['custom-radio']}></span>
-                            <div className={styles['option-details']}>
-                                <span className={styles['option-title']}>Giao hàng tận nơi</span>
-                                <span className={styles['option-desc']}>Dự kiến giao trong 25-30 phút</span>
-                            </div>
-                            <i className={`bx bxs-truck ${styles['option-icon']}`}></i>
-                        </label>
-                        <label className={styles['delivery-option']}>
-                            <input type="radio" name="delivery_method" value="pickup" />
-                            <span className={styles['custom-radio']}></span>
-                            <div className={styles['option-details']}>
-                                <span className={styles['option-title']}>Đến cửa hàng lấy</span>
-                                <span className={styles['option-desc']}>Sẵn sàng trong 15-20 phút</span>
-                            </div>
-                            <i className={`bx bxs-store-alt ${styles['option-icon']}`}></i>
-                        </label>
-                    </div>
+
                     <div className={styles.info__actions}>
-                        <button className={`${styles.btn} ${styles['btn--secondary']}`}>
+                        <button
+                          className={`${styles.btn} ${styles['btn--secondary']}`}
+                          onClick={handleAddToCart}
+                          disabled={addingToCart}
+                        >
                             <i className='bx bx-cart-add'></i>
-                            <span>Thêm vào giỏ</span>
+                            <span>{addingToCart ? 'Đang thêm...' : 'Thêm vào giỏ'}</span>
                         </button>
-                        <button className={`${styles.btn} ${styles['btn--primary']}`}>Mua ngay</button>
+                        <button
+                          className={`${styles.btn} ${styles['btn--primary']}`}
+                          onClick={handleBuyNow}
+                          disabled={addingToCart}
+                        >
+                          Mua ngay
+                        </button>
                     </div>
 
                 </div>
@@ -295,25 +335,29 @@ const handleChange = (amount) => {
         </section>
 
         <div className={`${styles.container} ${styles['product-extra-info']}`}>
-            <section className={styles['product-section']}>
-                <h2 className={styles.section__title}>Sản phẩm khác của {productData.store.name}</h2>
-                <div className={styles['cross-sell-grid']}> 
-                    {productData.moreFromStore.map(item => (
-                        <ProductCard key={item.id} product={item} />
-                    ))}
-                </div>
-            </section>
-            
+            {moreFromStore.length > 0 && (
+              <section className={styles['product-section']}>
+                  <h2 className={styles.section__title}>Sản phẩm khác của {storeName}</h2>
+                  <div className={styles['cross-sell-grid']}>
+                      {moreFromStore.map(item => (
+                          <ProductCard key={item.id} product={item} />
+                      ))}
+                  </div>
+              </section>
+            )}
+
             <section className={styles['product-section']}>
                 <h2 className={styles.section__title}>Phản hồi</h2>
                 <div className={styles.reviews__container}>
-                    {reviews.map(review => (
+                    {reviews.length === 0 ? (
+                      <p>Chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ trải nghiệm!</p>
+                    ) : reviews.map(review => (
                         <div key={review.id} className={styles['review-card']}>
                             <div className={styles['review-header']}>
                                 <div className={styles['review-rating']}>
                                     {[...Array(review.rating)].map((_, i) => <FaStar key={i} />)}
                                 </div>
-                                <span className={styles['review-author']}>{review.name}</span>
+                                <span className={styles['review-author']}>{review.authorName}</span>
                             </div>
                             <p className={styles['review-comment']}>"{review.comment}"</p>
                         </div>
@@ -356,14 +400,16 @@ const handleChange = (amount) => {
                 </div>
             </section>
 
-             <section className={styles['product-section']}>
-                <h2 className={styles.section__title}>Có thể bạn quan tâm</h2>
-                <div className={styles['cross-sell-grid']}>
-                    {productData.otherStoreSuggestions.map(item => (
-                        <ProductCard key={item.id} product={item} />
-                    ))}
-                </div>
-            </section>
+             {otherDeals.length > 0 && (
+              <section className={styles['product-section']}>
+                  <h2 className={styles.section__title}>Có thể bạn quan tâm</h2>
+                  <div className={styles['cross-sell-grid']}>
+                      {otherDeals.map(item => (
+                          <ProductCard key={item.id} product={item} />
+                      ))}
+                  </div>
+              </section>
+            )}
         </div>
       </main>
         <Footer />

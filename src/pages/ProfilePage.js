@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import styles from './ProfilePage.module.css';
-import { FaUserEdit, FaBoxOpen, FaMapMarkerAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaUserEdit, FaBoxOpen, FaMapMarkerAlt, FaSignOutAlt, FaStore } from 'react-icons/fa';
 import UserInfo from '../components/ProfilePage/UserInfo';
 import OrderHistory from '../components/ProfilePage/OrderHistory';
 import SavedAddresses from '../components/ProfilePage/SavedAddresses';
+import MyDeals from '../components/ProfilePage/MyDeals';
 import Header from '../components/Header/Header'; 
 import Footer from '../components/Footer/Footer';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -65,6 +66,10 @@ const ProfilePage = () => {
                                 <FaMapMarkerAlt />
                                 <span>Địa chỉ đã lưu</span>
                             </NavLink>
+                            <NavLink to="/profile/deals" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+                                <FaStore />
+                                <span>Bài đã đăng</span>
+                            </NavLink>
                             <button className={`${styles.navLink} ${styles.logoutLink}`} onClick={handleLogout} type="button">
                                 <FaSignOutAlt />
                                 <span>Đăng xuất</span>
@@ -78,6 +83,7 @@ const ProfilePage = () => {
                                 <Route index element={<UserInfo />} />
                                 <Route path="orders" element={<OrderHistory />} />
                                 <Route path="addresses" element={<SavedAddresses />} />
+                                <Route path="deals" element={<MyDeals />} />
                             </Routes>
                         </AnimatePresence>
                     </main>

@@ -114,11 +114,11 @@ export const useCart = () => {
         }
     }, [currentUser]);
 
-    const handleAddDealToCart = useCallback(async (deal) => {
+    const handleAddDealToCart = useCallback(async (deal, addQuantity = 1) => {
         const discount = Math.max(0, Math.min(100, Number(deal?.dealPercentage || 0)));
         const originalPrice = Math.max(0, Number(deal?.salePrice || 0));
         const finalPrice = Math.round(originalPrice * (1 - discount / 100));
-        const quantity = 1;
+        const quantity = Math.max(1, Number(addQuantity) || 1);
 
         const cartPayload = {
             dealId: String(deal.id || `${deal.productName}-${deal.timestamp || Date.now()}`),
@@ -148,7 +148,7 @@ export const useCart = () => {
             }
             return current.map((item) =>
                 item.dealId === cartPayload.dealId
-                    ? { ...item, quantity: Number(item.quantity || 1) + 1 }
+                    ? { ...item, quantity: Number(item.quantity || 1) + quantity }
                     : item
             );
         });

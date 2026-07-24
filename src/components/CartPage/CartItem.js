@@ -19,7 +19,7 @@ const CartItem = ({ item, isSelected, onSelect, onQuantityChange, onRemove }) =>
             </div>
             <img src={item.imageUrl} alt={item.name} className={styles.itemImage} />
             <div className={styles.itemInfo}>
-                <Link to={`/products/${item.id}`} className={styles.itemNameLink}>
+                <Link to={`/products/${item.dealId || item.id}`} className={styles.itemNameLink}>
                     <h4 className={styles.itemName}>{item.name}</h4>
                 </Link>
                 <div className={styles.priceWrapper}>

@@ -418,8 +418,14 @@
   cursor: not-allowed;
 }
 
+.voucherErrorText {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #DC2626;
+}
 
-.appliedVoucher { 
+
+.appliedVoucher {
   display: flex; 
   justify-content: space-between; 
   align-items: center; 

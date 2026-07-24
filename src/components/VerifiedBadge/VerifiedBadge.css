@@ -1,0 +1,47 @@
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px 2px 5px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2563eb, #0ea5e9);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.7;
+  vertical-align: middle;
+  white-space: nowrap;
+  cursor: help;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.35);
+  user-select: none;
+}
+
+.verified-badge__icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.verified-badge__label {
+  letter-spacing: 0.01em;
+}
+
+.verified-badge--sm {
+  font-size: 10px;
+  padding: 1px 8px 1px 4px;
+}
+
+.verified-badge--sm .verified-badge__icon {
+  width: 11px;
+  height: 11px;
+}
+
+.verified-badge--lg {
+  font-size: 13px;
+  padding: 5px 14px 5px 8px;
+}
+
+.verified-badge--lg .verified-badge__icon {
+  width: 17px;
+  height: 17px;
+}

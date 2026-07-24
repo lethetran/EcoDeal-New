@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, limit, orderBy, query, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, limit, orderBy, query, serverTimestamp, where } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { auth, firestore, storage } from '../firebase-config';
 
@@ -20,6 +20,13 @@ const sanitizeImage = (imageValue) => {
   if (!imageValue) return DEFAULT_IMAGE_FALLBACK;
   return imageValue;
 };
+
+// Chặn người bán gõ ký tự huy hiệu xác minh (✅, 🔍...) vào tên sản phẩm để giả mạo
+// trạng thái "đã kiểm duyệt AI" — trạng thái thật chỉ đến từ field ecoCheckApproved.
+const VERIFICATION_MIMIC_PATTERN = /[✅✔️☑🛡🔍🏷]/g;
+
+export const sanitizeProductName = (name) =>
+  String(name || '').replace(VERIFICATION_MIMIC_PATTERN, '');
 
 const isDataUrl = (value) => typeof value === 'string' && value.startsWith('data:');
 
@@ -105,6 +112,8 @@ export const saveDeal = async (dealData) => {
   }
 
   const payload = await normalizeDealForStorage(dealData, user.uid);
+  payload.productName = sanitizeProductName(payload.productName);
+
   const docRef = await withTimeout(addDoc(collection(firestore, DEALS_COLLECTION), {
     ...payload,
     ownerUid: user.uid,
@@ -123,6 +132,24 @@ export const saveDeal = async (dealData) => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
+};
+
+export const fetchDealById = async (dealId) => {
+  const snap = await getDoc(doc(firestore, DEALS_COLLECTION, dealId));
+  if (!snap.exists()) return null;
+  return mapDealDocument(snap);
+};
+
+export const fetchDealsByOwner = async (ownerUid) => {
+  const dealsQuery = query(
+    collection(firestore, DEALS_COLLECTION),
+    where('ownerUid', '==', ownerUid)
+  );
+
+  const snapshot = await getDocs(dealsQuery);
+  return snapshot.docs
+    .map(mapDealDocument)
+    .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 };
 
 export const fetchLatestDeals = async (maxItems = 50) => {

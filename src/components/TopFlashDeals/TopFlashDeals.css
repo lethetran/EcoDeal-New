@@ -170,6 +170,12 @@
   height: 450px;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+
+.deal-verified-row {
+  margin: -4px 0 6px;
 }
 
 .flash-deal-card:hover {
