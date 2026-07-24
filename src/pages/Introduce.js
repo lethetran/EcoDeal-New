@@ -5,7 +5,6 @@ import FeaturedDeals from '../components/Introduce/FeaturedDeals';
 import HowItWorks from '../components/Introduce/HowItWorks';
 import PartnerCTA from '../components/Introduce/PartnerCTA';
 import Footer from '../components/Introduce/Footer';
-import { Link } from 'react-router-dom';
 
 const Introduce = () => {
   return (

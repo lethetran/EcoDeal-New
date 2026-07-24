@@ -33,7 +33,6 @@ const PostProduct = ({ nsxData, onClose }) => {
   const [productImages, setProductImages] = useState([]); // Array of {file, preview}
   const [mainImageIndex, setMainImageIndex] = useState(0); // Index of main thumbnail
   const [qualityCheckImages, setQualityCheckImages] = useState([]); // Array of {file, preview} dành riêng cho AI kiểm duyệt chất lượng
-  const [dateImage, setDateImage] = useState(null);
   const [dateImagePreview, setDateImagePreview] = useState(null);
   const [dateImageFile, setDateImageFile] = useState(null); // Lưu file object để quét
   const [dateExtracted, setDateExtracted] = useState(false);
@@ -44,7 +43,6 @@ const PostProduct = ({ nsxData, onClose }) => {
   const [reductionUnit, setReductionUnit] = useState('day'); // 'day' hoặc 'hour'
   const [timeRemaining, setTimeRemaining] = useState(0); // Thời gian còn lại theo unit
   const [dealPercentage, setDealPercentage] = useState(0);
-  const [isModified, setIsModified] = useState(false);
   const [loading, setLoading] = useState(false);
   const [scanLoading, setScanLoading] = useState(false); // Loading riêng cho quét ảnh
   const [aiCheckLoading, setAiCheckLoading] = useState(false); // Loading riêng cho AI check
@@ -216,7 +214,6 @@ const PostProduct = ({ nsxData, onClose }) => {
       }
 
       // Set file ngay để tránh timing issue
-      setDateImage(file);
       setDateImageFile(file);
       
       // Tạo preview URL (hiệu quả hơn FileReader)
@@ -337,12 +334,10 @@ const PostProduct = ({ nsxData, onClose }) => {
       } else {
         setQualityCheckImages([]);
       }
-      setIsModified(true);
       return;
     }
 
     setFormData(prev => ({ ...prev, [name]: value }));
-    setIsModified(true);
     
     // Nếu sửa NSX/HSD thủ công, chỉ reset scan flag và status
     if (name === 'nsx' || name === 'hsd') {
@@ -866,7 +861,6 @@ const PostProduct = ({ nsxData, onClose }) => {
                             const fileInput = document.getElementById('date-image-input');
                             if (fileInput) fileInput.value = '';
                             
-                            setDateImage(null);
                             setDateImagePreview(null);
                             setDateImageFile(null);
                             setDateExtracted(false);

@@ -12,7 +12,6 @@ import HeroSlider from '../components/Home/HeroSlider';
 import FiltersSection from '../components/Home/FiltersSection';
 import MarqueeDeals from '../components/Home/MarqueeDeals'; // Import MarqueeDeals component
 import SpotlightDeal from '../components/Home/SpotlightDeal';
-import { Link } from 'react-router-dom';
 
 function HomePage() {
   const [isSearchOpen, setSearchOpen] = useState(false);

@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './CartItem.module.css';
 import { Link } from 'react-router-dom';
 import { FaTrashAlt } from 'react-icons/fa';
-import Card from './Card';
 import QuantitySelector from './QuantitySelector';
 
 const CartItem = ({ item, isSelected, onSelect, onQuantityChange, onRemove }) => {

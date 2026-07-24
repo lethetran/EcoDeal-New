@@ -23,9 +23,9 @@ const Footer = () => {
           <div>
             <h3 className="footer__title">Hỗ trợ</h3>
             <ul className="footer__links">
-              <li><a href="#" className="footer__link">Câu hỏi thường gặp</a></li>
-              <li><a href="#" className="footer__link">Liên hệ</a></li>
-              <li><a href="#" className="footer__link">Điều khoản dịch vụ</a></li>
+              <li><a href="/faq" className="footer__link">Câu hỏi thường gặp</a></li>
+              <li><a href="/contact" className="footer__link">Liên hệ</a></li>
+              <li><a href="/terms" className="footer__link">Điều khoản dịch vụ</a></li>
             </ul>
           </div>
           <div>

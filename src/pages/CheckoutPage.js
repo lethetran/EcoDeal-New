@@ -96,32 +96,6 @@ const RadioCard = ({
   </label>
 );
 
-const OrderItem = ({ item }) => (
-  <div className={styles.orderItem}>
-    <div className={styles.productCell}>
-      <img
-        src={item.imageUrl}
-        alt={item.name}
-        className={styles.productImage}
-      />
-      <div className={styles.productInfo}>
-        <p className={styles.productName}>{item.name}</p>
-        {/* Link đến cửa hàng */}
-        <Link to={`/stores/${item.store.id}`} className={styles.storeLink}>
-          {item.store.name}
-        </Link>
-      </div>
-    </div>
-    <div className={styles.quantityCell}>{item.quantity}</div>
-    <div className={styles.priceCell}>
-      {item.price.toLocaleString("vi-VN")}đ
-    </div>
-    <div className={styles.totalCell}>
-      {(item.price * item.quantity).toLocaleString("vi-VN")}đ
-    </div>
-  </div>
-);
-
 const CheckoutPage = () => {
   // State
   const [shippingMethod, setShippingMethod] = useState("delivery");

@@ -18,8 +18,6 @@ import AboutPage from "./pages/AboutPage";
 import StoresPage from "./pages/StoresPage"; // Import trang cửa hàng
 import Landing from "./pages/Landing"; // Import trang giới thiệu
 import CheckoutPage from "./pages/CheckoutPage";  
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer"; // Nếu bạn muốn sử dụng Footer, hãy bỏ comment dòng này
 
 function App() {
   return (

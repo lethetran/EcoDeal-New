@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './OrderSummary.module.css';
-import { FaArrowRight, FaTag } from 'react-icons/fa';
+import { FaTag } from 'react-icons/fa';
 import Card from './Card';
 
 const OrderSummary = ({ selectedItems, subTotal, shippingFee, total }) => {

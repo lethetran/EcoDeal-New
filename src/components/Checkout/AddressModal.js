@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './AddressModal.module.css';
 
 // Import các icon cần thiết
-import { FiX, FiMapPin, FiPlus, FiCheckCircle } from 'react-icons/fi';
+import { FiX, FiPlus } from 'react-icons/fi';
 
 // --- DỮ LIỆU GIẢ LẬP (Trong ứng dụng thật, bạn sẽ lấy từ API) ---
 const mockUserAddresses = [

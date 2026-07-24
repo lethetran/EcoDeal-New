@@ -5,7 +5,6 @@ import { useCart } from '../hooks/useCart'; // <-- Bước 1: Import hook
 
 // Import các component giao diện (chỉ để hiển thị)
 import Header from '../components/Header/Header';
-import PageHeader from '../components/CartPage/PageHeader';
 import StoreHeader from '../components/CartPage/StoreHeader';
 import CartItem from '../components/CartPage/CartItem';
 import OrderSummary from '../components/CartPage/OrderSummary';
