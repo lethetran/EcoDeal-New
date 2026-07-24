@@ -10,11 +10,11 @@ const testimonialsData = [
 ];
 
 const logosData = [
-    { src: "https://logoipsum.com/logo/logo-32.svg", alt: "Partner Logo 1" },
-    { src: "https://logoipsum.com/logo/logo-35.svg", alt: "Partner Logo 2" },
-    { src: "https://logoipsum.com/logo/logo-39.svg", alt: "Partner Logo 3" },
-    { src: "https://logoipsum.com/logo/logo-41.svg", alt: "Partner Logo 4" },
-    { src: "https://logoipsum.com/logo/logo-24.svg", alt: "Partner Logo 5" }
+    { src: "/placeholders/deal-placeholder.svg", alt: "Partner Logo 1" },
+    { src: "/placeholders/deal-placeholder.svg", alt: "Partner Logo 2" },
+    { src: "/placeholders/deal-placeholder.svg", alt: "Partner Logo 3" },
+    { src: "/placeholders/deal-placeholder.svg", alt: "Partner Logo 4" },
+    { src: "/placeholders/deal-placeholder.svg", alt: "Partner Logo 5" }
 ];
 
 const CommunitySection = () => {

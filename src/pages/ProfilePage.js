@@ -1,7 +1,7 @@
 // src/pages/ProfilePage/ProfilePage.jsx
 
-import React from 'react';
-import { NavLink, Routes, Route, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import styles from './ProfilePage.module.css';
 import { FaUserEdit, FaBoxOpen, FaMapMarkerAlt, FaSignOutAlt } from 'react-icons/fa';
@@ -9,10 +9,36 @@ import UserInfo from '../components/ProfilePage/UserInfo';
 import OrderHistory from '../components/ProfilePage/OrderHistory';
 import Header from '../components/Header/Header'; 
 import Footer from '../components/Footer/Footer';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase-config';
+import { logout } from '../services/authService';
 
 const ProfilePage = () => {
     // useLocation để AnimatePresence biết khi nào route thay đổi
     const location = useLocation();
+    const navigate = useNavigate();
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const displayName = (currentUser?.displayName || '').trim();
+    const email = currentUser?.email || '';
+    const greetingName = displayName || (email ? email.split('@')[0] : 'Khách');
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/home');
+        } catch (error) {
+            alert('Không thể đăng xuất lúc này, vui lòng thử lại.');
+        }
+    };
 
     return (
         <>
@@ -22,8 +48,8 @@ const ProfilePage = () => {
                     <aside className={styles.profileNav}>
                         <div className={styles.navHeader}>
                             <img src="https://i.pravatar.cc/100" alt="Avatar" className={styles.avatar} />
-                            <h3 className={styles.userName}>Nguyễn Văn An</h3>
-                            <p className={styles.userEmail}>an.nguyen@email.com</p>
+                            <h3 className={styles.userName}>{greetingName}</h3>
+                            <p className={styles.userEmail}>{email || 'guest@ecodeal.local'}</p>
                         </div>
                         <nav className={styles.navLinks}>
                             <NavLink to="/profile" end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
@@ -38,10 +64,10 @@ const ProfilePage = () => {
                                 <FaMapMarkerAlt />
                                 <span>Địa chỉ đã lưu</span>
                             </NavLink>
-                            <NavLink to="/logout" className={`${styles.navLink} ${styles.logoutLink}`}>
+                            <button className={`${styles.navLink} ${styles.logoutLink}`} onClick={handleLogout} type="button">
                                 <FaSignOutAlt />
                                 <span>Đăng xuất</span>
-                            </NavLink>
+                            </button>
                         </nav>
                     </aside>
 

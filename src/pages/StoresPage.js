@@ -12,9 +12,9 @@ const allStoresData = [
     { id: 'pizza-hut', name: 'Pizza Hut', category: 'Quán ăn', bannerUrl: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=500', distance: 3.1, rating: 4.5, tags: ['Pizza', 'Món Ý'], address: '789 Đường GHI, Quận 10', openingHours: '10:00 - 22:00' },
     { id: 'cong-caphe', name: 'Cộng Cà Phê', category: 'Cà phê', bannerUrl: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=500', distance: 0.5, rating: 4.9, tags: ['Cà phê', 'Vintage'], address: '111 Đường KLM, Quận 1', openingHours: '07:00 - 23:00' },
     { id: 'kfc', name: 'KFC', category: 'Quán ăn', bannerUrl: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=500', distance: 2.1, rating: 4.3, tags: ['Gà rán', 'Thức ăn nhanh'], address: '222 Đường NOP, Quận 5', openingHours: '09:00 - 22:00' },
-    { id: 'gong-cha', name: 'Gong Cha', category: 'Trà sữa', bannerUrl: 'https://images.unsplash.com/photo-1557825223-93663673591b?w=500', distance: 1.9, rating: 4.6, tags: ['Trà sữa', 'Topping'], address: '333 Đường QRS, Quận 1', openingHours: '10:00 - 22:30' },
+    { id: 'gong-cha', name: 'Gong Cha', category: 'Trà sữa', bannerUrl: '/placeholders/deal-placeholder.svg', distance: 1.9, rating: 4.6, tags: ['Trà sữa', 'Topping'], address: '333 Đường QRS, Quận 1', openingHours: '10:00 - 22:30' },
     { id: 'sushi-hokkaido', name: 'Sushi Hokkaido Sachi', category: 'Quán ăn', bannerUrl: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=500', distance: 2.4, rating: 4.8, tags: ['Sushi', 'Nhật Bản'], address: '444 Đường TUV, Quận 7', openingHours: '11:00 - 22:00' },
-    { id: 'the-coffee-house', name: 'The Coffee House', category: 'Cà phê', bannerUrl: 'https://images.unsplash.com/photo-1511920183276-542a28fb7b1c?w=500', distance: 1.8, rating: 4.7, tags: ['Cà phê', 'Làm việc'], address: '555 Đường XYZ, Quận Tân Bình', openingHours: '07:00 - 22:00' },
+    { id: 'the-coffee-house', name: 'The Coffee House', category: 'Cà phê', bannerUrl: '/placeholders/deal-placeholder.svg', distance: 1.8, rating: 4.7, tags: ['Cà phê', 'Làm việc'], address: '555 Đường XYZ, Quận Tân Bình', openingHours: '07:00 - 22:00' },
 ];
 
 // HÀM API GIẢ LẬP - ĐÃ CẬP NHẬT LOGIC LỌC

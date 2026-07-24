@@ -543,6 +543,7 @@ const PostProduct = ({ nsxData, onClose }) => {
       return;
     }
 
+    setMessage('⏳ Đang đăng bài và tải ảnh lên, vui lòng đợi...');
     setLoading(true);
     
     // Khi post, dealPercentage = initialDiscount (chưa có thời gian trôi qua)
@@ -649,8 +650,15 @@ const PostProduct = ({ nsxData, onClose }) => {
       console.error('Post deal failed:', error);
       if (error?.message === 'AUTH_REQUIRED') {
         setMessage('❌ Bạn cần đăng nhập để lưu deal lên CSDL.');
+      } else if (String(error?.message || '').startsWith('IMAGE_UPLOAD_ALL_FAILED:')) {
+        const reason = String(error.message).replace('IMAGE_UPLOAD_ALL_FAILED:', '');
+        setMessage(`❌ Không thể tải ảnh lên Storage (${reason}). Vui lòng kiểm tra bucket/rules rồi thử lại.`);
+      } else if (error?.message === 'IMAGE_UPLOAD_ALL_FAILED') {
+        setMessage('❌ Không thể tải ảnh lên Storage. Vui lòng kiểm tra bucket/rules rồi thử lại.');
+      } else if (String(error?.message || '').includes('TIMEOUT')) {
+        setMessage('❌ Hệ thống phản hồi chậm hoặc mạng yếu. Vui lòng thử lại với ít ảnh hơn.');
       } else {
-        setMessage('❌ Lỗi khi đăng bài. Vui lòng thử lại.');
+        setMessage(`❌ Lỗi khi đăng bài: ${error?.message || 'Vui lòng thử lại.'}`);
       }
     } finally {
       setLoading(false);

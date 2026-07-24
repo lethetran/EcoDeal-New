@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import './HeroSlider.css'; // Import your CSS styles
 
 const promotionalSlides = [
-  { type: 'video', src: 'https://videos.pexels.com/video-files/5679930/5679930-hd_1920_1080_25fps.mp4', title: 'Ưu Đãi Nóng Hổi, Giao Nhanh Chóng', subtitle: 'Khám phá hàng ngàn món ngon sắp hết hạn với giá không thể tốt hơn.' },
+  { type: 'image', src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop', title: 'Ưu Đãi Nóng Hổi, Giao Nhanh Chóng', subtitle: 'Khám phá hàng ngàn món ngon sắp hết hạn với giá không thể tốt hơn.' },
   { type: 'image', src: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2074&auto=format&fit=crop', title: 'Tiết Kiệm Thông Minh, Bảo Vệ Trái Đất', subtitle: 'Mỗi đơn hàng của bạn là một hành động ý nghĩa giúp giảm thiểu lãng phí thực phẩm.' },
 ];
 
@@ -46,16 +46,23 @@ const AnimatedText = ({ text }) => {
 };
 
 const HeroSlider = ({ userName }) => {
-  // Bắt đầu từ -1 nếu có user để hiển thị slide chào mừng đầu tiên, nhưng không cho nó vào vòng lặp
-  const [index, setIndex] = useState(userName ? -1 : 0); 
+  const hasUser = Boolean((userName || '').trim());
+  const greetingSlide = {
+    type: 'greeting',
+    title: hasUser ? `Chào ${userName}!` : 'Xin chào!',
+    subtitle: hasUser
+      ? 'Cùng xem hôm nay có ưu đãi nào hấp dẫn nhé.'
+      : 'Đăng nhập để đăng bài và đặt hàng nhanh hơn.',
+  };
+
+  // Luôn bắt đầu bằng slide chào để tránh cảm giác rời rạc giữa khách và user đã đăng nhập.
+  const [index, setIndex] = useState(0);
   const heroRef = useRef(null);
 
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   
-  const allSlides = userName 
-    ? [{ type: 'greeting', title: `Chào mừng trở lại, ${userName}!`, subtitle: 'Cùng xem hôm nay có ưu đãi nào hấp dẫn nhé.' }, ...promotionalSlides] 
-    : promotionalSlides;
+  const allSlides = [greetingSlide, ...promotionalSlides];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -64,7 +71,7 @@ const HeroSlider = ({ userName }) => {
     return () => clearInterval(timer);
   }, [allSlides.length]);
 
-  const currentSlide = allSlides[index === -1 ? 0 : index];
+  const currentSlide = allSlides[index];
   
   return (
     <section className="hero-slider" ref={heroRef}>

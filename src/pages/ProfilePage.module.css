@@ -66,6 +66,10 @@
   align-items: center;
   gap: var(--spacing-4);
   padding: var(--spacing-4);
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
   border-radius: var(--border-radius-md);
   color: var(--color-text-light);
   font-weight: 500;

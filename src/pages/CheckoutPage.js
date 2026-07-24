@@ -5,6 +5,9 @@ import AddressModal from "../components/Checkout/AddressModal";
 import { Link, useNavigate } from 'react-router-dom';
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer"; // Nếu bạn muốn sử dụng Footer, hãy bỏ comment dòng này
+import { auth } from '../firebase-config';
+import { useCart } from '../hooks/useCart';
+import { createOrderFromCart } from '../services/cartService';
 
 // Import các icon từ thư viện 'react-icons'
 import {
@@ -21,25 +24,6 @@ import {
   FiEdit3,
 } from "react-icons/fi";
 
-// --- Giả lập dữ liệu ---
-const mockItemsFromCart = [
-  {
-    id: 1,
-    name: "Cơm tấm sườn bì chả đặc biệt",
-    price: 55000,
-    quantity: 2,
-    imageUrl: "https://i.imgur.com/3tk6vRk.jpeg",
-    store: { id: "store1", name: "Cơm Tấm Phúc Lộc Thọ" },
-  },
-  {
-    id: 3,
-    name: "Trà sữa trân châu đường đen size L",
-    price: 45000,
-    quantity: 1,
-    imageUrl: "https://i.imgur.com/oTf2YyQ.jpeg",
-    store: { id: "store2", name: "Gong Cha" },
-  },
-];
 const availableVouchers = [
   {
     code: "GIAM10K",
@@ -97,6 +81,7 @@ const RadioCard = ({
 );
 
 const CheckoutPage = () => {
+  const { cartItems, selectedItems, handlers } = useCart();
   // State
   const [shippingMethod, setShippingMethod] = useState("delivery");
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -112,8 +97,13 @@ const CheckoutPage = () => {
       "123 Đường D1, Phường 25, Quận Bình Thạnh, Thành phố Hồ Chí Minh",
   });
 
+  const itemsForCheckout = useMemo(() => {
+    const selected = cartItems.filter((item) => selectedItems.has(item.id));
+    return selected.length > 0 ? selected : cartItems;
+  }, [cartItems, selectedItems]);
+
   const groupedByStore = useMemo(() => {
-    return mockItemsFromCart.reduce((acc, item) => {
+    return itemsForCheckout.reduce((acc, item) => {
       const storeId = item.store.id;
       if (!acc[storeId]) {
         acc[storeId] = {
@@ -124,16 +114,16 @@ const CheckoutPage = () => {
       acc[storeId].items.push(item);
       return acc;
     }, {});
-  }, []);
+  }, [itemsForCheckout]);
 
   // Dữ liệu phái sinh
   const subTotal = useMemo(
     () =>
-      mockItemsFromCart.reduce(
+      itemsForCheckout.reduce(
         (total, item) => total + item.price * item.quantity,
         0
       ),
-    []
+    [itemsForCheckout]
   );
   const shippingFee = useMemo(
     () => (shippingMethod === "delivery" ? 15000 : 0),
@@ -184,7 +174,51 @@ const CheckoutPage = () => {
     setVoucherInput("");
   };
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
+    if (!auth.currentUser) {
+      alert('Bạn cần đăng nhập hoặc đăng ký để đặt hàng.');
+      navigate('/login');
+      return;
+    }
+
+    if (itemsForCheckout.length === 0) {
+      alert('Giỏ hàng đang trống, vui lòng thêm sản phẩm trước khi thanh toán.');
+      navigate('/home');
+      return;
+    }
+
+    const orderPayload = {
+      shippingMethod,
+      paymentMethod,
+      orderNote,
+      voucherCode: appliedVoucher?.code || '',
+      discountAmount,
+      shippingFee,
+      subTotal,
+      total,
+      status: paymentMethod === 'online' ? 'pending_payment' : 'confirmed',
+      shippingAddress,
+      items: itemsForCheckout.map((item) => ({
+        cartItemId: item.id,
+        dealId: item.dealId || '',
+        name: item.name,
+        price: item.price,
+        originalPrice: item.originalPrice || item.price,
+        quantity: item.quantity,
+        imageUrl: item.imageUrl,
+        store: item.store,
+      })),
+    };
+
+    let orderId = '';
+    try {
+      orderId = await createOrderFromCart(auth.currentUser.uid, orderPayload);
+    } catch (error) {
+      console.error('Create order failed:', error);
+      alert('Không thể tạo đơn hàng. Vui lòng thử lại.');
+      return;
+    }
+
     // Kiểm tra phương thức thanh toán đã chọn
     if (paymentMethod === 'online') {
       // Nếu là thanh toán online, chuyển hướng người dùng
@@ -192,7 +226,7 @@ const CheckoutPage = () => {
       console.log('Chuyển hướng đến cổng thanh toán...');
       navigate('/payment-qr', { 
         state: { 
-          orderId: `DH-${Date.now()}`, // Tạo một ID đơn hàng giả
+          orderId,
           amount: total 
         } 
       });
@@ -201,11 +235,12 @@ const CheckoutPage = () => {
       // Nếu là thanh toán khi nhận hàng (COD), hiển thị thông báo thành công
       // Trong thực tế, bạn sẽ gọi API để lưu đơn hàng ở đây trước khi thông báo
       console.log('Đang xử lý đơn hàng COD...');
+      await handlers.handleClearCart();
       alert('Đặt hàng thành công! Cảm ơn bạn đã mua sắm.');
       
       // (Tùy chọn) Sau khi đặt hàng thành công, có thể chuyển người dùng về trang chủ
       // hoặc trang "Đơn hàng của tôi"
-      // navigate('/my-orders');
+      navigate('/profile/orders');
 
     } else {
       // Xử lý các trường hợp khác nếu có
@@ -297,7 +332,7 @@ const CheckoutPage = () => {
                   <div className={styles.orderItemsList}>
                     {items.map((item) => (
                       // Component OrderItem bây giờ cần phải có thêm thông tin phân loại
-                      <div className={styles.orderItem}>
+                      <div key={item.id} className={styles.orderItem}>
                         <div className={styles.productCell}>
                           <img
                             src={item.imageUrl}

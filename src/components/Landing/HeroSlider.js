@@ -5,17 +5,17 @@ import styles from './HeroSlider.module.css';
 // Tách dữ liệu ra để dễ quản lý và tái sử dụng
 const slidesData = [
     {
-        videoSrc: "https://videos.pexels.com/video-files/3773281/3773281-hd_1920_1080_25fps.mp4",
+        videoSrc: "/placeholders/deal-placeholder.svg",
         title: "Tươi Mới Mỗi Ngày",
         subtitle: "Đón nhận tinh túy từ đất mẹ với giá yêu thương."
     },
     {
-        videoSrc: "https://videos.pexels.com/video-files/5679930/5679930-hd_1920_1080_25fps.mp4",
+        videoSrc: "/placeholders/deal-placeholder.svg",
         title: "Chia Sẻ Khoảnh Khắc",
         subtitle: "Biến mỗi bữa ăn thành một kỷ niệm đáng nhớ."
     },
     {
-        videoSrc: "https://videos.pexels.com/video-files/2099589/2099589-hd_1920_1080_30fps.mp4",
+        videoSrc: "/placeholders/deal-placeholder.svg",
         title: "Nghệ Thuật Từ Tâm",
         subtitle: "Mỗi nguyên liệu đều xứng đáng trở thành một kiệt tác."
     }

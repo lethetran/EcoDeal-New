@@ -7,9 +7,9 @@ import useCountdown from '../../hooks/useCountdown';
 import { FaQrcode, FaShieldAlt, FaCopy, FaCheck, FaInfoCircle } from 'react-icons/fa';
 
 // Link logo
-const VietQRLogo = "https://seeklogo.com/images/V/vietqr-logo-1M4A22103C-seeklogo.com.png";
-const MomoLogo = "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png";
-const ZaloPayLogo = "https://seeklogo.com/images/Z/zalopay-logo-6VP0A62D71-seeklogo.com.png";
+const VietQRLogo = "/placeholders/deal-placeholder.svg";
+const MomoLogo = "/placeholders/deal-placeholder.svg";
+const ZaloPayLogo = "/placeholders/deal-placeholder.svg";
 
 const orderInfo = {
     id: '#123456',

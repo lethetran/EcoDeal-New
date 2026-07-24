@@ -9,12 +9,12 @@ const dealsData = [
   { id: 2, name: 'Túi bánh ngọt tổng hợp', imageUrl: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=400', expiry: 'Trong ngày', remaining: 3, originalPrice: 150000, discountPrice: 50000, storeName: 'Paris Gateaux', distance: '2.5km' },
   { id: 3, name: 'Pizza Hải Sản Cỡ Lớn', imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400', expiry: 'Hết hạn 21:00', remaining: 8, originalPrice: 250000, discountPrice: 175000, storeName: 'Pizza Hut', distance: '3.1km' },
   // Thêm nhiều sản phẩm nữa vào đây để thấy rõ hiệu ứng "Xem thêm"
-  { id: 4, name: 'Bún Chả Hà Nội Đặc Sắc', imageUrl: 'https://images.unsplash.com/photo-1626983803029-38c6b355449e?w=400', expiry: 'Hết hạn 14:00', remaining: 6, originalPrice: 50000, discountPrice: 35000, storeName: 'Bún Chả Hàng Mành', distance: '800m' },
-  { id: 5, name: 'Cà Phê Sữa Đá Đậm Đà', imageUrl: 'https://images.unsplash.com/photo-1551030173-1a29929e79b8?w=400', expiry: 'Trong ngày', remaining: 10, originalPrice: 25000, discountPrice: 15000, storeName: 'Cộng Cà Phê', distance: '550m' },
-  { id: 6, name: 'Combo 2 Miếng Gà Rán Giòn Tan', imageUrl: 'https://images.unsplash.com/photo-1626082929543-5bab3f09d342?w=400', expiry: 'Còn lại 1 giờ', remaining: 4, originalPrice: 90000, discountPrice: 55000, storeName: 'KFC', distance: '2.1km' },
+  { id: 4, name: 'Bún Chả Hà Nội Đặc Sắc', imageUrl: '/placeholders/deal-placeholder.svg', expiry: 'Hết hạn 14:00', remaining: 6, originalPrice: 50000, discountPrice: 35000, storeName: 'Bún Chả Hàng Mành', distance: '800m' },
+  { id: 5, name: 'Cà Phê Sữa Đá Đậm Đà', imageUrl: '/placeholders/deal-placeholder.svg', expiry: 'Trong ngày', remaining: 10, originalPrice: 25000, discountPrice: 15000, storeName: 'Cộng Cà Phê', distance: '550m' },
+  { id: 6, name: 'Combo 2 Miếng Gà Rán Giòn Tan', imageUrl: '/placeholders/deal-placeholder.svg', expiry: 'Còn lại 1 giờ', remaining: 4, originalPrice: 90000, discountPrice: 55000, storeName: 'KFC', distance: '2.1km' },
   { id: 7, name: 'Bánh Mì Kẹp Thịt Đặc Biệt', imageUrl: 'https://images.unsplash.com/photo-1585238342024-78d387f4a707?w=400', expiry: 'Cuối ngày', remaining: 11, originalPrice: 60000, discountPrice: 40000, storeName: 'Bánh Mì Huỳnh Hoa', distance: '3.5km' },
-  { id: 8, name: 'Trà Sữa Trân Châu Đường Đen', imageUrl: 'https://images.unsplash.com/photo-1558160074-294b28416d2b?w=400', expiry: 'Còn lại 3 giờ', remaining: 7, originalPrice: 55000, discountPrice: 30000, storeName: 'Gong Cha', distance: '1.9km' },
-  { id: 9, name: 'Cơm Tấm Sườn Bì Chả', imageUrl: 'https://images.unsplash.com/photo-1596185851480-1a77a9442a5a?w=400', expiry: 'Hết hạn 20:30', remaining: 2, originalPrice: 70000, discountPrice: 45000, storeName: 'Cơm Tấm Cali', distance: '4.2km' },
+  { id: 8, name: 'Trà Sữa Trân Châu Đường Đen', imageUrl: '/placeholders/deal-placeholder.svg', expiry: 'Còn lại 3 giờ', remaining: 7, originalPrice: 55000, discountPrice: 30000, storeName: 'Gong Cha', distance: '1.9km' },
+  { id: 9, name: 'Cơm Tấm Sườn Bì Chả', imageUrl: '/placeholders/deal-placeholder.svg', expiry: 'Hết hạn 20:30', remaining: 2, originalPrice: 70000, discountPrice: 45000, storeName: 'Cơm Tấm Cali', distance: '4.2km' },
   { id: 10, name: 'Hộp 2 Bánh Croissant Bơ', imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400', expiry: 'Trong ngày', remaining: 9, originalPrice: 60000, discountPrice: 30000, storeName: 'Tous Les Jours', distance: '1.5km' },
 ];
 

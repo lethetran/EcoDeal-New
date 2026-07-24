@@ -4,12 +4,18 @@ import './Header.css'; // Đảm bảo bạn đã import file CSS
 import useWindowSize from '../../hooks/useWindowSize'; // Import hook useWindowSize
 import ScanImage from '../ScanImage/ScanImage';
 import PostProduct from '../PostProduct/PostProduct';
+import { Link, useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../firebase-config';
+import { logout } from '../../services/authService';
 const Header = () => {
     // 1. State để quản lý việc dropdown đang mở hay đóng
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isScanModalOpen, setIsScanModalOpen] = useState(false);
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const [scannedData, setScannedData] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+    const navigate = useNavigate();
 
     // 2. Ref để tham chiếu đến DOM element của user-area
     const dropdownRef = useRef(null);
@@ -17,6 +23,33 @@ const Header = () => {
     // Hàm để bật/tắt dropdown
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const handleOpenPostModal = () => {
+        if (!currentUser) {
+            alert('Bạn cần đăng nhập hoặc đăng ký để đăng bài.');
+            navigate('/login');
+            return;
+        }
+        setIsPostModalOpen(true);
+    };
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            setIsDropdownOpen(false);
+            navigate('/home');
+        } catch (error) {
+            alert('Không thể đăng xuất lúc này, vui lòng thử lại.');
+        }
     };
 
     const { width } = useWindowSize();
@@ -108,7 +141,7 @@ const Header = () => {
 
                 <button
                     className="nav__action-link post-link"
-                    onClick={() => setIsPostModalOpen(true)}
+                    onClick={handleOpenPostModal}
                     title="Đăng sản phẩm"
                 >
                     <i className='bx bx-upload'></i>
@@ -127,17 +160,25 @@ const Header = () => {
                 <div className="user-area" ref={dropdownRef}>
                     <div className="user-area__trigger" onClick={toggleDropdown} style={{display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
                         <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="User Avatar" className="user-area__avatar" />
-                        <span className="user-area__greeting">Chào An!</span>
+                        <span className="user-area__greeting">{currentUser ? `Chào ${currentUser.displayName || currentUser.email}!` : 'Xin chào'}</span>
                     </div>
                     
                     {/* Dùng state để thêm/xóa class 'active' */}
                     <div className={`user-area__dropdown ${isDropdownOpen ? 'active' : ''}`}>
                         <ul className="dropdown__menu">
-                            <li><a href="/profile"><i className='bx bx-user'></i> Tài khoản của tôi</a></li>
-                            <li><a href="/orders"><i className='bx bx-receipt'></i> Đơn hàng của tôi</a></li>
-                            <li><a href="/saved-stores"><i className='bx bx-store-alt'></i> Cửa hàng đã lưu</a></li>
-                            <li className="dropdown__divider"></li>
-                            <li><button className="logout-button"><i className='bx bx-log-out'></i> Đăng xuất</button></li>
+                            {currentUser ? (
+                                <>
+                                    <li><a href="/profile"><i className='bx bx-user'></i> Tài khoản của tôi</a></li>
+                                    <li><a href="/orders"><i className='bx bx-receipt'></i> Đơn hàng của tôi</a></li>
+                                    <li><a href="/saved-stores"><i className='bx bx-store-alt'></i> Cửa hàng đã lưu</a></li>
+                                    <li className="dropdown__divider"></li>
+                                    <li><button className="logout-button" onClick={handleLogout}><i className='bx bx-log-out'></i> Đăng xuất</button></li>
+                                </>
+                            ) : (
+                                <li>
+                                    <Link to="/login"><i className='bx bx-log-in'></i> Đăng nhập / Đăng ký</Link>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>

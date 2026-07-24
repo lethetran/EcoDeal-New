@@ -12,22 +12,22 @@ import styles from './Product.module.css';
 const productData = {
   name: "Combo Burger Thịt Bò Đặc Biệt",
   mainImage: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800",
-  thumbnails: [ "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200", "https://i.pinimg.com/736x/f9/00/7f/f9007f73da46783cb255a1e621637f27.jpg", "https://images.unsplash.com/photo-1603064752734-4b4bfb15b3a3?w=200", "https://images.unsplash.com/photo-1606132910793-27883a9364b4?w=200", ],
+  thumbnails: [ "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200", "https://i.pinimg.com/736x/f9/00/7f/f9007f73da46783cb255a1e621637f27.jpg", "/placeholders/deal-placeholder.svg", "/placeholders/deal-placeholder.svg", ],
   store: { name: "Tiệm Burger House", distance: "1.2km" },
   price: { new: 60000, old: 120000, discount: 50 },
   description: "Một phần ăn đầy đặn giúp bạn no căng bụng. Bao gồm một burger bò phô mai hảo hạng, khoai tây chiên giòn rụm và một ly Coca-Cola mát lạnh.",
   rescueStatus: { expiryDate: "Hôm nay", remaining: 12, reason: "Sản phẩm tươi, bán trong ngày", savedCount: 188, },
   reviews: [ { id: 1, name: "Minh Anh", rating: 5, comment: "Mình đã giải cứu thành công! Bánh vẫn rất ngon, mềm và thơm. Ủng hộ mô hình ý nghĩa này của shop." }, { id: 2, name: "Thanh Hằng", rating: 5, comment: "Giá quá tốt cho chất lượng này. Giao hàng nhanh. Cảm ơn vì đã giúp mình tiết kiệm và bảo vệ môi trường." } ],
   moreFromStore: [
-    { id: 10, name: 'Bánh Mì Gối Yến Mạch Tươi Ngon Bổ Dưỡng', price: 25000, originalPrice: 40000, img: 'https://images.unsplash.com/photo-1581334437634-4050d28a3a2b?w=400', expiry: 'Còn 8 giờ', stock: 12, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
-    { id: 11, name: 'Hộp 4 Bánh Tart Trứng Béo Ngậy', price: 39000, originalPrice: 60000, img: 'https://images.unsplash.com/photo-1604424997233-f542a299386c?w=400', expiry: 'Còn 3 giờ', stock: 8, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
-    { id: 12, name: 'Bánh Bông Lan Trứng Muối', price: 59000, originalPrice: 90000, img: 'https://images.unsplash.com/photo-1607813843521-8b2b7540f316?w=400', expiry: 'Còn 5 giờ', stock: 4, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
+    { id: 10, name: 'Bánh Mì Gối Yến Mạch Tươi Ngon Bổ Dưỡng', price: 25000, originalPrice: 40000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 8 giờ', stock: 12, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
+    { id: 11, name: 'Hộp 4 Bánh Tart Trứng Béo Ngậy', price: 39000, originalPrice: 60000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 3 giờ', stock: 8, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
+    { id: 12, name: 'Bánh Bông Lan Trứng Muối', price: 59000, originalPrice: 90000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 5 giờ', stock: 4, store: { name: 'Tiệm Burger House', distance: '1.2km' } },
     { 
     id: 30, 
     name: 'Túi Cà Chua Bi Sạch VietGAP (500g)', 
     price: 29000, 
     originalPrice: 45000, 
-    img: 'https://images.unsplash.com/photo-1591997365872-9b6d8b13d3d1?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 2 ngày', 
     stock: 18, 
     store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
@@ -37,7 +37,7 @@ const productData = {
     name: 'Bó Xà Lách Romain Tươi Mơn Mởn', 
     price: 15000, 
     originalPrice: 25000, 
-    img: 'https://images.unsplash.com/photo-1605651230822-6b9911855a82?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Hôm nay', 
     stock: 9, 
     store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
@@ -47,7 +47,7 @@ const productData = {
     name: 'Khay Nấm Đùi Gà Hữu Cơ', 
     price: 35000, 
     originalPrice: 55000, 
-    img: 'https://images.unsplash.com/photo-1598112599052-19e4922153b8?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 3 ngày', 
     stock: 11, 
     store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
@@ -57,7 +57,7 @@ const productData = {
     name: 'Bơ Sáp 034 Chín Cây (Túi 1kg)', 
     price: 49000, 
     originalPrice: 80000, 
-    img: 'https://images.unsplash.com/photo-1601035432328-31a2380d5b4a?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 2 ngày', 
     stock: 7, 
     store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
@@ -67,7 +67,7 @@ const productData = {
     name: 'Túi Chanh Vàng Không Hạt Nhập Khẩu', 
     price: 39000, 
     originalPrice: 60000, 
-    img: 'https://images.unsplash.com/photo-1587496679742-9694b7be8202?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 1 tuần', 
     stock: 25, 
     store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
@@ -77,16 +77,16 @@ const productData = {
     name: 'Bông Cải Xanh Tươi VietGAP', 
     price: 22000, 
     originalPrice: 35000, 
-    img: 'https://images.unsplash.com/photo-1584285418195-217a86f1577a?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 2 ngày', 
     stock: 14, 
     store: { id: 'nong-trai-xanh', name: 'Nông Trại Xanh', distance: '1.5km' } 
   }
   ],
   otherStoreSuggestions: [
-    { id: 20, name: 'Hộp Dâu Tây Đà Lạt Siêu To (500g)', price: 69000, originalPrice: 100000, img: 'https://images.unsplash.com/photo-1588313111242-27637812b1b3?w=400', expiry: 'Còn 1 ngày', stock: 15, store: { id: 101, name: 'Nông sản Sạch Xanh Lá Cây To Khổng Lồ', distance: '2.5km' } },
-    { id: 21, name: 'Sữa Chua Hy Lạp Tự Nhiên Không Đường', price: 19000, originalPrice: 30000, img: 'https://images.unsplash.com/photo-1634923120159-f22198d08918?w=400', expiry: 'Còn 2 ngày', stock: 20, store: { id: 102, name: 'Tiệm Sữa Nhà Làm', distance: '3.1km' } },
-    { id: 22, name: 'Ức Gà Phi Lê Tươi Sạch Mỗi Ngày', price: 45000, originalPrice: 65000, img: 'https://images.unsplash.com/photo-1608272166945-31a8ea645229?w=400', expiry: 'Hôm nay', stock: 9, store: { id: 103, name: 'Thực phẩm An Toàn Vì Sức Khỏe', distance: '1.8km' } },
+    { id: 20, name: 'Hộp Dâu Tây Đà Lạt Siêu To (500g)', price: 69000, originalPrice: 100000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 1 ngày', stock: 15, store: { id: 101, name: 'Nông sản Sạch Xanh Lá Cây To Khổng Lồ', distance: '2.5km' } },
+    { id: 21, name: 'Sữa Chua Hy Lạp Tự Nhiên Không Đường', price: 19000, originalPrice: 30000, img: '/placeholders/deal-placeholder.svg', expiry: 'Còn 2 ngày', stock: 20, store: { id: 102, name: 'Tiệm Sữa Nhà Làm', distance: '3.1km' } },
+    { id: 22, name: 'Ức Gà Phi Lê Tươi Sạch Mỗi Ngày', price: 45000, originalPrice: 65000, img: '/placeholders/deal-placeholder.svg', expiry: 'Hôm nay', stock: 9, store: { id: 103, name: 'Thực phẩm An Toàn Vì Sức Khỏe', distance: '1.8km' } },
      { id: 40, 
     name: 'Túi Khoai Tây Bi Đà Lạt (1kg)', 
     price: 25000, 
@@ -101,7 +101,7 @@ const productData = {
     name: 'Túi Cà Rốt Sạch Hữu Cơ', 
     price: 19000, 
     originalPrice: 30000, 
-    img: 'https://images.unsplash.com/photo-1590422229567-775836450618?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 3 ngày', 
     stock: 17, 
     store: { id: 'rau-cu-sach', name: 'Rau Củ Sạch 3 Miền', distance: '2.1km' } 
@@ -111,7 +111,7 @@ const productData = {
     name: 'Chùm Táo Envy Nhập Khẩu Mỹ', 
     price: 79000, 
     originalPrice: 120000, 
-    img: 'https://images.unsplash.com/photo-1560806887-1e4cd0b69665?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 5 ngày', 
     stock: 10, 
     store: { id: 'fruitopia', name: 'Fruitopia', distance: '4.2km' } 
@@ -121,7 +121,7 @@ const productData = {
     name: 'Bắp Cải Thảo Tươi Ngon', 
     price: 12000, 
     originalPrice: 20000, 
-    img: 'https://images.unsplash.com/photo-1614138111166-1a89c7c72551?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Hôm nay', 
     stock: 8, 
     store: { id: 'vuon-an-lanh', name: 'Vườn An Lành', distance: '2.9km' } 
@@ -131,7 +131,7 @@ const productData = {
     name: 'Tỏi Cô Đơn Lý Sơn (Túi 200g)', 
     price: 45000, 
     originalPrice: 65000, 
-    img: 'https://images.unsplash.com/photo-1582379391942-75d1f274a72d?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 2 tuần', 
     stock: 30, 
     store: { id: 'cho-nong-san', name: 'Chợ Nông Sản Online', distance: '3.5km' } 
@@ -141,7 +141,7 @@ const productData = {
     name: 'Dưa Chuột Baby Sạch Giòn', 
     price: 18000, 
     originalPrice: 28000, 
-    img: 'https://images.unsplash.com/photo-1582287232938-958897a38f0d?w=400', 
+    img: '/placeholders/deal-placeholder.svg', 
     expiry: 'Còn 2 ngày', 
     stock: 13, 
     store: { id: 'bach-hoa-xanh', name: 'Bách Hóa Xanh', distance: '950m' } 

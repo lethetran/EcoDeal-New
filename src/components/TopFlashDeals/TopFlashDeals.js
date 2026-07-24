@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './TopFlashDeals.css';
 import { fetchLatestDeals } from '../../services/dealService';
+import { useCart } from '../../hooks/useCart';
+import { useNavigate } from 'react-router-dom';
 
 const isFruitDeal = (deal) => deal?.category === 'fresh_fruits' || deal?.quantityUnit === 'kg';
 
@@ -145,6 +147,8 @@ const dedupeDeals = (dealList = []) => {
 };
 
 const TopFlashDeals = () => {
+  const navigate = useNavigate();
+  const { currentUser, handlers } = useCart();
   const [deals, setDeals] = useState([]);
   const [cloudDeals, setCloudDeals] = useState([]);
   const [hasOverflow, setHasOverflow] = useState(false);
@@ -169,15 +173,12 @@ const TopFlashDeals = () => {
     setHasOverflow(scrollWidth > clientWidth + 8);
   };
 
-  // Lấy deals từ localStorage và tính lại percentage
+  // Lấy deals từ Firestore và tính lại percentage
   const loadDealsWithUpdatedPercentage = useCallback(() => {
-    const localDeals = JSON.parse(localStorage.getItem('flashDeals') || '[]');
-    const mergedDeals = dedupeDeals([...cloudDeals, ...localDeals]);
-    const activeDeals = mergedDeals.filter((deal) => !isExpired(deal));
+    const activeDeals = dedupeDeals(cloudDeals).filter((deal) => !isExpired(deal));
 
-    if (activeDeals.length !== mergedDeals.length || mergedDeals.length !== localDeals.length) {
-      localStorage.setItem('flashDeals', JSON.stringify(activeDeals));
-    }
+    // Đồng bộ cache local theo dữ liệu Firestore để tránh giữ deal đã bị xóa trên cloud.
+    localStorage.setItem('flashDeals', JSON.stringify(activeDeals));
 
     const dealsWithUpdatedPercentage = activeDeals.slice(0, 5).map(deal => {
       const newPercentage = calculateDealPercentage(deal);
@@ -245,15 +246,41 @@ const TopFlashDeals = () => {
 
   // Listen cho event newFlashDeal để cập nhật danh sách
   useEffect(() => {
-    const handleNewFlashDeal = () => {
-      loadDealsWithUpdatedPercentage();
+    const handleNewFlashDeal = (event) => {
+      const createdDeal = event?.detail;
+      if (createdDeal && createdDeal.id) {
+        setCloudDeals((prev) => dedupeDeals([createdDeal, ...prev]));
+        return;
+      }
+
+      fetchLatestDeals(50)
+        .then((dealsFromDb) => {
+          setCloudDeals(dealsFromDb);
+        })
+        .catch((error) => {
+          console.error('Cannot reload deals after posting:', error);
+        });
     };
 
     window.addEventListener('newFlashDeal', handleNewFlashDeal);
     return () => window.removeEventListener('newFlashDeal', handleNewFlashDeal);
   }, [loadDealsWithUpdatedPercentage]);
 
-  if (deals.length === 0) return null;
+  const handleAddToCart = async (deal) => {
+    if (!currentUser) {
+      alert('Bạn cần đăng nhập để lưu giỏ hàng theo tài khoản.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      await handlers.handleAddDealToCart(deal);
+      alert('Đã thêm sản phẩm vào giỏ hàng.');
+    } catch (error) {
+      console.error('Add to cart failed:', error);
+      alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+    }
+  };
 
   return (
     <section className="top-flash-deals">
@@ -274,7 +301,7 @@ const TopFlashDeals = () => {
             ref={dealsGridRef}
             className={`deals-grid ${hasOverflow ? 'has-overflow' : 'is-centered'}`}
           >
-          {deals.map((deal, index) => (
+          {deals.length > 0 ? deals.map((deal, index) => (
             <div key={deal.id || index} className="flash-deal-card highlight">
               {/* Main Image */}
               <div className="deal-image-wrapper">
@@ -331,12 +358,16 @@ const TopFlashDeals = () => {
                   <span className="stock-label">Còn {formatQuantity(deal)}</span>
                 </div>
 
-                <button className="btn-add-cart">
+                <button className="btn-add-cart" onClick={() => handleAddToCart(deal)}>
                   🛒 Thêm vào giỏ
                 </button>
               </div>
             </div>
-          ))}
+          )) : (
+            <div className="deals-empty-state">
+              Chưa có bài ưu đãi mới. Bạn có thể đăng bài để hiển thị ngay tại đây.
+            </div>
+          )}
 
           </div>
 

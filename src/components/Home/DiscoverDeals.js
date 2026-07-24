@@ -31,7 +31,7 @@ const discoverDealsData = [
   {
     id: 3,
     name: 'Bánh Sừng Bò Bơ Tỏi',
-    imageUrl: 'https://images.unsplash.com/photo-1622619330779-817151745a43?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Hết hạn 18:00',
     remaining: 6,
     originalPrice: 45000,
@@ -42,7 +42,7 @@ const discoverDealsData = [
   {
     id: 4,
     name: 'Ổ Bánh Mì Gối Sandwich',
-    imageUrl: 'https://images.unsplash.com/photo-1586512342248-6a581ba5f22a?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Còn 2 ngày',
     remaining: 14,
     originalPrice: 40000,
@@ -55,7 +55,7 @@ const discoverDealsData = [
   {
     id: 5,
     name: 'Lốc 4 Hộp Sữa Chua Hy Lạp',
-    imageUrl: 'https://images.unsplash.com/photo-1562119420-a61632737404?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Còn 2 ngày',
     remaining: 8,
     originalPrice: 95000,
@@ -66,7 +66,7 @@ const discoverDealsData = [
   {
     id: 6,
     name: 'Khay Thịt Bò Úc Tươi',
-    imageUrl: 'https://images.unsplash.com/photo-1603048209209-152f7f137e0f?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Hết hạn hôm nay',
     remaining: 4,
     originalPrice: 250000,
@@ -77,7 +77,7 @@ const discoverDealsData = [
   {
     id: 7,
     name: 'Vỉ 10 Trứng Gà Ta',
-    imageUrl: 'https://images.unsplash.com/photo-1587486913049-52fc082a3236?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Còn 3 ngày',
     remaining: 15,
     originalPrice: 40000,
@@ -134,7 +134,7 @@ const discoverDealsData = [
   {
     id: 12,
     name: 'Túi Nấm Tươi Đà Lạt',
-    imageUrl: 'https://images.unsplash.com/photo-1528504923239-2a910f13521e?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Còn 3 ngày',
     remaining: 11,
     originalPrice: 85000,
@@ -145,7 +145,7 @@ const discoverDealsData = [
   {
     id: 13,
     name: 'Set 3 Bó Xà Lách Xoong',
-    imageUrl: 'https://images.unsplash.com/photo-1550501131-39f2a013a486?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Dùng trong ngày',
     remaining: 18,
     originalPrice: 50000,
@@ -156,7 +156,7 @@ const discoverDealsData = [
   {
     id: 14,
     name: 'Rổ Cà Chua Bi Cherry',
-    imageUrl: 'https://images.unsplash.com/photo-1461351292913-9a3b6f0e4b83?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Còn 3 ngày',
     remaining: 22,
     originalPrice: 65000,
@@ -169,7 +169,7 @@ const discoverDealsData = [
   {
     id: 15,
     name: 'Hộp Salad Gà Nướng',
-    imageUrl: 'https://images.unsplash.com/photo-1555949258-eb67b160522d?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Dùng trong ngày',
     remaining: 7,
     originalPrice: 90000,
@@ -180,7 +180,7 @@ const discoverDealsData = [
   {
     id: 16,
     name: 'Phở Bò Đặc Biệt',
-    imageUrl: 'https://images.unsplash.com/photo-1585559987413-58536fdefa49?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Hết hạn 14:00',
     remaining: 4,
     originalPrice: 60000,
@@ -202,7 +202,7 @@ const discoverDealsData = [
   {
     id: 18,
     name: 'Hộp Cơm Tấm Sườn Bì',
-    imageUrl: 'https://images.unsplash.com/photo-1598514983318-76a8a1c91162?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Hết hạn 13:00',
     remaining: 9,
     originalPrice: 55000,
@@ -213,7 +213,7 @@ const discoverDealsData = [
   {
     id: 19,
     name: 'Chai Nước Ép Cần Tây Mix',
-    imageUrl: 'https://images.unsplash.com/photo-1590292257218-9710a3103437?w=400',
+    imageUrl: '/placeholders/deal-placeholder.svg',
     expiry: 'Dùng trong 24h',
     remaining: 9,
     originalPrice: 70000,

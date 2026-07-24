@@ -8,9 +8,9 @@ import { FaQrcode, FaCopy, FaInfoCircle, FaRedo } from 'react-icons/fa';
 import Header from '../components/Header/Header'; 
 import Footer from '../components/Footer/Footer';
 // Link logo công khai
-const VietQRLogo = "https://seeklogo.com/images/V/vietqr-logo-1M4A22103C-seeklogo.com.png";
-const MomoLogo = "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png";
-const ZaloPayLogo = "https://seeklogo.com/images/Z/zalopay-logo-6VP0A62D71-seeklogo.com.png";
+const VietQRLogo = "/placeholders/deal-placeholder.svg";
+const MomoLogo = "/placeholders/deal-placeholder.svg";
+const ZaloPayLogo = "/placeholders/deal-placeholder.svg";
 
 const orderInfo = {
     id: '#123456',

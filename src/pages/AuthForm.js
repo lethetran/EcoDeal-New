@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './AuthForm.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { login, register } from '../services/authService';
+import { login, loginWithGoogle, register } from '../services/authService';
 // import Navbar from './Navbar';
 
 
@@ -60,6 +60,21 @@ const AuthForm = () => {
     try {
       await register(registerEmail.trim(), registerPassword, registerName.trim());
       setFormMessage('Tạo tài khoản thành công. Bạn đã được đăng nhập.');
+      navigate('/home');
+    } catch (error) {
+      setFormError(getFirebaseErrorMessage(error));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setFormError('');
+    setFormMessage('');
+    setIsSubmitting(true);
+    try {
+      await loginWithGoogle();
+      setFormMessage('Đăng nhập Google thành công. Đang chuyển trang...');
       navigate('/home');
     } catch (error) {
       setFormError(getFirebaseErrorMessage(error));
@@ -126,10 +141,10 @@ const AuthForm = () => {
                 </button>
                 <p>or login with social platforms</p>
                 <div className="social-icons">
-                  <button type="button" className="social-button"><i className='bx bxl-google'></i></button>
-                  <button type="button" className="social-button"><i className='bx bxl-facebook'></i></button>
-                  <button type="button" className="social-button"><i className='bx bxl-github'></i></button>
-                  <button type="button" className="social-button"><i className='bx bxl-linkedin'></i></button>
+                  <button type="button" className="social-button" onClick={handleGoogleLogin} disabled={isSubmitting} title="Đăng nhập với Google"><i className='bx bxl-google'></i></button>
+                  <button type="button" className="social-button social-button--disabled" disabled title="Chưa hỗ trợ"><i className='bx bxl-facebook'></i></button>
+                  <button type="button" className="social-button social-button--disabled" disabled title="Chưa hỗ trợ"><i className='bx bxl-github'></i></button>
+                  <button type="button" className="social-button social-button--disabled" disabled title="Chưa hỗ trợ"><i className='bx bxl-linkedin'></i></button>
                 </div>
               </motion.form>
             )}
@@ -185,10 +200,10 @@ const AuthForm = () => {
                 </button>
                 <p>or register with social platforms</p>
                 <div className="social-icons">
-                  <button type="button" className="social-button"><i className='bx bxl-google'></i></button>
-                  <button type="button" className="social-button"><i className='bx bxl-facebook'></i></button>
-                  <button type="button" className="social-button"><i className='bx bxl-github'></i></button>
-                  <button type="button" className="social-button"><i className='bx bxl-linkedin'></i></button>
+                  <button type="button" className="social-button" onClick={handleGoogleLogin} disabled={isSubmitting} title="Đăng nhập với Google"><i className='bx bxl-google'></i></button>
+                  <button type="button" className="social-button social-button--disabled" disabled title="Chưa hỗ trợ"><i className='bx bxl-facebook'></i></button>
+                  <button type="button" className="social-button social-button--disabled" disabled title="Chưa hỗ trợ"><i className='bx bxl-github'></i></button>
+                  <button type="button" className="social-button social-button--disabled" disabled title="Chưa hỗ trợ"><i className='bx bxl-linkedin'></i></button>
                 </div>
               </motion.form>
             )}

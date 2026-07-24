@@ -62,7 +62,7 @@ const Countdown = ({ targetDate }) => {
 
 const teaserItems = [
     { icon: 'https://cdn-icons-png.flaticon.com/512/10493/10493026.png', title: 'VOUCHER ĐỘC QUYỀN', subtitle: 'Cho Thành Viên' },
-    { icon: 'https://cdn-icons-png.flaticon.com/512/992/992011.png', title: 'DEAL GIẢM TỚI 50%', subtitle: 'Flash Sale Mỗi Ngày' },
+    { icon: '/placeholders/deal-placeholder.svg', title: 'DEAL GIẢM TỚI 50%', subtitle: 'Flash Sale Mỗi Ngày' },
     { icon: 'https://cdn-icons-png.flaticon.com/512/3233/3233866.png', title: 'MÃ FREESHIP', subtitle: 'Hàng Ngày' },
 ];
 

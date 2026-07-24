@@ -42,7 +42,7 @@ const storeData = {
             name: 'Burger Gà Giòn Cay Sốt Mayo',
             originalPrice: null,   // <-- Sản phẩm không giảm giá
             price: 79000, 
-            img: 'https://images.unsplash.com/photo-1603614588339-36c9a2d33b3a?w=400', 
+            img: '/placeholders/deal-placeholder.svg', 
             isBestSeller: false,
             stock: 30,
             expiry: '2025-12-31'
@@ -52,7 +52,7 @@ const storeData = {
             name: 'Combo Gà Rán 2 người (2 miếng gà, 2 khoai, 2 nước)',
             originalPrice: 249000, // <-- Giá cũ
             price: 199000,         // <-- Giá mới
-            img: 'https://images.unsplash.com/photo-1626082929543-5bab3f09d342?w=400', 
+            img: '/placeholders/deal-placeholder.svg', 
             isBestSeller: true,
             stock: 5,              // <-- Sắp hết hàng
             expiry: '2025-12-25'
@@ -72,7 +72,7 @@ const storeData = {
             name: 'Burger Gà Giòn Cay Sốt Mayo',
             originalPrice: null,   // <-- Sản phẩm không giảm giá
             price: 79000, 
-            img: 'https://images.unsplash.com/photo-1603614588339-36c9a2d33b3a?w=400', 
+            img: '/placeholders/deal-placeholder.svg', 
             isBestSeller: false,
             stock: 30,
             expiry: '2025-12-31'
@@ -82,7 +82,7 @@ const storeData = {
             name: 'Combo Gà Rán 2 người (2 miếng gà, 2 khoai, 2 nước)',
             originalPrice: 249000, // <-- Giá cũ
             price: 199000,         // <-- Giá mới
-            img: 'https://images.unsplash.com/photo-1626082929543-5bab3f09d342?w=400', 
+            img: '/placeholders/deal-placeholder.svg', 
             isBestSeller: true,
             stock: 5,              // <-- Sắp hết hàng
             expiry: '2025-12-25'
@@ -102,7 +102,7 @@ const storeData = {
             name: 'Burger Gà Giòn Cay Sốt Mayo',
             originalPrice: null,   // <-- Sản phẩm không giảm giá
             price: 79000, 
-            img: 'https://images.unsplash.com/photo-1603614588339-36c9a2d33b3a?w=400', 
+            img: '/placeholders/deal-placeholder.svg', 
             isBestSeller: false,
             stock: 30,
             expiry: '2025-12-31'
@@ -112,7 +112,7 @@ const storeData = {
             name: 'Combo Gà Rán 2 người (2 miếng gà, 2 khoai, 2 nước)',
             originalPrice: 249000, // <-- Giá cũ
             price: 199000,         // <-- Giá mới
-            img: 'https://images.unsplash.com/photo-1626082929543-5bab3f09d342?w=400', 
+            img: '/placeholders/deal-placeholder.svg', 
             isBestSeller: true,
             stock: 5,              // <-- Sắp hết hàng
             expiry: '2025-12-25'
