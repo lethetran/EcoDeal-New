@@ -118,7 +118,7 @@ const MarqueeDeals = () => {
     return (
         <section className="dashboard-section marquee-section">
              <div className="dashboard-section-header">
-                <h2>Ưu Đãi Chớp Nhoáng</h2>
+                <h2>Ưu Đãi Nổi Bật</h2>
                 <p>Những "túi bất ngờ" này đang được săn đón nhiều nhất! Đừng bỏ lỡ.</p>
             </div>
             <div className="marquee-wrapper">

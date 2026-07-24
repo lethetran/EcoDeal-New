@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Header from '../components/Home/Header';
 import SearchOverlay from '../components/Home/SearchOverlay'; 
 import Footer from '../components/Introduce/Footer';
+import FlashDealNotification from '../components/FlashDealNotification';
+import TopFlashDeals from '../components/TopFlashDeals';
 // import WelcomeSection from '../components/Home/WelcomeSection';
 import DealsGrid from '../components/Home/DealsGrid';   
 import StoresSection from '../components/Home/StoresSection';
@@ -19,10 +21,13 @@ function HomePage() {
   return (
     <>
       <Header onSearchClick={() => setSearchOpen(true)} />
+      <FlashDealNotification />
 
       {/* <WelcomeSection /> */}
       <HeroSlider userName="An" />
       
+      <TopFlashDeals />
+
       <FiltersSection />
 
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} />

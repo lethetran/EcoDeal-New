@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer__container container_home grid">
         <div>
-          <a href="/logo" className="footer__logo">PheniFood</a>
+          <a href="/logo" className="footer__logo">ECODEAL</a>
           <p className="footer__description">Giải cứu đồ ăn, tiết kiệm tiền, <br/> bảo vệ hành tinh.</p>
         </div>
         <div className="footer__content">
@@ -38,7 +38,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <p className="footer__copy">&#169; 2025 PheniFood. All rights reserved.</p>
+      <p className="footer__copy">&#169; 2025 ECODEAL. All rights reserved.</p>
     </footer>
   );
 };

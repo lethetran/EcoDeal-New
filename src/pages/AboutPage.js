@@ -53,13 +53,13 @@ const AboutPage = () => {
       <section className="about-hero-v2">
         <div className="hero-background-image"></div>
         <div className="container">
-          <p className="hero-eyebrow animate-fade-in">PheniFood Story</p>
+          <p className="hero-eyebrow animate-fade-in">ECODEAL Story</p>
           <h1 className="hero-title-v2 animate-fade-in-up delay-1">
             Không chỉ là bữa ăn, đó là một sứ mệnh.
           </h1>
           <p className="hero-subtitle-v2 animate-fade-in-up delay-2">
             Chúng tôi tin rằng mỗi món ăn ngon đều xứng đáng có một cơ hội. Cùng
-            PheniFood định nghĩa lại giá trị của thực phẩm.
+            ECODEAL định nghĩa lại giá trị của thực phẩm.
           </p>
         </div>
       </section>
@@ -113,7 +113,7 @@ const AboutPage = () => {
                 Mọi chuyện bắt đầu khi chúng tôi nhìn thấy những chiếc bánh mì,
                 những phần ăn còn thơm ngon bị bỏ đi. Một câu hỏi lớn được đặt
                 ra: "Làm thế nào để kết nối chúng với những người đang tìm kiếm
-                một bữa ăn chất lượng với giá phải chăng?". Đó là lúc PheniFood
+                một bữa ăn chất lượng với giá phải chăng?". Đó là lúc ECODEAL
                 ra đời.
               </p>
             </div>
@@ -190,7 +190,7 @@ const AboutPage = () => {
         <div className="container cta-container-v2 animate-fade-in">
           <h2>Bạn đã sẵn sàng tham gia cuộc cách mạng ẩm thực?</h2>
           <p>
-            Trở thành một phần của PheniFood và cùng chúng tôi viết tiếp câu
+            Trở thành một phần của ECODEAL và cùng chúng tôi viết tiếp câu
             chuyện này.
           </p>
           <div className="cta-buttons-v2">

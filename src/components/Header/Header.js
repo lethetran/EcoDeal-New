@@ -2,9 +2,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Header.css'; // Đảm bảo bạn đã import file CSS
 import useWindowSize from '../../hooks/useWindowSize'; // Import hook useWindowSize
+import ScanImage from '../ScanImage/ScanImage';
+import PostProduct from '../PostProduct/PostProduct';
 const Header = () => {
     // 1. State để quản lý việc dropdown đang mở hay đóng
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isScanModalOpen, setIsScanModalOpen] = useState(false);
+    const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+    const [scannedData, setScannedData] = useState(null);
 
     // 2. Ref để tham chiếu đến DOM element của user-area
     const dropdownRef = useRef(null);
@@ -51,13 +56,17 @@ const Header = () => {
                         <i className='bx bxs-hot'></i>
                         <span>Ưu Đãi</span>
                     </a>
+                    <button 
+                        className="tab-bar__link camera-link"
+                        onClick={() => setIsScanModalOpen(true)}
+                        style={{background: 'none', border: 'none', cursor: 'pointer'}}
+                    >
+                        <i className='bx bx-camera'></i>
+                        <span>Quét</span>
+                    </button>
                     <a href="/stores" className="tab-bar__link">
                         <i className='bx bx-store-alt'></i>
                         <span>Nhà Hàng</span>
-                    </a>
-                    <a href="#explore" className="tab-bar__link">
-                        <i className='bx bx-compass'></i>
-                        <span>Khám Phá</span>
                     </a>
                     <a href="/cart" className="tab-bar__link">
                         <i className='bx bx-cart'></i>
@@ -71,14 +80,16 @@ const Header = () => {
                         className="user-area__avatar" 
                     />
                 </div>
+                {isScanModalOpen && <ScanImage onClose={() => setIsScanModalOpen(false)} />}
             </div>
         );
     }
 
     return (
+        <>
         <div className={`app-wrapper ${isMobile ? 'has-mobile-sidebar' : ''}`}>
         <header className="navbar">
-            <a href="/home" className="logo">PheniFood</a>
+            <a href="/home" className="logo">ECODEAL</a>
             <nav>
                 <a href="/home">Trang Chủ</a>
                 <a href="/promotions">Ưu Đãi</a>
@@ -87,6 +98,22 @@ const Header = () => {
             </nav>
             
             <div className="nav__actions">
+                <button 
+                    className="nav__action-link camera-link"
+                    onClick={() => setIsScanModalOpen(true)}
+                    title="Quét NSX/HSD"
+                >
+                    <i className='bx bx-camera'></i>
+                </button>
+
+                <button
+                    className="nav__action-link post-link"
+                    onClick={() => setIsPostModalOpen(true)}
+                    title="Đăng sản phẩm"
+                >
+                    <i className='bx bx-upload'></i>
+                </button>
+
                 <a href="/cart" className="nav__action-link cart-link">
                     <i className='bx bx-cart'></i>
                     <span className="cart-badge">2</span>
@@ -117,6 +144,18 @@ const Header = () => {
             </div>
         </header>
         </div>
+        {isScanModalOpen && (
+            <ScanImage 
+                onClose={() => setIsScanModalOpen(false)}
+                onPostProduct={(data) => {
+                    setScannedData(data);
+                    setIsScanModalOpen(false);
+                    setIsPostModalOpen(true);
+                }}
+            />
+        )}
+        {isPostModalOpen && <PostProduct nsxData={scannedData} onClose={() => setIsPostModalOpen(false)} />}
+        </>
     );
 };
 

@@ -101,6 +101,41 @@
   color: var(--primary-blue);
 }
 
+.nav__action-link.camera-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  background: none;
+  border: none;
+}
+
+.nav__action-link.camera-link:hover {
+  background: rgba(108, 126, 225, 0.1);
+  transform: scale(1.15);
+}
+
+.nav__action-link.post-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.nav__action-link.post-link:hover {
+  background: rgba(108, 126, 225, 0.1);
+  transform: scale(1.15);
+  color: var(--primary-blue);
+}
+
 .cart-badge {
   position: absolute;
   top: -5px;
@@ -341,5 +376,33 @@
         height: 44px;
         border: 2px solid var(--border-color, #e9ecef);
         cursor: pointer;
+    }
+
+    /* Camera link style */
+    .camera-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+    .camera-link:hover {
+        color: var(--primary-blue);
+        transform: scale(1.1);
+    }
+
+    .camera-link i {
+        font-size: 1.6rem;
+    }
+
+    /* Style cho tab-bar link */
+    .tab-bar__link.camera-link {
+        flex-direction: column;
+        gap: 4px;
     }
 }

@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       {/* Toàn bộ nội dung phức tạp đã được xóa bỏ */}
-      <p className="footer__copy">© 2025 PheniFood. All rights reserved.</p>
+      <p className="footer__copy">© 2025 ECODEAL. All rights reserved.</p>
     </footer>
   );
 };

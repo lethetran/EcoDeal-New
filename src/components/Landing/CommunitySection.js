@@ -5,7 +5,7 @@ import styles from './CommunitySection.module.css';
 
 const testimonialsData = [
     { quote: "Thật tuyệt vời khi vừa tiết kiệm được tiền, vừa góp phần bảo vệ môi trường. Các sản phẩm luôn tươi ngon bất ngờ!", author: "- Chị An, Đống Đa -" },
-    { quote: "Ứng dụng rất dễ dùng. Mình đã khám phá ra nhiều tiệm bánh ngon gần nhà mà trước giờ không hề biết. Cảm ơn PheniFood!", author: "- Anh Quang, Ba Đình -" },
+    { quote: "Ứng dụng rất dễ dùng. Mình đã khám phá ra nhiều tiệm bánh ngon gần nhà mà trước giờ không hề biết. Cảm ơn ECODEAL!", author: "- Anh Quang, Ba Đình -" },
     { quote: "Một ý tưởng nhân văn. Các 'Túi Bất Ngờ' luôn có giá trị cao hơn nhiều so với số tiền mình bỏ ra. Rất đáng thử.", author: "- Bạn Nguyên, Hoàn Kiếm -" }
 ];
 

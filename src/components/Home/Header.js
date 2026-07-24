@@ -2,11 +2,16 @@
 import React, { useState, useRef } from 'react';
 import useOnClickOutside from '../../hooks/useOnClickOutside'; // Import custom hook
 import '../../pages/Home.css'; 
+import ScanImage from '../ScanImage/ScanImage';
+import PostProduct from '../PostProduct/PostProduct';
 // Component Header sẽ nhận một prop là hàm `onSearchClick` từ component cha
 function Header({ onSearchClick }) {
   
   // 1. Dùng useState để quản lý trạng thái đóng/mở của dropdown người dùng
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isScanModalOpen, setIsScanModalOpen] = useState(false);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [scannedData, setScannedData] = useState(null);
 
   // 2. Dùng useRef để tham chiếu đến div của dropdown
   const dropdownRef = useRef(null);
@@ -22,7 +27,7 @@ function Header({ onSearchClick }) {
   return (
     <header className="header">
       <nav className="nav container">
-        <a href="/" className="nav__logo">PheniFood</a>
+        <a href="/" className="nav__logo">ECODEAL</a>
 
         {/* Khi click vào thanh search này cũng sẽ mở overlay */}
         <div className="nav__search" onClick={onSearchClick}>
@@ -34,6 +39,22 @@ function Header({ onSearchClick }) {
           {/* Icon search trên mobile */}
           <button id="search-open-btn" className="nav__action-link " onClick={onSearchClick}>
             <i className='bx bx-search'></i>
+          </button>
+
+          <button 
+            className="nav__action-link camera-link"
+            onClick={() => setIsScanModalOpen(true)}
+            title="Quét NSX/HSD"
+          >
+            <i className='bx bx-camera'></i>
+          </button>
+
+          <button
+            className="nav__action-link post-link"
+            onClick={() => setIsPostModalOpen(true)}
+            title="Đăng sản phẩm"
+          >
+            <i className='bx bx-upload'></i>
           </button>
       
           <a href="/cart" className="nav__action-link cart-link">
@@ -63,6 +84,17 @@ function Header({ onSearchClick }) {
           </div>
         </div>
       </nav>
+      {isScanModalOpen && (
+        <ScanImage 
+          onClose={() => setIsScanModalOpen(false)}
+          onPostProduct={(data) => {
+            setScannedData(data);
+            setIsScanModalOpen(false);
+            setIsPostModalOpen(true);
+          }}
+        />
+      )}
+      {isPostModalOpen && <PostProduct nsxData={scannedData} onClose={() => setIsPostModalOpen(false)} />}
     </header>
   );
 }

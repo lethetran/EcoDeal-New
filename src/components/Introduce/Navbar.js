@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <header className="header">
       <nav className="nav container_home">
-        <a href="/introduce" className="nav__logo">PheniFood</a>
+        <a href="/introduce" className="nav__logo">ECODEAL</a>
         <div className="nav__search">
           <i className='bx bx-search'></i>
           <input type="text" placeholder="Tìm kiếm món ăn, cửa hàng..." />

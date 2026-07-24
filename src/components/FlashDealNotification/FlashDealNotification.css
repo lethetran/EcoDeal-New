@@ -1,0 +1,153 @@
+.flash-deal-notification {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 500px;
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+}
+
+.flash-deal-notification.hide {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+.flash-deal-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8c42 100%);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
+  border: 2px solid #ff5a5a;
+}
+
+.flash-icon {
+  font-size: 28px;
+  animation: pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.flash-deal-info {
+  flex: 1;
+}
+
+.flash-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flash-product {
+  margin: 5px 0 3px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.flash-details {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.discount {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.price {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.flash-close-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.flash-close-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.flash-close-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+  .flash-deal-notification {
+    top: 70px;
+    width: 95%;
+  }
+
+  .flash-deal-content {
+    padding: 12px 15px;
+    gap: 12px;
+  }
+
+  .flash-icon {
+    font-size: 24px;
+  }
+
+  .flash-product {
+    font-size: 14px;
+  }
+
+  .flash-details {
+    font-size: 11px;
+  }
+}

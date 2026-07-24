@@ -31,7 +31,7 @@ function PartnerForm() {
                 <div className="form-container">
                     <div className="form-header">
                         <h2 className="form-title">ĐĂNG KÝ HỢP TÁC</h2>
-                        <p className="form-subtitle">Hoàn thành biểu mẫu dưới đây, đội ngũ PheniFood sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
+                        <p className="form-subtitle">Hoàn thành biểu mẫu dưới đây, đội ngũ ECODEAL sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
                     </div>
                     <form onSubmit={handleSubmit} className="partner-form">
                         <div className="form-group">

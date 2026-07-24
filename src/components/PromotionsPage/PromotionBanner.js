@@ -104,7 +104,7 @@ const PromotionBanner = () => {
                 <div className={styles.bannerInnerContainer}>
                     <div className={styles.bannerContent}>
                         <motion.div className={styles.bannerText} variants={itemVariants}>
-                            <span className={styles.brandName}>PheniFood Presents</span>
+                            <span className={styles.brandName}>ECODEAL Presents</span>
                             <h1>VŨ TRỤ SALE BÙNG NỔ</h1>
                             <Countdown targetDate="2025-08-25T00:00:00" />
                         </motion.div>

@@ -15,7 +15,7 @@ function PartnerBenefits() {
           <div className="benefit-card">
             <i className='bx bxs-group benefit-card__icon'></i>
             <h3 className="benefit-card__title">Khách hàng mới</h3>
-            <p className="benefit-card__text">Tiếp cận cộng đồng người dùng lớn của PheniFood, những người quan tâm đến việc tiết kiệm.</p>
+            <p className="benefit-card__text">Tiếp cận cộng đồng người dùng lớn của ECODEAL, những người quan tâm đến việc tiết kiệm.</p>
           </div>
           <div className="benefit-card">
             <i className='bx bxs-leaf benefit-card__icon'></i>

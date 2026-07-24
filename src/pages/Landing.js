@@ -17,7 +17,7 @@ import Footer from '../components/Home/Footer';
 // Component Preloader đơn giản
 const Preloader = () => (
     <div className={styles.preloader}>
-        <div className={styles.logoLoader}>PheniFood</div>
+        <div className={styles.logoLoader}>ECODEAL</div>
     </div>
 );
 

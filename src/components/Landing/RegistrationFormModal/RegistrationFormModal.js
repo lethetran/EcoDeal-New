@@ -48,7 +48,7 @@ const RegistrationFormModal = ({ onClose }) => {
                 {/* 4. Nội dung chính của Form */}
                 <div className={styles.formHeader}>
                     <h2>Đăng Ký Đối Tác</h2>
-                    <p>Cùng PheniFood đưa thương hiệu của bạn đến với hàng triệu khách hàng!</p>
+                    <p>Cùng ECODEAL đưa thương hiệu của bạn đến với hàng triệu khách hàng!</p>
                 </div>
 
                 {/* Cậu có thể thay thế bằng component Form hoàn chỉnh của mình */}

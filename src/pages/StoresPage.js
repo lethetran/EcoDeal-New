@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './StoresPage.css'; 
+import FlashDealNotification from '../components/FlashDealNotification';
+import TopFlashDeals from '../components/TopFlashDeals';
 import Footer from '../components/Footer/Footer';
 import Navbar from '../components/Header/Header';
 
@@ -114,6 +116,8 @@ const StoresPage = () => {
     return (
         <>
             <Navbar />
+            <FlashDealNotification />
+            <TopFlashDeals />
             <div className="stores-page">
                 <div className="container">
                     <header className="stores-header">
