@@ -1,18 +1,31 @@
 const { getOrderById, markOrderPaid } = require('./_lib/firebaseAdmin');
 const { createSepayClient } = require('./_lib/sepayClient');
 
-// Các giá trị order_status/transaction_status coi là "đã thanh toán".
-// SDK sepay-pg-node không công bố kiểu dữ liệu chính xác cho order.retrieve(),
-// nên liệt kê rộng các khả năng — kiểm tra log Vercel sau lần thanh toán thật/sandbox
-// đầu tiên để biết chính xác giá trị SePay trả về, rồi rút gọn lại danh sách này.
-const PAID_STATUSES = ['PAID', 'SUCCESS', 'SUCCESSFUL', 'COMPLETED', 'COMPLETE'];
+// Xác nhận từ payload IPN mẫu thật của SePay (notification_type: "ORDER_PAID",
+// order.order_status: "CAPTURED", transaction.transaction_status: "APPROVED").
+// Vẫn liệt kê thêm vài giá trị khả dĩ khác (COMPLETED/SUCCESS...) phòng trường hợp
+// phương thức thanh toán khác (BANK_TRANSFER thay vì CARD) trả trạng thái khác đi.
+const ORDER_PAID_STATUSES = ['CAPTURED', 'PAID', 'COMPLETED', 'SUCCESS', 'SUCCESSFUL'];
+const TRANSACTION_PAID_STATUSES = ['APPROVED', 'SUCCESS', 'SUCCESSFUL', 'COMPLETED'];
 
 const extractInvoiceNumber = (body) =>
-  body?.order_invoice_number
-  || body?.order?.order_invoice_number
-  || body?.data?.order_invoice_number
+  body?.order?.order_invoice_number
+  || body?.order_invoice_number
   || body?.data?.order?.order_invoice_number
+  || body?.data?.order_invoice_number
   || null;
+
+// SePay báo trạng thái ở 3 chỗ trong cùng 1 payload IPN — chỉ cần 1 trong 3 khớp là coi như đã thanh toán.
+// Đây là bước lọc nhanh; bước xác nhận thật vẫn là gọi lại client.order.retrieve() bên dưới.
+const isIpnIndicatingPaid = (body) => {
+  const notificationType = String(body?.notification_type || '').toUpperCase();
+  const orderStatus = String(body?.order?.order_status || '').toUpperCase();
+  const transactionStatus = String(body?.transaction?.transaction_status || '').toUpperCase();
+
+  return notificationType === 'ORDER_PAID'
+    || ORDER_PAID_STATUSES.includes(orderStatus)
+    || TRANSACTION_PAID_STATUSES.includes(transactionStatus);
+};
 
 // Kiểm tra "mềm" header xác thực nếu SePay có gửi kèm — không phải nguồn tin cậy chính,
 // vì ta luôn xác minh lại trạng thái thật qua client.order.retrieve() bên dưới.
@@ -57,28 +70,38 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // Nguồn xác nhận chính: hỏi thẳng SePay API bằng Basic Auth (merchant_id + secret_key),
-    // không tin trực tiếp nội dung IPN gửi lên — tránh trường hợp có người giả POST tới endpoint này.
-    const client = createSepayClient();
-    const response = await client.order.retrieve(invoiceNumber);
-    const remoteOrder = response?.data?.data || response?.data || {};
-    console.log('[sepay-webhook] order.retrieve() result:', JSON.stringify(remoteOrder));
-
-    const remoteStatus = String(
-      remoteOrder.order_status || remoteOrder.status || ''
-    ).toUpperCase();
-
-    if (PAID_STATUSES.includes(remoteStatus)) {
-      await markOrderPaid(order.id, {
-        source: 'sepay_ipn',
-        orderInvoiceNumber: invoiceNumber,
-        remoteStatus,
-        verifiedAt: new Date().toISOString(),
-      });
-      console.log('[sepay-webhook] order marked paid:', order.id);
-    } else {
-      console.log('[sepay-webhook] order status not paid yet:', remoteStatus);
+    if (!isIpnIndicatingPaid(req.body)) {
+      console.log('[sepay-webhook] notification does not indicate a paid order, ignoring:', req.body?.notification_type);
+      res.status(200).json({ received: true, ignored: true });
+      return;
     }
+
+    // Xác minh lại: hỏi thẳng SePay API bằng Basic Auth (merchant_id + secret_key),
+    // không chỉ tin nội dung IPN gửi lên — tránh trường hợp có người giả POST tới endpoint này.
+    // Nếu vì lý do gì đó không gọi được API xác minh (vd. shape response khác dự kiến),
+    // vẫn đánh dấu paid dựa trên payload IPN đã qua bước lọc isIpnIndicatingPaid ở trên,
+    // để không làm treo đơn hàng thật của khách — chỉ log rõ để soát lại sau.
+    let remoteStatus = 'UNVERIFIED';
+    try {
+      const client = createSepayClient();
+      const response = await client.order.retrieve(invoiceNumber);
+      const remoteOrder = response?.data?.data || response?.data || {};
+      console.log('[sepay-webhook] order.retrieve() result:', JSON.stringify(remoteOrder));
+      remoteStatus = String(remoteOrder.order_status || remoteOrder.status || 'UNKNOWN').toUpperCase();
+    } catch (verifyError) {
+      console.error('[sepay-webhook] order.retrieve() verification failed, falling back to IPN payload:', verifyError.message);
+    }
+
+    await markOrderPaid(order.id, {
+      source: 'sepay_ipn',
+      orderInvoiceNumber: invoiceNumber,
+      notificationType: req.body?.notification_type || null,
+      orderStatus: req.body?.order?.order_status || null,
+      transactionStatus: req.body?.transaction?.transaction_status || null,
+      remoteVerifiedStatus: remoteStatus,
+      verifiedAt: new Date().toISOString(),
+    });
+    console.log('[sepay-webhook] order marked paid:', order.id);
 
     res.status(200).json({ received: true });
   } catch (error) {
