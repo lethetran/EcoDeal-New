@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from './OrderDetailPage.module.css';
-import { FaBoxOpen, FaCheckCircle, FaMotorcycle, FaHome, FaRegClock, FaMapMarkerAlt, FaCreditCard } from 'react-icons/fa';
+import { FaBoxOpen, FaMotorcycle, FaHome, FaRegClock, FaMapMarkerAlt, FaCreditCard } from 'react-icons/fa';
 import Header from '../components/Header/Header';
 import PageHeader from '../components/CartPage/PageHeader'; 
 import Card from '../components/CartPage/Card'; 

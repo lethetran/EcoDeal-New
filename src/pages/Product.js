@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header/Header'; // Điều chỉnh đường dẫn nếu cần
 import ProductCard from '../components/ProductCard/ProductCard';
 import Footer from '../components/Footer/Footer';
-import { FaHeart, FaStar } from 'react-icons/fa';
+import { FaStar } from 'react-icons/fa';
 
 // Import CSS Module đúng cách
 import styles from './Product.module.css';
@@ -171,13 +171,6 @@ function ProductDetailPage() {
     setThumbnails(newThumbnails);
   };
 
-  const handleQuantityChange = (amount) => {
-    setQuantity(prevQuantity => {
-      const newQuantity = prevQuantity + amount;
-      return newQuantity < 1 ? 1 : newQuantity;
-    });
-  };
-
   const handleSubmitReview = (e) => {
     e.preventDefault();
     if (!newReviewText.trim() || newReviewRating === 0) {
@@ -236,10 +229,10 @@ const handleChange = (amount) => {
                 <div className={styles['product-detail__info']}>
                     <h1 className={styles.info__title}>{productData.name}</h1>
                     <div className={styles.info__store_meta}>
-                        <a href="#" className={styles['store_meta__name']}>
+                      <Link to="/stores" className={styles['store_meta__name']}>
                             <i className='bx bxs-store-alt'></i>
                             <span>{productData.store.name}</span>
-                        </a>
+                      </Link>
                         <span className={styles['store-d_meta__divider']}></span>
                         <span className={styles['store-d_meta__distance']}><i className='bx bxs-map'></i> Cách bạn {productData.store.distance}</span>
                     </div>

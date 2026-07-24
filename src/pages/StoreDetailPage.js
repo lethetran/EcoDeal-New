@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styles from './StoreDetailPage.module.css';
-import { FaMapMarkerAlt, FaStar, FaClock, FaPlus, FaTags, FaShippingFast } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaStar, FaClock, FaTags, FaShippingFast } from 'react-icons/fa';
 import Card from '../components/CartPage/Card'; // **QUAN TRỌNG**: Đảm bảo đường dẫn này đúng với cấu trúc dự án của bạn
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer'; // Nếu bạn muốn sử dụng Footer, hãy bỏ comment dòng này

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { NavLink, Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import styles from './ProfilePage.module.css';
 import { FaUserEdit, FaBoxOpen, FaMapMarkerAlt, FaSignOutAlt } from 'react-icons/fa';
 import UserInfo from '../components/ProfilePage/UserInfo';

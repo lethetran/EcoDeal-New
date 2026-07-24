@@ -1,11 +1,10 @@
 // src/pages/PaymentQRPage/PaymentQRPage.jsx (Phiên bản Hoàn chỉnh sau khi điều chỉnh)
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './PaymentQRPage.module.css';
 import useCountdown from '../hooks/useCountdown'; // Giả sử bạn có hook này
-import { FaQrcode, FaShieldAlt, FaCopy, FaCheck, FaInfoCircle, FaRedo } from 'react-icons/fa';
+import { FaQrcode, FaCopy, FaInfoCircle, FaRedo } from 'react-icons/fa';
 import Header from '../components/Header/Header'; 
 import Footer from '../components/Footer/Footer';
 // Link logo công khai
@@ -147,7 +146,7 @@ const PaymentQRPage = () => {
 
                          <div className={styles.supportInfo}>
                             <FaInfoCircle />
-                            <span>Gặp sự cố? <a href="#">Liên hệ hỗ trợ</a></span>
+                            <span>Gặp sự cố? <a href="mailto:support@phenifood.vn">Liên hệ hỗ trợ</a></span>
                         </div>
                     </div>
                 </motion.div>
