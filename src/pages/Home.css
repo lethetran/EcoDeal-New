@@ -907,6 +907,8 @@ img {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 700;
   margin: 0;
+  line-height: 1.3;
+  padding-top: 4px;
   color: var(--color-text-primary, #1A202C);
 }
 .dashboard-section-header p {
@@ -1009,6 +1011,8 @@ img {
     
     font-weight: 700; /* Có thể là 800 nếu bạn muốn đậm hơn */
     margin: 0; /* Xóa margin mặc định của thẻ h2 */
+    line-height: 1.3;
+    padding-top: 4px;
     
     /* Sử dụng biến màu đã định nghĩa */
     color: var(--color-text-primary, #1A202C); 

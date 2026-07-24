@@ -56,7 +56,7 @@ function App() {
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/*" element={<ProfilePage />} />
         <Route path="/promotions" element={<PromotionsPage />} />
         <Route path="/store/:id" element={<StoreDetailPage />} />
         <Route path="/payment-qr" element={<PaymentQRPage />} />

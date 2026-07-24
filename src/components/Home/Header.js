@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase-config';
 import { logout } from '../../services/authService';
+import { useCart } from '../../hooks/useCart';
 // Component Header sẽ nhận một prop là hàm `onSearchClick` từ component cha
 function Header({ onSearchClick }) {
   
@@ -17,6 +18,7 @@ function Header({ onSearchClick }) {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [scannedData, setScannedData] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const { cartItemCount } = useCart();
   const navigate = useNavigate();
 
   // 2. Dùng useRef để tham chiếu đến div của dropdown
@@ -92,7 +94,7 @@ function Header({ onSearchClick }) {
       
           <a href="/cart" className="nav__action-link cart-link">
             <i className='bx bx-cart'></i>
-            <span className="cart-badge">2</span>
+            {cartItemCount > 0 && <span className="cart-badge">{cartItemCount}</span>}
           </a>
 
           <a href="/notifications" className="nav__action-link">
@@ -110,7 +112,7 @@ function Header({ onSearchClick }) {
                 {currentUser ? (
                   <>
                     <li><a href="/profile"><i className='bx bx-user'></i> Tài khoản của tôi</a></li>
-                    <li><a href="/orders"><i className='bx bx-receipt'></i> Đơn hàng của tôi</a></li>
+                    <li><a href="/profile/orders"><i className='bx bx-receipt'></i> Đơn hàng của tôi</a></li>
                     <li><a href="/saved-stores"><i className='bx bx-store-alt'></i> Cửa hàng đã lưu</a></li>
                     <li className="dropdown__divider"></li>
                     <li><button className="logout-button" onClick={handleLogout}><i className='bx bx-log-out'></i> Đăng xuất</button></li>

@@ -3,8 +3,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../pages/Introduce.css'; // Đảm bảo đường dẫn CSS đúng
+import { useCart } from '../../hooks/useCart';
 
 const DealCard = ({ id, image, tag, title, store, oldPrice, newPrice, info }) => {
+  const { handlers } = useCart();
 
   // ---- PHẦN XỬ LÝ DỮ LIỆU ----
   // Tự động tách chuỗi "Cửa hàng • Khoảng cách"
@@ -13,14 +15,42 @@ const DealCard = ({ id, image, tag, title, store, oldPrice, newPrice, info }) =>
   // Xác định xem "info" là HSD hay là số lượng còn lại
   const isExpiryInfo = info.toLowerCase().includes('nhận hàng') || info.toLowerCase().includes('hết hạn');
 
+  const parseVnd = (value) => Number(String(value || '').replace(/[^\d]/g, '')) || 0;
+
+  const handleAddToCart = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const originalPrice = parseVnd(oldPrice);
+    const discountPrice = parseVnd(newPrice);
+    const dealPercent = originalPrice > 0
+      ? Math.max(0, Math.round(((originalPrice - discountPrice) / originalPrice) * 1000) / 10)
+      : 0;
+
+    try {
+      await handlers.handleAddDealToCart({
+        id: `sample-${id}`,
+        productName: title,
+        salePrice: originalPrice || discountPrice,
+        dealPercentage: dealPercent,
+        quantity: 1,
+        quantityUnit: 'item',
+        mainImage: image,
+        allImages: [image],
+        ownerUid: `sample-store-${storeName.replace(/\s+/g, '-').toLowerCase()}`,
+        ownerDisplayName: storeName,
+      });
+    } catch (error) {
+      console.error('Cannot add introduce card to cart:', error);
+      alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+    }
+  };
+
   return (
     // Bọc toàn bộ thẻ bằng Link (cần id từ component cha)
     <Link to={`/product/${id}`} className="deal-card">
       
-      <button className="deal-card__add-to-cart" onClick={(e) => {
-        e.preventDefault();
-        console.log(`Thêm sản phẩm ${id} vào giỏ hàng`);
-      }}>
+      <button className="deal-card__add-to-cart" onClick={handleAddToCart} type="button">
         <i className='bx bx-cart-add'></i>
       </button>
 

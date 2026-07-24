@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'; // BƯỚC 1: Thêm useState và useEffect
 import { Link } from 'react-router-dom';
 import '../../pages/Home.css';
+import { useCart } from '../../hooks/useCart';
 
 // Dữ liệu mẫu (Giữ nguyên)
 // Trong thực tế, bạn sẽ không cần mảng lớn này ở client nữa khi gọi API
@@ -29,15 +30,12 @@ const fetchDealsFromAPI = async (page, limit) => {
 };
 
 // Component DealCard (Giữ nguyên, nhưng thêm React.memo để tối ưu)
-const DealCard = React.memo(({ deal }) => {
+const DealCard = React.memo(({ deal, onAddToCart }) => {
   const discountPercent = Math.round(((deal.originalPrice - deal.discountPrice) / deal.originalPrice) * 100);
 
   return (
     <Link to={`/product/${deal.id}`} className="deal-card">
-      <button className="deal-card__add-to-cart" onClick={(e) => {
-        e.preventDefault();
-        console.log(`Thêm sản phẩm ${deal.id} vào giỏ hàng`);
-      }}>
+      <button className="deal-card__add-to-cart" onClick={(e) => onAddToCart(e, deal)} type="button">
         <i className='bx bx-cart-add'></i>
       </button>
       <div className="deal-card__image">
@@ -67,6 +65,7 @@ const DealCard = React.memo(({ deal }) => {
 
 // Component DealsGrid chính (Đã được nâng cấp)
 function DealsGrid() {
+  const { handlers } = useCart();
   // BƯỚC 2: Thêm các state để quản lý
   const DEALS_PER_PAGE = 4; // Số sản phẩm tải mỗi lần
   const [deals, setDeals] = useState([]);       // Mảng chứa sản phẩm đang hiển thị
@@ -101,6 +100,34 @@ function DealsGrid() {
     setLoading(false);
   };
 
+  const handleAddToCart = async (e, deal) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const basePrice = Number(deal.originalPrice || deal.discountPrice || 0);
+    const dealPercent = basePrice > 0
+      ? Math.max(0, Math.round(((basePrice - Number(deal.discountPrice || 0)) / basePrice) * 1000) / 10)
+      : 0;
+
+    try {
+      await handlers.handleAddDealToCart({
+        id: `sample-${deal.id}`,
+        productName: deal.name,
+        salePrice: basePrice || Number(deal.discountPrice || 0),
+        dealPercentage: dealPercent,
+        quantity: Number(deal.remaining || 1),
+        quantityUnit: 'item',
+        mainImage: deal.imageUrl,
+        allImages: [deal.imageUrl],
+        ownerUid: `sample-store-${String(deal.storeName || 'store').replace(/\s+/g, '-').toLowerCase()}`,
+        ownerDisplayName: deal.storeName || 'Cửa hàng mẫu',
+      });
+    } catch (error) {
+      console.error('Cannot add sample deal to cart:', error);
+      alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+    }
+  };
+
   return (
     <section className="deals-grid section pt-0">
       <div className="dashboard-section-header">
@@ -111,7 +138,7 @@ function DealsGrid() {
         {/* THAY ĐỔI: Map trên state `deals` thay vì `dealsData` */}
         <div className="deals-grid__container">
           {deals.map(deal => (
-            <DealCard key={deal.id} deal={deal} />
+            <DealCard key={deal.id} deal={deal} onAddToCart={handleAddToCart} />
           ))}
         </div>
 

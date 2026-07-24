@@ -26,5 +26,12 @@ service cloud.firestore {
 
       allow update, delete: if false;
     }
+
+    match /userProfiles/{userId} {
+      allow read, create, update: if request.auth != null
+        && request.auth.uid == userId;
+
+      allow delete: if false;
+    }
   }
 }

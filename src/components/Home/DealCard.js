@@ -3,17 +3,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../pages/Home.css'; // Đảm bảo đường dẫn CSS đúng
+import { useCart } from '../../hooks/useCart';
 
 const DealCard = ({ deal }) => {
+  const { handlers } = useCart();
   // Tính toán phần trăm giảm giá
   const discountPercent = Math.round(((deal.originalPrice - deal.discountPrice) / deal.originalPrice) * 100);
 
+  const handleAddToCart = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const basePrice = Number(deal.originalPrice || deal.discountPrice || 0);
+    const dealPercent = basePrice > 0
+      ? Math.max(0, Math.round(((basePrice - Number(deal.discountPrice || 0)) / basePrice) * 1000) / 10)
+      : 0;
+
+    try {
+      await handlers.handleAddDealToCart({
+        id: `sample-${deal.id}`,
+        productName: deal.name,
+        salePrice: basePrice || Number(deal.discountPrice || 0),
+        dealPercentage: dealPercent,
+        quantity: Number(deal.remaining || 1),
+        quantityUnit: 'item',
+        mainImage: deal.imageUrl,
+        allImages: [deal.imageUrl],
+        ownerUid: `sample-store-${String(deal.storeName || 'store').replace(/\s+/g, '-').toLowerCase()}`,
+        ownerDisplayName: deal.storeName || 'Cửa hàng mẫu',
+      });
+    } catch (error) {
+      console.error('Cannot add sample deal to cart:', error);
+      alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+    }
+  };
+
   return (
     <Link to={`/product/${deal.id}`} className="deal-card">
-      <button className="deal-card__add-to-cart" onClick={(e) => {
-        e.preventDefault();
-        console.log(`Thêm sản phẩm ${deal.id} vào giỏ hàng`);
-      }}>
+      <button className="deal-card__add-to-cart" onClick={handleAddToCart} type="button">
         <i className='bx bx-cart-add'></i>
       </button>
 

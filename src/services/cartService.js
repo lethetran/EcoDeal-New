@@ -97,3 +97,29 @@ export const createOrderFromCart = async (uid, orderPayload) => {
   });
   return ref.id;
 };
+
+export const fetchUserOrders = async (uid, maxItems = 30) => {
+  const ordersQuery = query(
+    collection(firestore, 'orders'),
+    where('uid', '==', uid)
+  );
+
+  const snapshot = await getDocs(ordersQuery);
+  const orders = snapshot.docs.map((docSnap) => {
+    const data = docSnap.data();
+    return {
+      id: docSnap.id,
+      ...data,
+      createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : data.createdAt,
+      updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toISOString() : data.updatedAt,
+    };
+  });
+
+  return orders
+    .sort((a, b) => {
+      const aTime = new Date(a.createdAt || 0).getTime();
+      const bTime = new Date(b.createdAt || 0).getTime();
+      return bTime - aTime;
+    })
+    .slice(0, maxItems);
+};

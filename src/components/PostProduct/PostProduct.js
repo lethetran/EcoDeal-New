@@ -3,9 +3,9 @@ import './PostProduct.css';
 import { auth } from '../../firebase-config';
 import { saveDeal } from '../../services/dealService';
 
-const SCAN_DATE_API_URL = process.env.REACT_APP_SCAN_DATE_API_URL || 'https://ac15-34-87-17-43.ngrok-free.app/scan-date';
-const SCAN_FRUITS_API_URL = process.env.REACT_APP_SCAN_FRUITS_API_URL || 'https://ac15-34-87-17-43.ngrok-free.app/scan-fruits';
-const SCAN_MEAT_API_URL = process.env.REACT_APP_SCAN_MEAT_API_URL || 'https://ac15-34-87-17-43.ngrok-free.app/scan-meat';
+const SCAN_DATE_API_URL = process.env.REACT_APP_SCAN_DATE_API_URL || 'https://adelaida-beastlike-vernia.ngrok-free.dev/scan-date';
+const SCAN_FRUITS_API_URL = process.env.REACT_APP_SCAN_FRUITS_API_URL || 'https://adelaida-beastlike-vernia.ngrok-free.dev/scan-fruits';
+const SCAN_MEAT_API_URL = process.env.REACT_APP_SCAN_MEAT_API_URL || 'https://adelaida-beastlike-vernia.ngrok-free.dev/scan-meat';
 
 const getFirstScanResult = (data) => {
   if (Array.isArray(data)) {

@@ -9,6 +9,7 @@ import { FaMapMarkerAlt, FaStar, FaClock, FaTags, FaShippingFast } from 'react-i
 import Card from '../components/CartPage/Card'; // **QUAN TRỌNG**: Đảm bảo đường dẫn này đúng với cấu trúc dự án của bạn
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer'; // Nếu bạn muốn sử dụng Footer, hãy bỏ comment dòng này
+import { useCart } from '../hooks/useCart';
 // === DỮ LIỆU MẪU ===
 const storeData = {
     id: 'sl-diner-hoang-cau',
@@ -143,6 +144,36 @@ const productVariants = {
 };
 
 const StoreDetailPage = () => {
+    const { handlers } = useCart();
+
+    const handleAddToCart = async (event, product) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const basePrice = Number(product.originalPrice || product.price || 0);
+        const discountPercent = (product.originalPrice && product.price)
+            ? Math.max(0, Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 1000) / 10)
+            : 0;
+
+        try {
+            await handlers.handleAddDealToCart({
+                id: `sample-store-${storeData.id}-${product.id}`,
+                productName: product.name,
+                salePrice: basePrice || Number(product.price || 0),
+                dealPercentage: discountPercent,
+                quantity: Number(product.stock || 1),
+                quantityUnit: 'item',
+                mainImage: product.img,
+                allImages: [product.img],
+                ownerUid: storeData.id,
+                ownerDisplayName: storeData.name,
+            });
+        } catch (error) {
+            console.error('Cannot add store product to cart:', error);
+            alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+        }
+    };
+
     return (
         <>
         <Header />
@@ -214,7 +245,7 @@ const StoreDetailPage = () => {
                     </span>
                 )}
                 
-                <button className={styles.cardTopCartBtn} aria-label="Thêm vào giỏ hàng">
+                <button className={styles.cardTopCartBtn} aria-label="Thêm vào giỏ hàng" onClick={(event) => handleAddToCart(event, p)} type="button">
                     <i className='bx bx-cart-add'></i>
                 </button>
             </div>

@@ -8,7 +8,7 @@ const ScanImage = ({ onClose, onPostProduct }) => {
   const [resultData, setResultData] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const API_URL = process.env.REACT_APP_SCAN_DATE_API_URL || 'https://ac15-34-87-17-43.ngrok-free.app/scan-date';
+  const API_URL = process.env.REACT_APP_SCAN_DATE_API_URL || 'https://adelaida-beastlike-vernia.ngrok-free.dev/scan-date';
 
   // Handling chọn ảnh & tạo link preview
   const handleFileChange = (e) => {

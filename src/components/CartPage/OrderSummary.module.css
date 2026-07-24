@@ -73,10 +73,14 @@
 .promoInput {
   flex-grow: 1; border: none; outline: none; background: none;
   padding: var(--spacing-3) 0; font-family: var(--font-family-sans); font-size: var(--font-size-sm);
+  min-width: 0;
 }
 .promoButton {
   background-color: #dfe3f8; border: none; color: var(--primary-blue-dark);
   font-weight: 600; padding: var(--spacing-3) var(--spacing-4); cursor: pointer; transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 82px;
 }
 .promoButton:hover { background-color: var(--primary-blue); color: #FFFFFF; }
 .promoMessage { font-size: var(--font-size-sm); padding: var(--spacing-2) var(--spacing-3); border-radius: var(--border-radius-md); text-align: center; }

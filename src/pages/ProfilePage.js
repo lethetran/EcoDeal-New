@@ -7,6 +7,7 @@ import styles from './ProfilePage.module.css';
 import { FaUserEdit, FaBoxOpen, FaMapMarkerAlt, FaSignOutAlt } from 'react-icons/fa';
 import UserInfo from '../components/ProfilePage/UserInfo';
 import OrderHistory from '../components/ProfilePage/OrderHistory';
+import SavedAddresses from '../components/ProfilePage/SavedAddresses';
 import Header from '../components/Header/Header'; 
 import Footer from '../components/Footer/Footer';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -76,7 +77,7 @@ const ProfilePage = () => {
                             <Routes location={location} key={location.pathname}>
                                 <Route index element={<UserInfo />} />
                                 <Route path="orders" element={<OrderHistory />} />
-                                <Route path="addresses" element={<div>Địa chỉ đang phát triển</div>} />
+                                <Route path="addresses" element={<SavedAddresses />} />
                             </Routes>
                         </AnimatePresence>
                     </main>

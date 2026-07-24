@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useCallback } from "react";
+import React, { useState, useMemo, useRef, useCallback, useEffect } from "react";
 // import { Link } from "react-router-dom";
 import styles from "./CheckoutPage.module.css";
 import AddressModal from "../components/Checkout/AddressModal";
@@ -8,6 +8,7 @@ import Footer from "../components/Footer/Footer"; // Nếu bạn muốn sử d�
 import { auth } from '../firebase-config';
 import { useCart } from '../hooks/useCart';
 import { createOrderFromCart } from '../services/cartService';
+import { fetchUserAddresses, saveUserAddresses } from '../services/userProfileService';
 
 // Import các icon từ thư viện 'react-icons'
 import {
@@ -36,6 +37,8 @@ const availableVouchers = [
     discount: 15000,
   },
 ];
+
+const CHECKOUT_ADDRESSES_STORAGE_KEY = 'checkoutAddresses';
 
 // --- Component con ---
 
@@ -81,7 +84,7 @@ const RadioCard = ({
 );
 
 const CheckoutPage = () => {
-  const { cartItems, selectedItems, handlers } = useCart();
+  const { currentUser, cartItems, selectedItems, handlers } = useCart();
   // State
   const [shippingMethod, setShippingMethod] = useState("delivery");
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -90,12 +93,50 @@ const CheckoutPage = () => {
   const [appliedVoucher, setAppliedVoucher] = useState(null);
   const navigate = useNavigate();
 
-  const [shippingAddress, setShippingAddress] = useState({
-    name: "Nguyễn Văn An",
-    phone: "0987 654 321",
-    fullAddress:
-      "123 Đường D1, Phường 25, Quận Bình Thạnh, Thành phố Hồ Chí Minh",
-  });
+  const [addresses, setAddresses] = useState([]);
+  const [shippingAddress, setShippingAddress] = useState(null);
+
+  useEffect(() => {
+    const loadAddresses = async () => {
+      if (currentUser?.uid) {
+        try {
+          const remoteAddresses = await fetchUserAddresses(currentUser.uid);
+          setAddresses(remoteAddresses);
+          const defaultAddress = remoteAddresses.find((addr) => addr.isDefault) || remoteAddresses[0] || null;
+          setShippingAddress(defaultAddress);
+          return;
+        } catch (error) {
+          console.error('Cannot load user addresses:', error);
+        }
+      }
+
+      try {
+        const savedAddresses = JSON.parse(localStorage.getItem(CHECKOUT_ADDRESSES_STORAGE_KEY) || '[]');
+        const safeAddresses = Array.isArray(savedAddresses) ? savedAddresses : [];
+        setAddresses(safeAddresses);
+        const defaultAddress = safeAddresses.find((addr) => addr.isDefault) || safeAddresses[0] || null;
+        setShippingAddress(defaultAddress);
+      } catch {
+        setAddresses([]);
+        setShippingAddress(null);
+      }
+    };
+
+    loadAddresses();
+  }, [currentUser]);
+
+  const persistAddresses = useCallback(async (nextAddresses) => {
+    setAddresses(nextAddresses);
+    const defaultAddress = nextAddresses.find((addr) => addr.isDefault) || nextAddresses[0] || null;
+    setShippingAddress(defaultAddress);
+
+    if (currentUser?.uid) {
+      await saveUserAddresses(currentUser.uid, nextAddresses);
+      return;
+    }
+
+    localStorage.setItem(CHECKOUT_ADDRESSES_STORAGE_KEY, JSON.stringify(nextAddresses));
+  }, [currentUser]);
 
   const itemsForCheckout = useMemo(() => {
     const selected = cartItems.filter((item) => selectedItems.has(item.id));
@@ -187,6 +228,12 @@ const CheckoutPage = () => {
       return;
     }
 
+    if (!shippingAddress?.fullAddress || !shippingAddress?.phone) {
+      alert('Vui lòng thêm địa chỉ nhận hàng và số điện thoại trước khi đặt hàng.');
+      setAddressModalOpen(true);
+      return;
+    }
+
     const orderPayload = {
       shippingMethod,
       paymentMethod,
@@ -238,9 +285,8 @@ const CheckoutPage = () => {
       await handlers.handleClearCart();
       alert('Đặt hàng thành công! Cảm ơn bạn đã mua sắm.');
       
-      // (Tùy chọn) Sau khi đặt hàng thành công, có thể chuyển người dùng về trang chủ
-      // hoặc trang "Đơn hàng của tôi"
-      navigate('/profile/orders');
+      // Sau khi đặt hàng thành công, chuyển về trang chủ theo yêu cầu.
+      navigate('/home');
 
     } else {
       // Xử lý các trường hợp khác nếu có
@@ -290,12 +336,18 @@ const CheckoutPage = () => {
     }
             >
               <div className={styles.addressInfo}>
-                <p className={styles.customerName}>
-                  {shippingAddress.name} / {shippingAddress.phone}
-                </p>
-                <p className={styles.addressText}>
-                  {shippingAddress.fullAddress}
-                </p>
+                {shippingAddress ? (
+                  <>
+                    <p className={styles.customerName}>
+                      {shippingAddress.fullName} / {shippingAddress.phone}
+                    </p>
+                    <p className={styles.addressText}>
+                      {shippingAddress.fullAddress}
+                    </p>
+                  </>
+                ) : (
+                  <p className={styles.addressText}>Bạn chưa có địa chỉ nhận hàng. Vui lòng thêm địa chỉ và số điện thoại.</p>
+                )}
               </div>
             </Section>
 
@@ -510,6 +562,8 @@ const CheckoutPage = () => {
       <AddressModal 
                 isOpen={isAddressModalOpen}
                 onClose={() => setAddressModalOpen(false)}
+            addresses={addresses}
+            onSaveAddresses={persistAddresses}
                 onSelectAddress={(selectedAddr) => {
                     // Cập nhật địa chỉ trên trang Checkout
                     setShippingAddress(selectedAddr); 

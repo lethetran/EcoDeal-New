@@ -244,3 +244,7 @@
   background-color: var(--primary-blue-dark);
   transform: translateY(-2px);
 }
+
+.stores-top-flash-wrap {
+    padding-top: 96px;
+}

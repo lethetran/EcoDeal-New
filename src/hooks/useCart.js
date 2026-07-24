@@ -162,10 +162,15 @@ export const useCart = () => {
         }
     }, [currentUser]);
 
+    const cartItemCount = cartItems.reduce((total, item) => {
+        return total + Math.max(0, Number(item?.quantity || 0));
+    }, 0);
+
     // Trả về dữ liệu và các hàm xử lý để Component có thể sử dụng
     return {
         currentUser,
         cartItems,
+        cartItemCount,
         selectedItems,
         handlers: {
             handleSelectItem,

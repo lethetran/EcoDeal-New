@@ -117,7 +117,9 @@ const StoresPage = () => {
         <>
             <Navbar />
             <FlashDealNotification />
-            <TopFlashDeals />
+            <div className="stores-top-flash-wrap">
+                <TopFlashDeals />
+            </div>
             <div className="stores-page">
                 <div className="container">
                     <header className="stores-header">

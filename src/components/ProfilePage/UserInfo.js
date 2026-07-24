@@ -11,6 +11,21 @@ const contentVariants = {
     exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
 };
 
+const formatProviderName = (providerId) => {
+    switch (providerId) {
+        case 'google.com':
+            return 'Google';
+        case 'password':
+            return 'Email / Mật khẩu';
+        case 'phone':
+            return 'Số điện thoại';
+        case 'anonymous':
+            return 'Khách';
+        default:
+            return 'Tài khoản khác';
+    }
+};
+
 const UserInfo = () => {
     const [currentUser, setCurrentUser] = useState(null);
 
@@ -24,8 +39,8 @@ const UserInfo = () => {
 
     const displayName = (currentUser?.displayName || '').trim();
     const email = currentUser?.email || 'Chưa có email';
-    const userId = currentUser?.uid || 'Guest';
     const providerId = currentUser?.providerData?.[0]?.providerId || 'anonymous';
+    const providerName = formatProviderName(providerId);
     const joinedAt = currentUser?.metadata?.creationTime
         ? new Date(currentUser.metadata.creationTime).toLocaleString('vi-VN')
         : 'Chưa xác định';
@@ -50,12 +65,8 @@ const UserInfo = () => {
                             <strong>{email}</strong>
                         </div>
                         <div className={styles.profileInfoRow}>
-                            <span>ID người dùng</span>
-                            <strong>{userId}</strong>
-                        </div>
-                        <div className={styles.profileInfoRow}>
                             <span>Đăng nhập bằng</span>
-                            <strong>{providerId}</strong>
+                            <strong>{providerName}</strong>
                         </div>
                         <div className={styles.profileInfoRow}>
                             <span>Ngày tạo tài khoản</span>

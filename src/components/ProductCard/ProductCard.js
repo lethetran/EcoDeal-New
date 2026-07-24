@@ -1,9 +1,39 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './ProductCard.module.css';
+import { useCart } from '../../hooks/useCart';
 
 const ProductCard = ({ product }) => {
     const navigate = useNavigate();
+  const { handlers } = useCart();
+    const handleAddToCart = async (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const basePrice = Number(product.originalPrice || product.price || 0);
+      const dealPercent = (product.originalPrice && product.price)
+        ? Math.max(0, Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 1000) / 10)
+        : 0;
+
+      try {
+        await handlers.handleAddDealToCart({
+          id: `sample-${product.id}`,
+          productName: product.name,
+          salePrice: basePrice || Number(product.price || 0),
+          dealPercentage: dealPercent,
+          quantity: Number(product.stock || 1),
+          quantityUnit: 'item',
+          mainImage: product.img,
+          allImages: [product.img],
+          ownerUid: String(product.store?.id || 'sample-store'),
+          ownerDisplayName: product.store?.name || 'Cửa hàng mẫu',
+        });
+      } catch (error) {
+        console.error('Cannot add product to cart:', error);
+        alert('Không thể thêm vào giỏ hàng, vui lòng thử lại.');
+      }
+    };
+
   // Tính toán % giảm giá một cách an toàn
   const discountPercent = (product.originalPrice && product.price)
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -35,12 +65,9 @@ const ProductCard = ({ product }) => {
 
           <button 
             className={styles.cartButton} 
-            onClick={(e) => { 
-              e.stopPropagation();
-              e.preventDefault(); 
-              alert(`Đã thêm "${product.name}" vào giỏ hàng!`); 
-            }}
+            onClick={handleAddToCart}
             aria-label="Thêm vào giỏ hàng"
+            type="button"
           >
             <i className='bx bx-cart-add'></i>
           </button>

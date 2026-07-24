@@ -4,26 +4,6 @@ import styles from './AddressModal.module.css';
 // Import các icon cần thiết
 import { FiX, FiPlus } from 'react-icons/fi';
 
-// --- DỮ LIỆU GIẢ LẬP (Trong ứng dụng thật, bạn sẽ lấy từ API) ---
-const mockUserAddresses = [
-    {
-        id: 1,
-        fullName: 'Nguyễn Văn An',
-        phone: '0987 654 321',
-        fullAddress: '123 Đường D1, Phường 25, Quận Bình Thạnh, Thành phố Hồ Chí Minh',
-        addressType: 'Nhà Riêng',
-        isDefault: true,
-    },
-    {
-        id: 2,
-        fullName: 'Nguyễn Văn An',
-        phone: '0912 345 678',
-        fullAddress: 'Tòa nhà ABC, 789 Đường D2, Phường 26, Quận Bình Thạnh, Thành phố Hồ Chí Minh',
-        addressType: 'Văn Phòng',
-        isDefault: false,
-    },
-];
-
 // --- COMPONENT CON: FORM THÊM/SỬA ĐỊA CHỈ ---
 const AddressForm = ({ initialData, onBack, onSave }) => {
     const [formData, setFormData] = useState({
@@ -34,17 +14,19 @@ const AddressForm = ({ initialData, onBack, onSave }) => {
         addressType: 'Nhà Riêng',
         isDefault: false,
     });
+    const [errorMessage, setErrorMessage] = useState('');
 
     // Điền dữ liệu vào form nếu đang ở chế độ "Cập nhật"
     useEffect(() => {
         if (initialData) {
+            const [province = '', ...details] = String(initialData.fullAddress || '').split(',');
             setFormData({
-                fullName: initialData.fullName,
-                phone: initialData.phone,
-                fullAddress: initialData.fullAddress, // Cần tách ra thành các trường nhỏ hơn trong thực tế
-                addressDetail: initialData.fullAddress,
-                addressType: initialData.addressType,
-                isDefault: initialData.isDefault,
+                fullName: initialData.fullName || '',
+                phone: initialData.phone || '',
+                province: province.trim(),
+                addressDetail: details.join(',').trim() || String(initialData.fullAddress || ''),
+                addressType: initialData.addressType || 'Nhà Riêng',
+                isDefault: Boolean(initialData.isDefault),
             });
         }
     }, [initialData]);
@@ -55,8 +37,31 @@ const AddressForm = ({ initialData, onBack, onSave }) => {
     };
 
     const handleSave = () => {
-        // ... (Logic validate dữ liệu ở đây)
-        onSave({ ...formData, id: initialData?.id || Date.now() }); // Gửi lại cả ID nếu là cập nhật
+        const fullName = formData.fullName.trim();
+        const phone = formData.phone.trim();
+        const province = formData.province.trim();
+        const addressDetail = formData.addressDetail.trim();
+
+        if (!fullName || !phone || !province || !addressDetail) {
+            setErrorMessage('Vui lòng nhập đầy đủ họ tên, số điện thoại và địa chỉ.');
+            return;
+        }
+
+        const normalizedPhone = phone.replace(/\s+/g, '');
+        if (!/^[0-9]{9,11}$/.test(normalizedPhone)) {
+            setErrorMessage('Số điện thoại không hợp lệ.');
+            return;
+        }
+
+        setErrorMessage('');
+        onSave({
+            id: initialData?.id || `addr-${Date.now()}`,
+            fullName,
+            phone,
+            fullAddress: `${province}, ${addressDetail}`,
+            addressType: formData.addressType,
+            isDefault: formData.isDefault,
+        });
     };
 
     return (
@@ -67,8 +72,10 @@ const AddressForm = ({ initialData, onBack, onSave }) => {
                 <input type="text" name="fullName" placeholder="Họ và tên" value={formData.fullName} onChange={handleChange} className={styles.formInput} />
                 <input type="tel" name="phone" placeholder="Số điện thoại" value={formData.phone} onChange={handleChange} className={styles.formInput} />
             </div>
-            <input type="text" placeholder="Tỉnh/ Thành phố, Quận/Huyện, Phường/Xã" className={styles.formInput} />
+            <input type="text" name="province" placeholder="Tỉnh/ Thành phố, Quận/Huyện, Phường/Xã" value={formData.province} onChange={handleChange} className={styles.formInput} />
             <textarea name="addressDetail" placeholder="Địa chỉ cụ thể" value={formData.addressDetail} onChange={handleChange} className={styles.formTextarea} rows="3"></textarea>
+
+            {errorMessage && <p className={styles.formError}>{errorMessage}</p>}
             
             <button className={styles.mapButton}><FiPlus /> Thêm vị trí</button>
 
@@ -103,15 +110,37 @@ const AddressForm = ({ initialData, onBack, onSave }) => {
 
 
 // --- COMPONENT CHÍNH: MODAL QUẢN LÝ ĐỊA CHỈ ---
-const AddressModal = ({ isOpen, onClose, onSelectAddress }) => {
+const AddressModal = ({ isOpen, onClose, onSelectAddress, addresses = [], onSaveAddresses }) => {
     const [view, setView] = useState('list'); // 'list' hoặc 'form'
-    const [addresses, setAddresses] = useState(mockUserAddresses);
+    const [localAddresses, setLocalAddresses] = useState([]);
     const [editingAddress, setEditingAddress] = useState(null); // null: thêm mới, object: cập nhật
+
+    useEffect(() => {
+        if (!isOpen) {
+            setView('list');
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        setLocalAddresses(Array.isArray(addresses) ? addresses : []);
+    }, [addresses]);
 
     if (!isOpen) return null;
 
+    const safeAddresses = Array.isArray(localAddresses) ? localAddresses : [];
+
+    const persistAddresses = async (nextAddresses) => {
+        setLocalAddresses(nextAddresses);
+        if (typeof onSaveAddresses === 'function') {
+            await onSaveAddresses(nextAddresses);
+        }
+    };
+
     const handleSetDefault = (id) => {
-        setAddresses(prev => prev.map(addr => ({ ...addr, isDefault: addr.id === id })));
+        const nextAddresses = safeAddresses.map((addr) => ({ ...addr, isDefault: addr.id === id }));
+        persistAddresses(nextAddresses).catch((error) => {
+            console.error('Cannot save default address:', error);
+        });
     };
 
     const handleEdit = (address) => {
@@ -124,12 +153,24 @@ const AddressModal = ({ isOpen, onClose, onSelectAddress }) => {
         setView('form');
     };
     
-    const handleSaveAddress = (savedData) => {
-        if (editingAddress) { // Cập nhật
-            setAddresses(prev => prev.map(addr => addr.id === savedData.id ? savedData : addr));
-        } else { // Thêm mới
-            setAddresses(prev => [...prev, savedData]);
-        }
+    const handleSaveAddress = async (savedData) => {
+        const nextAddresses = editingAddress
+            ? safeAddresses.map(addr => addr.id === savedData.id ? savedData : addr)
+            : [...safeAddresses, savedData];
+
+        const normalizedAddresses = nextAddresses.map((addr, index) => {
+            if (savedData.isDefault) {
+                return { ...addr, isDefault: addr.id === savedData.id };
+            }
+
+            if (!nextAddresses.some((item) => item.isDefault)) {
+                return { ...addr, isDefault: index === 0 };
+            }
+
+            return addr;
+        });
+
+        await persistAddresses(normalizedAddresses);
         setView('list'); // Quay lại danh sách
     };
 
@@ -142,7 +183,7 @@ const AddressModal = ({ isOpen, onClose, onSelectAddress }) => {
                     <>
                         <h3 className={styles.modalTitle}>Địa chỉ của tôi</h3>
                         <div className={styles.addressList}>
-                            {addresses.map(addr => (
+                            {safeAddresses.map(addr => (
                                 <div key={addr.id} className={`${styles.addressCard} ${addr.isDefault ? styles.defaultCard : ''}`}>
                                     <div className={styles.cardMain} onClick={() => onSelectAddress(addr)}>
                                         <div className={styles.cardHeader}>
@@ -163,6 +204,9 @@ const AddressModal = ({ isOpen, onClose, onSelectAddress }) => {
                                 </div>
                             ))}
                         </div>
+                        {safeAddresses.length === 0 && (
+                            <p className={styles.emptyAddresses}>Bạn chưa có địa chỉ nhận hàng. Hãy thêm địa chỉ mới.</p>
+                        )}
                         <button className={styles.addNewButton} onClick={handleAddNew}>
                             <FiPlus /> Thêm địa chỉ mới
                         </button>
