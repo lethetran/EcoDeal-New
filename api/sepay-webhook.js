@@ -1,39 +1,29 @@
 const { getOrderById, markOrderPaid } = require('./_lib/firebaseAdmin');
 const { createSepayClient } = require('./_lib/sepayClient');
 
-// Xác nhận từ payload IPN mẫu thật của SePay (notification_type: "ORDER_PAID",
-// order.order_status: "CAPTURED", transaction.transaction_status: "APPROVED").
-// Vẫn liệt kê thêm vài giá trị khả dĩ khác (COMPLETED/SUCCESS...) phòng trường hợp
-// phương thức thanh toán khác (BANK_TRANSFER thay vì CARD) trả trạng thái khác đi.
-const ORDER_PAID_STATUSES = ['CAPTURED', 'PAID', 'COMPLETED', 'SUCCESS', 'SUCCESSFUL'];
-const TRANSACTION_PAID_STATUSES = ['APPROVED', 'SUCCESS', 'SUCCESSFUL', 'COMPLETED'];
+// Theo tài liệu IPN chính thức của SePay:
+// order.order_status: "CAPTURED" | "CANCELLED" | "AUTHENTICATION_NOT_NEEDED"
+// transaction.transaction_status: "APPROVED" | "DECLINED"
+// notification_type: "ORDER_PAID" | "TRANSACTION_VOID"
+const extractInvoiceNumber = (body) => body?.order?.order_invoice_number || null;
 
-const extractInvoiceNumber = (body) =>
-  body?.order?.order_invoice_number
-  || body?.order_invoice_number
-  || body?.data?.order?.order_invoice_number
-  || body?.data?.order_invoice_number
-  || null;
-
-// SePay báo trạng thái ở 3 chỗ trong cùng 1 payload IPN — chỉ cần 1 trong 3 khớp là coi như đã thanh toán.
-// Đây là bước lọc nhanh; bước xác nhận thật vẫn là gọi lại client.order.retrieve() bên dưới.
 const isIpnIndicatingPaid = (body) => {
   const notificationType = String(body?.notification_type || '').toUpperCase();
   const orderStatus = String(body?.order?.order_status || '').toUpperCase();
   const transactionStatus = String(body?.transaction?.transaction_status || '').toUpperCase();
 
   return notificationType === 'ORDER_PAID'
-    || ORDER_PAID_STATUSES.includes(orderStatus)
-    || TRANSACTION_PAID_STATUSES.includes(transactionStatus);
+    && orderStatus === 'CAPTURED'
+    && transactionStatus === 'APPROVED';
 };
 
-// Kiểm tra "mềm" header xác thực nếu SePay có gửi kèm — không phải nguồn tin cậy chính,
-// vì ta luôn xác minh lại trạng thái thật qua client.order.retrieve() bên dưới.
-const hasPlausibleAuthHeader = (req) => {
-  const secret = process.env.SEPAY_SECRET_KEY || '';
-  if (!secret) return true;
-  const headerValue = req.headers.authorization || req.headers['x-secret-key'] || '';
-  return typeof headerValue === 'string' && headerValue.includes(secret);
+// Header xác thực thật của SePay: "X-Secret-Key: <secret_key>" (chỉ gửi khi merchant
+// cấu hình Auth Type = Secret Key trên my.sepay.vn, như tài khoản bạn đang dùng).
+// Node/Vercel luôn đưa header về chữ thường trong req.headers.
+const isAuthorizedRequest = (req) => {
+  const configuredSecret = process.env.SEPAY_SECRET_KEY || '';
+  if (!configuredSecret) return true; // chưa cấu hình secret thì bỏ qua check (không khuyến khích để lâu)
+  return req.headers['x-secret-key'] === configuredSecret;
 };
 
 module.exports = async (req, res) => {
@@ -43,16 +33,25 @@ module.exports = async (req, res) => {
   }
 
   console.log('[sepay-webhook] payload:', JSON.stringify(req.body));
-  console.log('[sepay-webhook] headers:', JSON.stringify(req.headers));
 
-  if (!hasPlausibleAuthHeader(req)) {
-    console.warn('[sepay-webhook] auth header did not match SEPAY_SECRET_KEY — processing anyway, will verify via API');
+  if (!isAuthorizedRequest(req)) {
+    console.warn('[sepay-webhook] rejected: invalid or missing X-Secret-Key header');
+    res.status(401).json({ error: 'UNAUTHORIZED' });
+    return;
   }
 
   try {
+    const notificationType = String(req.body?.notification_type || '').toUpperCase();
+
+    if (notificationType === 'TRANSACTION_VOID') {
+      console.log('[sepay-webhook] transaction voided, no state change applied:', req.body?.order?.order_invoice_number);
+      res.status(200).json({ received: true, ignored: true });
+      return;
+    }
+
     const invoiceNumber = extractInvoiceNumber(req.body);
     if (!invoiceNumber) {
-      console.warn('[sepay-webhook] missing order_invoice_number in payload');
+      console.warn('[sepay-webhook] missing order.order_invoice_number in payload');
       res.status(400).json({ error: 'MISSING_ORDER_INVOICE_NUMBER' });
       return;
     }
@@ -71,23 +70,26 @@ module.exports = async (req, res) => {
     }
 
     if (!isIpnIndicatingPaid(req.body)) {
-      console.log('[sepay-webhook] notification does not indicate a paid order, ignoring:', req.body?.notification_type);
+      console.log('[sepay-webhook] notification does not indicate a paid order:', {
+        notificationType,
+        orderStatus: req.body?.order?.order_status,
+        transactionStatus: req.body?.transaction?.transaction_status,
+      });
       res.status(200).json({ received: true, ignored: true });
       return;
     }
 
-    // Xác minh lại: hỏi thẳng SePay API bằng Basic Auth (merchant_id + secret_key),
-    // không chỉ tin nội dung IPN gửi lên — tránh trường hợp có người giả POST tới endpoint này.
-    // Nếu vì lý do gì đó không gọi được API xác minh (vd. shape response khác dự kiến),
-    // vẫn đánh dấu paid dựa trên payload IPN đã qua bước lọc isIpnIndicatingPaid ở trên,
-    // để không làm treo đơn hàng thật của khách — chỉ log rõ để soát lại sau.
-    let remoteStatus = 'UNVERIFIED';
+    // Lớp phòng thủ thứ 2 (sau X-Secret-Key): hỏi lại thẳng SePay API để chắc chắn.
+    // Nếu API phụ trợ này lỗi vì lý do khác (vd. shape response chưa từng gặp), vẫn đánh
+    // dấu paid dựa trên IPN đã qua xác thực header + đúng cả 3 trạng thái ở trên — không
+    // để đơn hàng thật của khách bị treo chỉ vì 1 cuộc gọi phụ trợ, chỉ log lại để soát sau.
+    let remoteVerifiedStatus = 'UNVERIFIED';
     try {
       const client = createSepayClient();
       const response = await client.order.retrieve(invoiceNumber);
       const remoteOrder = response?.data?.data || response?.data || {};
       console.log('[sepay-webhook] order.retrieve() result:', JSON.stringify(remoteOrder));
-      remoteStatus = String(remoteOrder.order_status || remoteOrder.status || 'UNKNOWN').toUpperCase();
+      remoteVerifiedStatus = String(remoteOrder.order_status || 'UNKNOWN').toUpperCase();
     } catch (verifyError) {
       console.error('[sepay-webhook] order.retrieve() verification failed, falling back to IPN payload:', verifyError.message);
     }
@@ -95,10 +97,9 @@ module.exports = async (req, res) => {
     await markOrderPaid(order.id, {
       source: 'sepay_ipn',
       orderInvoiceNumber: invoiceNumber,
-      notificationType: req.body?.notification_type || null,
-      orderStatus: req.body?.order?.order_status || null,
-      transactionStatus: req.body?.transaction?.transaction_status || null,
-      remoteVerifiedStatus: remoteStatus,
+      transactionId: req.body?.transaction?.transaction_id || null,
+      paymentMethod: req.body?.transaction?.payment_method || null,
+      remoteVerifiedStatus,
       verifiedAt: new Date().toISOString(),
     });
     console.log('[sepay-webhook] order marked paid:', order.id);
