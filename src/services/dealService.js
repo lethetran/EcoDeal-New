@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, limit, orderBy, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { auth, firestore, storage } from '../firebase-config';
 
@@ -138,6 +138,17 @@ export const fetchDealById = async (dealId) => {
   const snap = await getDoc(doc(firestore, DEALS_COLLECTION, dealId));
   if (!snap.exists()) return null;
   return mapDealDocument(snap);
+};
+
+export const updateDealFields = async (dealId, fields) => {
+  await updateDoc(doc(firestore, DEALS_COLLECTION, dealId), {
+    ...fields,
+    updatedAt: serverTimestamp(),
+  });
+};
+
+export const deleteDeal = async (dealId) => {
+  await deleteDoc(doc(firestore, DEALS_COLLECTION, dealId));
 };
 
 export const fetchDealsByOwner = async (ownerUid) => {

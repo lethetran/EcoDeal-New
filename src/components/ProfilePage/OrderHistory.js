@@ -4,7 +4,7 @@ import styles from './ProfileContent.module.css';
 import Card from '../CartPage/Card';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase-config';
-import { fetchUserOrders } from '../../services/cartService';
+import { fetchUserOrders, reportOrderIssue } from '../../services/cartService';
 
 const contentVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -54,6 +54,19 @@ const OrderHistory = () => {
 
         loadOrders();
     }, [currentUser]);
+
+    const handleReportIssue = async (orderId) => {
+        const reason = window.prompt('Mô tả vấn đề bạn gặp với đơn hàng này:');
+        if (!reason || !reason.trim()) return;
+
+        try {
+            await reportOrderIssue(orderId, reason);
+            setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, disputed: true } : o)));
+        } catch (error) {
+            console.error('Cannot report order issue:', error);
+            alert('Không thể gửi báo cáo lúc này, vui lòng thử lại.');
+        }
+    };
 
     return (
         <motion.div
@@ -107,6 +120,20 @@ const OrderHistory = () => {
                                 <div className={styles.orderPaymentCompact}>
                                     <span><strong>Thanh toán:</strong> {paymentLabel}</span>
                                     <span><strong>Tổng:</strong> {Number(order.total || 0).toLocaleString('vi-VN')}₫</span>
+                                </div>
+
+                                <div className={styles.orderPaymentCompact}>
+                                    {order.disputed ? (
+                                        <span style={{ color: '#e11d48', fontWeight: 600 }}>🚩 Đã báo cáo vấn đề</span>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            className={styles.viewDetailButton}
+                                            onClick={() => handleReportIssue(order.id)}
+                                        >
+                                            Báo cáo vấn đề
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         );

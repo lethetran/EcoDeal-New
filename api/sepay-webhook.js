@@ -1,4 +1,4 @@
-const { getOrderById, markOrderPaid } = require('./_lib/firebaseAdmin');
+const { getOrderById, markOrderPaid, decrementDealQuantities } = require('./_lib/firebaseAdmin');
 const { createSepayClient } = require('./_lib/sepayClient');
 
 // Theo tài liệu IPN chính thức của SePay:
@@ -103,6 +103,13 @@ module.exports = async (req, res) => {
       verifiedAt: new Date().toISOString(),
     });
     console.log('[sepay-webhook] order marked paid:', order.id);
+
+    // Trừ kho thật ngay khi thanh toán online được xác nhận.
+    try {
+      await decrementDealQuantities(order.items);
+    } catch (stockError) {
+      console.error('[sepay-webhook] decrementDealQuantities failed:', stockError);
+    }
 
     res.status(200).json({ received: true });
   } catch (error) {

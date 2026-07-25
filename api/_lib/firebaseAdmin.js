@@ -37,9 +37,33 @@ const markOrderPaid = async (orderId, paymentMeta) => {
   await firestore.collection('orders').doc(orderId).update({
     status: 'paid',
     paidAt: admin.firestore.FieldValue.serverTimestamp(),
+    settledAt: admin.firestore.FieldValue.serverTimestamp(),
     paymentMeta: paymentMeta || null,
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   });
 };
 
-module.exports = { admin, firestore, getOrderById, verifyIdToken, markOrderPaid };
+// Trừ kho thật khi 1 đơn hàng được xác nhận (COD ngay lúc đặt, online khi webhook báo đã thanh toán).
+// Chạy trong 1 transaction để tránh 2 đơn cùng lúc trừ đè lên nhau (race condition).
+const decrementDealQuantities = async (items) => {
+  const itemsWithDeal = (items || []).filter((item) => item?.dealId);
+  if (itemsWithDeal.length === 0) return;
+
+  await firestore.runTransaction(async (tx) => {
+    const dealRefs = itemsWithDeal.map((item) => firestore.collection('flashDeals').doc(item.dealId));
+    const dealSnaps = await Promise.all(dealRefs.map((ref) => tx.get(ref)));
+
+    dealSnaps.forEach((snap, index) => {
+      if (!snap.exists) return;
+      const item = itemsWithDeal[index];
+      const currentQuantity = Number(snap.data().quantity) || 0;
+      const nextQuantity = Math.max(0, currentQuantity - Number(item.quantity || 0));
+      tx.update(snap.ref, {
+        quantity: nextQuantity,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    });
+  });
+};
+
+module.exports = { admin, firestore, getOrderById, verifyIdToken, markOrderPaid, decrementDealQuantities };

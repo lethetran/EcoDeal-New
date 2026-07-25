@@ -123,6 +123,17 @@ export const subscribeToOrder = (orderId, onChange) =>
     onChange(snap.exists() ? mapOrder(snap) : null);
   });
 
+// Khách báo cáo vấn đề với đơn hàng — giữ lại phần tiền tương ứng của shop, không tính vào
+// số dư khả dụng để rút (xem walletService.computeSellerWallet). Chỉ bật cờ 1 chiều.
+export const reportOrderIssue = async (orderId, reason) => {
+  await updateDoc(doc(firestore, 'orders', orderId), {
+    disputed: true,
+    disputeReason: String(reason || '').trim().slice(0, 500),
+    disputedAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+};
+
 export const fetchUserOrders = async (uid, maxItems = 30) => {
   const ordersQuery = query(
     collection(firestore, 'orders'),

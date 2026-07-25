@@ -38,6 +38,15 @@ service cloud.firestore {
         && data.read == false;
     }
 
+    function isValidWithdrawal(data) {
+      return data.uid is string && data.uid.size() > 0
+        && data.amount is number && data.amount > 0
+        && data.bankAccountNumber is string && data.bankAccountNumber.size() > 0
+        && data.bankName is string && data.bankName.size() > 0
+        && data.accountHolderName is string && data.accountHolderName.size() > 0
+        && data.status == 'pending';
+    }
+
     match /flashDeals/{dealId} {
       allow read: if true;
 
@@ -64,10 +73,22 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid
         && isValidOrder(request.resource.data);
 
+      // Người mua đọc đơn của mình; người bán (có mặt trong sellerUids) đọc để tính doanh thu.
       allow read: if request.auth != null
-        && resource.data.uid == request.auth.uid;
+        && (
+          resource.data.uid == request.auth.uid
+          || (resource.data.sellerUids is list && request.auth.uid in resource.data.sellerUids)
+        );
 
-      allow update, delete: if false;
+      // Người mua báo cáo vấn đề đơn hàng — chỉ được bật cờ disputed (một chiều), không sửa gì khác.
+      // Việc trừ tiền/tạo trạng thái paid/settledAt chỉ do Cloud Function (Admin SDK) thực hiện,
+      // Admin SDK bỏ qua rules nên không cần thêm allow update cho các field đó ở đây.
+      allow update: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['disputed', 'disputeReason', 'disputedAt', 'updatedAt'])
+        && request.resource.data.disputed == true;
+
+      allow delete: if false;
     }
 
     match /reviews/{reviewId} {
@@ -131,6 +152,31 @@ service cloud.firestore {
         && request.auth.uid == userId;
 
       allow delete: if false;
+    }
+
+    match /withdrawalRequests/{requestId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && isValidWithdrawal(request.resource.data);
+
+      // Huỷ yêu cầu khi còn "pending" — không tự đổi sang completed/rejected được (chỉ xử lý thủ công
+      // qua Firebase Console / Admin SDK, tức bỏ qua rules).
+      allow update: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && resource.data.status == 'pending'
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.amount == resource.data.amount
+        && request.resource.data.status == 'cancelled';
+
+      allow delete: if false;
+    }
+
+    // Cấu hình nền tảng (vd. commissionRate) — chỉnh qua Firebase Console, client chỉ đọc.
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }

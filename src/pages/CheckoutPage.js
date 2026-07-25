@@ -238,6 +238,10 @@ const CheckoutPage = () => {
       return;
     }
 
+    const sellerUids = [...new Set(
+      itemsForCheckout.map((item) => item.store?.id).filter(Boolean)
+    )];
+
     const orderPayload = {
       shippingMethod,
       paymentMethod,
@@ -249,6 +253,8 @@ const CheckoutPage = () => {
       total,
       status: paymentMethod === 'online' ? 'pending_payment' : 'confirmed',
       shippingAddress,
+      sellerUids,
+      disputed: false,
       items: itemsForCheckout.map((item) => ({
         cartItemId: item.id,
         dealId: item.dealId || '',
@@ -310,12 +316,24 @@ const CheckoutPage = () => {
       }
 
     } else if (paymentMethod === 'cod') {
-      // Nếu là thanh toán khi nhận hàng (COD), hiển thị thông báo thành công
-      // Trong thực tế, bạn sẽ gọi API để lưu đơn hàng ở đây trước khi thông báo
-      console.log('Đang xử lý đơn hàng COD...');
+      // Trừ kho thật + đánh dấu settledAt (mốc tính thời gian giữ tiền cho shop) ngay khi đặt COD.
+      try {
+        const idToken = await auth.currentUser.getIdToken();
+        await fetch('/api/confirm-cod-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({ orderId }),
+        });
+      } catch (error) {
+        console.error('Cannot confirm COD order:', error);
+      }
+
       await handlers.handleClearCart();
       alert('Đặt hàng thành công! Cảm ơn bạn đã mua sắm.');
-      
+
       // Sau khi đặt hàng thành công, chuyển về trang chủ theo yêu cầu.
       navigate('/home');
 

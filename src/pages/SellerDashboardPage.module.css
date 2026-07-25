@@ -1,0 +1,236 @@
+.pageWrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+
+.pageTitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 24px;
+}
+
+.emptyState {
+  text-align: center;
+  color: #9ca3af;
+  padding: 60px 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.statCard {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statCard span {
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+.statCard strong {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.statDanger {
+  color: #e11d48 !important;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.panelTitle {
+  margin: 0 0 16px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.subTitle {
+  margin: 20px 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.withdrawForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.withdrawForm input {
+  padding: 11px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.withdrawForm input:focus {
+  outline: none;
+  border-color: #16a34a;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.14);
+}
+
+.withdrawForm button {
+  align-self: flex-start;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 10px;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.withdrawForm button:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+}
+
+.withdrawMessage {
+  margin: 0;
+  font-size: 13px;
+  color: #374151;
+}
+
+.withdrawHistory {
+  border-top: 1px solid #e5e7eb;
+}
+
+.withdrawRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 13.5px;
+  color: #374151;
+}
+
+.status_pending { color: #d97706; font-weight: 600; }
+.status_completed { color: #16a34a; font-weight: 600; }
+.status_rejected { color: #e11d48; font-weight: 600; }
+.status_cancelled { color: #9ca3af; font-weight: 600; }
+
+.panelHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dealList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dealRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.dealThumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #f3f4f6;
+}
+
+.dealInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.dealInfo strong {
+  font-size: 14px;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dealInfo span {
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+.dealActions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.dealActions button {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dealActions button:hover {
+  border-color: #16a34a;
+  color: #16a34a;
+}
+
+.deleteBtn {
+  color: #e11d48 !important;
+}
+
+.deleteBtn:hover {
+  border-color: #e11d48 !important;
+  color: #e11d48 !important;
+}
+
+@media (max-width: 720px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .dealRow {
+    flex-wrap: wrap;
+  }
+}

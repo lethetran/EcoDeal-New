@@ -113,6 +113,7 @@ function Header({ onSearchClick }) {
                     <li><a href="/profile"><i className='bx bx-user'></i> Tài khoản của tôi</a></li>
                     <li><a href="/profile/orders"><i className='bx bx-receipt'></i> Đơn hàng của tôi</a></li>
                     <li><a href="/saved-stores"><i className='bx bx-store-alt'></i> Cửa hàng đã lưu</a></li>
+                    <li><a href="/seller"><i className='bx bx-store'></i> Kênh người bán</a></li>
                     <li className="dropdown__divider"></li>
                     <li><button className="logout-button" onClick={handleLogout}><i className='bx bx-log-out'></i> Đăng xuất</button></li>
                   </>
