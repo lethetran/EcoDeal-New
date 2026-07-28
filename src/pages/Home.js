@@ -5,8 +5,7 @@ import Footer from '../components/Introduce/Footer';
 import FlashDealNotification from '../components/FlashDealNotification';
 import TopFlashDeals from '../components/TopFlashDeals';
 // import WelcomeSection from '../components/Home/WelcomeSection';
-import DealsGrid from '../components/Home/DealsGrid';   
-import StoresSection from '../components/Home/StoresSection';
+import DealsGrid from '../components/Home/DealsGrid';
 import DiscoverDeals from '../components/Home/DiscoverDeals';
 import HeroSlider from '../components/Home/HeroSlider';
 import FiltersSection from '../components/Home/FiltersSection';
@@ -55,7 +54,6 @@ function HomePage() {
         
         {/* Thêm phần DealsGrid */}
         <DealsGrid />
-        <StoresSection />
         <DiscoverDeals />
 
       </main>

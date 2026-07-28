@@ -142,7 +142,7 @@ const FeaturedDeals = () => {
   };
 
   return (
-    <section className="deals-grid section pt-0">
+    <section className="deals-grid-section section pt-0">
       <div className="container">
         <h2 className="section__title">Ưu đãi nổi bật gần bạn</h2>
         <div className="deals-grid__container">

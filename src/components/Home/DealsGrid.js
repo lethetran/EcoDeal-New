@@ -129,7 +129,7 @@ function DealsGrid() {
   };
 
   return (
-    <section className="deals-grid section pt-0">
+    <section className="deals-grid-section section pt-0">
       <div className="dashboard-section-header">
                 <h2>Khám Phá Tự Do</h2>
                 <p>Dạo một vòng quanh "khu chợ" FoodSave và tìm kiếm những bất ngờ cho riêng mình.</p>

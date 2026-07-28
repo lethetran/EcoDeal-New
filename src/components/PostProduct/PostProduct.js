@@ -390,8 +390,8 @@ const PostProduct = ({ nsxData, onClose }) => {
     try {
       if (isAICheckCategory) {
         if (qualityCheckImages.length === 0) {
-          setEcoCheckStatus('rejected');
-          setMessage(`❌ Vui lòng tải ảnh AI kiểm duyệt ${aiProductLabel} trước khi kiểm tra.`);
+          setEcoCheckStatus('pending');
+          setMessage(`⏳ Chưa có ảnh AI kiểm duyệt ${aiProductLabel} - gán nhãn "Chờ Admin duyệt", bạn vẫn có thể đăng bài.`);
           setAiCheckLoading(false);
           return;
         }
@@ -423,8 +423,8 @@ const PostProduct = ({ nsxData, onClose }) => {
 
         const resJson = await response.json();
         if (!resJson.success) {
-          setEcoCheckStatus('rejected');
-          setMessage(`❌ AI quét ${aiProductLabel} thất bại: ${resJson.message || 'Không rõ nguyên nhân.'}`);
+          setEcoCheckStatus('pending');
+          setMessage(`⏳ AI quét ${aiProductLabel} thất bại: ${resJson.message || 'Không rõ nguyên nhân.'} - gán nhãn "Chờ Admin duyệt", bạn vẫn có thể đăng bài.`);
           setAiCheckLoading(false);
           return;
         }
@@ -438,17 +438,26 @@ const PostProduct = ({ nsxData, onClose }) => {
           setEcoCheckStatus('rejected');
           setMessage('❌ AI kiểm duyệt: Hư hỏng.');
         } else {
-          setEcoCheckStatus('rejected');
-          setMessage('❌ AI trả về kết quả không rõ ràng. Vui lòng thử lại bằng ảnh khác.');
+          setEcoCheckStatus('pending');
+          setMessage('⏳ AI trả về kết quả không rõ ràng - gán nhãn "Chờ Admin duyệt", bạn vẫn có thể đăng bài.');
         }
         setAiCheckLoading(false);
         return;
       }
 
-      // Bước 1: Kiểm tra xem có quét được cả 2 ngày không
-      if (!dateWasScanned || !formData.nsx || !formData.hsd) {
-        setEcoCheckStatus('rejected');
-        setMessage('❌ Quét không đủ thông tin. Cần cả NSX và HSD. Vui lòng quét ảnh lại.');
+      // Bước 1: Nếu thiếu NSX/HSD thì không kiểm tra được
+      if (!formData.nsx || !formData.hsd) {
+        setEcoCheckStatus('pending');
+        setMessage('⏳ Chưa đủ NSX/HSD để AI xác minh - gán nhãn "Chờ Admin duyệt", bạn vẫn có thể đăng bài.');
+        setAiCheckLoading(false);
+        return;
+      }
+
+      // NSX/HSD được nhập tay (không quét từ ảnh) - không có gì để AI đối chiếu,
+      // gán nhãn chờ Admin duyệt thủ công nhưng vẫn cho đăng bài.
+      if (!dateWasScanned) {
+        setEcoCheckStatus('pending');
+        setMessage('⏳ NSX/HSD nhập tay - gán nhãn "Chờ Admin duyệt", bạn vẫn có thể đăng bài.');
         setAiCheckLoading(false);
         return;
       }
@@ -539,8 +548,8 @@ const PostProduct = ({ nsxData, onClose }) => {
       }
     } catch (error) {
       console.error('AI Check error:', error);
-      setEcoCheckStatus('rejected');
-      setMessage(`❌ Lỗi kiểm tra: ${error.message}`);
+      setEcoCheckStatus('pending');
+      setMessage(`⏳ Lỗi kiểm tra: ${error.message} - gán nhãn "Chờ Admin duyệt", bạn vẫn có thể đăng bài.`);
     } finally {
       setAiCheckLoading(false);
     }
@@ -988,6 +997,7 @@ const PostProduct = ({ nsxData, onClose }) => {
                 <span className={`info-value status-${ecoCheckStatus}`}>
                   {ecoCheckStatus === 'approved' && (isAICheckCategory ? '✅ Tốt' : '✅ EcoCheck Approved')}
                   {ecoCheckStatus === 'rejected' && (isAICheckCategory ? '❌ Hư hỏng' : '⏳ Chờ Admin duyệt')}
+                  {ecoCheckStatus === 'pending' && '⏳ Chờ Admin duyệt'}
                   {ecoCheckStatus === null && '⚪ Chưa kiểm tra'}
                 </span>
               </div>
